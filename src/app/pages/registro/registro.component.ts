@@ -10,26 +10,20 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegistroComponent implements OnInit {
 
-  empleado: EmpleadoModel;
+  empleado: EmpleadoModel | undefined;
 
   constructor(private auth:AuthService) { }
 
   ngOnInit() { 
     this.empleado = new EmpleadoModel();
-
-    this.empleado.nombre = "FRONT";
-    this.empleado.apellidos = "ANGULAR";
-    this.empleado.email = "angular@front.com";
-    this.empleado.password = "123";
-
-  }
+  } 
   onSubmit(form: NgForm){
     if(!form.valid){
       return;
     }
-    console.log("formulario enviado \n" + this.empleado.nombre + "\nNgFomr: " + form.valid);
+    console.log("formulario enviado \n" + this.empleado!.nombre + "\nNgFomr: " + form.valid);
     
-    this.auth.registrarEmpleado(this.empleado);
+    this.auth.registrarEmpleado(this.empleado!);
   }
 
 }

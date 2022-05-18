@@ -1,38 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-//import { ExpectedConditions } from 'protractor';
-//import { UnsubscriptionError } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
-import Swal from 'sweetalert2';
+
+import { AuthService } from '../../services/auth.service';
+//import Swal from 'sweetalert2';
 import { UsuarioModel } from '../../models/usuario.model';
+
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
 
-usuario : UsuarioModel = new UsuarioModel();
+  usuario : UsuarioModel = new UsuarioModel();
 
   constructor(private auth: AuthService) { }
 
-  ngOnInit() {
-    this.usuario.nombre = "admin";
-    this.usuario.password = "admin";
+  ngOnInit(): void {
+    
   }
   login(form: NgForm){
     if(!form.valid){
       return;
     }
 
-    Swal.fire({
+    /*Swal.fire({
       title: 'Error!',
       text: 'Do you want to continue',
       icon: 'error',
       confirmButtonText: 'Cool'
     })
-    /*let timerInterval;
+    let timerInterval;
     Swal.fire({
       title: 'Auto close alert!',
       html: 'I will close in <b></b> milliseconds.',

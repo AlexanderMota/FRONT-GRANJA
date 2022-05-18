@@ -10,7 +10,7 @@ import { UsuarioModel } from '../models/usuario.model';
 })
 export class AuthService {
 
-  private token = "";
+  private token : string | undefined;
 
   //Crear nuevo usuario
   private urlSignUp = 'http://localhost:4300/api/auth/signup';
@@ -33,6 +33,7 @@ export class AuthService {
       res => {
         if(res.status == 201){
           this.token = res.message;
+          console.log(this.token);
         }else{
           throw UnsubscriptionError;
         }
@@ -46,7 +47,7 @@ export class AuthService {
     //empleado.idEmpleado = 0;
     this.http.post<ApiResponse>(this.urlSignUp, empleado,{
       headers: new HttpHeaders({
-        Authorization: this.token
+        Authorization: (this.token == undefined ? "" : this.token  )
       })}).subscribe(
       res => {
         if(res.status == 201){

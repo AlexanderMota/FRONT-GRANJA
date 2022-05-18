@@ -9,38 +9,40 @@
                         Crear nueva cuenta
                     </span>
 
-                    <span *ngIf="registroForm.submited && registroForm.controls['nombre'].errors"
+                    <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
                         class="text-danger animated fadeIn">El nombre es obligatorio</span>
                     <div class="wrap-input100 m-b-16">
                         <input class="input100" 
                                type="text" 
                                name="nombre" 
-                               [(ngModel)]="empleado.nombre"
+                               [(ngModel)]="empleado!.nombre"
                                required
                                placeholder="Nombre">
     
                         <span class="focus-input100"></span>
                     </div>
 
+                    <span *ngIf="registroForm.submitted && registroForm.controls['apellidos'].errors"
+                        class="text-danger animated fadeIn">El apellido es obligatorio</span>
                     <div class="wrap-input100 m-b-16">
                         <input class="input100" 
                                type="text" 
                                name="apellidos" 
                                required
-                               [(ngModel)]="empleado.apellidos"
+                               [(ngModel)]="empleado!.apellidos"
                                placeholder="Apellidos">
     
                         <span class="focus-input100"></span>
                     </div>
     
                     <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                    <span *ngIf="registroForm.submited && registroForm.controls['email'].errors"
+                    <span *ngIf="registroForm.submitted && registroForm.controls['email'].errors"
                         class="text-danger animated fadeIn">El email es obligatorio</span>
                     <div class="wrap-input100 m-b-16">
                         <input class="input100" 
                                type="email" 
                                name="email" 
-                               [(ngModel)]="empleado.email"
+                               [(ngModel)]="empleado!.email"
                                required
                                email
                                placeholder="Email">
@@ -49,11 +51,13 @@
                     </div>
                     
                     <!-- <span class="text-danger">La contraseña debe de ser más de 6 letras</span> -->
+                    <span *ngIf="registroForm.submitted && registroForm.controls['password'].errors"
+                        class="text-danger animated fadeIn">El password es obligatorio</span>
                     <div class="wrap-input100 m-b-16" data-validate = "Password is required">
                         <input class="input100"
                                type="password" 
                                name="password" 
-                               [(ngModel)]="empleado.password"
+                               [(ngModel)]="empleado!.password"
                                placeholder="Password"
                                required
                                password>

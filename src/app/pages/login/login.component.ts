@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 //import Swal from 'sweetalert2';
 import { UsuarioModel } from '../../models/usuario.model';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   usuario : UsuarioModel = new UsuarioModel();
   recuerdame : boolean = false;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService,
+          private router: Router) { }
 
   ngOnInit(): void {
     if(localStorage.getItem('nombre') && localStorage.getItem('password')){
@@ -50,6 +52,8 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('nombre', this.usuario.nombre!);
             localStorage.setItem('password', this.usuario.password!);
            }
+           
+            this.router.navigateByUrl('/home');
            break; 
         }
         case 0: { 

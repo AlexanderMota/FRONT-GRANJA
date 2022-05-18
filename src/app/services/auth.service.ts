@@ -11,7 +11,7 @@ import { UsuarioModel } from '../models/usuario.model';
 })
 export class AuthService {
 
-  private token : string | undefined;
+  private token : string ="";
 
   //Crear nuevo usuario
   private urlSignUp = 'http://localhost:4300/api/auth/signup';
@@ -41,5 +41,9 @@ export class AuthService {
 
   guardaToken(token:string){
     this.token = token;
+    localStorage.setItem('token',token);
+  }
+  esAutenticado():boolean{
+    return this.token!.length > 0
   }
 }

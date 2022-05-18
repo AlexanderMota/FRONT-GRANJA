@@ -1,11 +1,11 @@
 
 export class EmpleadoModel{
   idEmpleado: Number | undefined;
-  nombre: String | undefined;
-  apellidos: String | undefined;
-  telefono: String | undefined;
-  email: String | undefined;
-  password: String | undefined;
+  nombre: string =""
+  apellidos: string =""
+  telefono: string =""
+  email: string =""
+  password: string =""
   /*public constructor(
     idEmpleado: Number,
     nombre: String,

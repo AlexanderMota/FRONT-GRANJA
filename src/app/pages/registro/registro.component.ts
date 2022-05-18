@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class RegistroComponent implements OnInit {
 
   empleado: EmpleadoModel | undefined;
+  recuerdame : boolean = false;
 
   constructor(private auth:AuthService) { }
 
@@ -34,6 +35,12 @@ export class RegistroComponent implements OnInit {
       switch(res.status) { 
         case 201: { 
            Swal.close();
+
+           if(this.recuerdame){
+            localStorage.setItem('nombre', this.empleado!.nombre!);
+            localStorage.setItem('password', this.empleado!.password!);
+           }
+
            break; 
         }
         case 0: { 
@@ -59,6 +66,22 @@ export class RegistroComponent implements OnInit {
           });
            break; 
         }  
+        case 401: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'La sesión ha caducado.',
+            icon:'warning'
+          });
+           break; 
+        } 
+        case 402: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'No tiene autorización.',
+            icon:'warning'
+          });
+           break; 
+        } 
         case 404: { 
           Swal.fire({
             allowOutsideClick:false,

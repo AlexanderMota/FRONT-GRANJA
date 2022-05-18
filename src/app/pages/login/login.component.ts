@@ -17,11 +17,16 @@ import Swal from 'sweetalert2';
 export class LoginComponent implements OnInit {
 
   usuario : UsuarioModel = new UsuarioModel();
+  recuerdame : boolean = false;
 
   constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
-    
+    if(localStorage.getItem('nombre') && localStorage.getItem('password')){
+      this.usuario.nombre = localStorage.getItem('nombre')!;
+      this.usuario.password = localStorage.getItem('password')!;
+      this.recuerdame = true;
+     }
   }
   login(form: NgForm){
     if(!form.valid){
@@ -38,7 +43,13 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.usuario).subscribe(res => {
       switch(res.status) { 
         case 201: { 
+          this.auth.guardaToken(res.message!);
            Swal.close();
+
+           if(this.recuerdame){
+            localStorage.setItem('nombre', this.usuario.nombre!);
+            localStorage.setItem('password', this.usuario.password!);
+           }
            break; 
         }
         case 0: { 

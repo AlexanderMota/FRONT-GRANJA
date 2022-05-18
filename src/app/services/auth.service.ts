@@ -26,23 +26,7 @@ export class AuthService {
   }
 
   login(usuario : UsuarioModel) : Observable<ApiResponse>{
-    /*const response = this.http.post<ApiResponse>(this.urlSignIn, usuario, this.httpOptions);
-    this.token = response.toPromise.apply((value)=>{
-      console.log(value);
-    });*/
-    return this.http.post<ApiResponse>(this.urlSignIn, usuario)/*.subscribe(
-      res => {
-        if(res.status == 201){
-          this.token = res.message;
-          stt = res.status;
-        }else{
-          stt = res.status!;
-        }
-      },(err)=>{
-        stt = err.error.status;
-      }
-    );
-    return stt;*/
+    return this.http.post<ApiResponse>(this.urlSignIn, usuario);
   }
 
   registrarEmpleado(empleado: EmpleadoModel):Observable<ApiResponse> {
@@ -51,17 +35,11 @@ export class AuthService {
     return this.http.post<ApiResponse>(this.urlSignUp, empleado,{
       headers: new HttpHeaders({
         Authorization: (this.token == undefined ? "" : this.token  )
-      })});/*.subscribe(
-      res => {
-        if(res.status == 201){
-          //
-        }else{
-          stt = res.status!;
-        }
-      },(err)=>{
-        stt = err.error.status;
-      }
-    );
-    return stt;*/
+      })
+    });
+  }
+
+  guardaToken(token:string){
+    this.token = token;
   }
 }

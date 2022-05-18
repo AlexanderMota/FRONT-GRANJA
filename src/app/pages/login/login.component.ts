@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 //import Swal from 'sweetalert2';
 import { UsuarioModel } from '../../models/usuario.model';
+import Swal from 'sweetalert2';
 
 
 
@@ -27,34 +28,65 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    /*Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool'
-    })
-    let timerInterval;
     Swal.fire({
-      title: 'Auto close alert!',
-      html: 'I will close in <b></b> milliseconds.',
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: () => {
-        Swal.showLoading()
-        const b = Swal.getHtmlContainer().querySelector('b')
-        timerInterval = setInterval(() => {
-          b.textContent = Swal.getTimerLeft().toString()
-        }, 100)
-      },
-      willClose: () => {
-        clearInterval(timerInterval)
-      }
-    }).then((result) => {
-      // Read more about handling dismissals below 
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
-      }
-    })*/
-    this.auth.login(this.usuario);
+      allowOutsideClick:false,
+      text:'Espere...',
+      icon:'info'
+    });
+    Swal.showLoading();
+    
+    this.auth.login(this.usuario).subscribe(res => {
+      switch(res.status) { 
+        case 201: { 
+           Swal.close();
+           break; 
+        }
+        case 0: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal.',
+            icon:'warning'
+          });
+           break; 
+        } 
+        default: { 
+           //statements; 
+           break; 
+        } 
+      } 
+    },(err)=>{
+      switch(err.error.status) { 
+        case 400: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Uno de los parametros es erroneo.',
+            icon:'error'
+          });
+          console.log("cerrando swal");
+           break; 
+        }  
+        case 404: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'No hay usuarios con ese nombre.',
+            icon:'error'
+          });
+          console.log("cerrando swal");
+           break; 
+        } 
+        case 0: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal.',
+            icon:'warning'
+          });
+           break; 
+        } 
+        default: { 
+           //statements; 
+           break; 
+        } 
+      } 
+    });
   }
 }

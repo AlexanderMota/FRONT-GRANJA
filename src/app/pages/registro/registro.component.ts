@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { EmpleadoModel } from '../../models/empleado.model';
 import { AuthService } from '../../services/auth.service';
 
@@ -21,9 +22,65 @@ export class RegistroComponent implements OnInit {
     if(!form.valid){
       return;
     }
-    console.log("formulario enviado \n" + this.empleado!.nombre + "\nNgFomr: " + form.valid);
     
-    this.auth.registrarEmpleado(this.empleado!);
+    Swal.fire({
+      allowOutsideClick:false,
+      text:'Espere...',
+      icon:'info'
+    });
+    Swal.showLoading();
+
+    this.auth.registrarEmpleado(this.empleado!).subscribe(res => {
+      switch(res.status) { 
+        case 201: { 
+           Swal.close();
+           break; 
+        }
+        case 0: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal.',
+            icon:'warning'
+          });
+           break; 
+        } 
+        default: { 
+           //statements; 
+           break; 
+        } 
+      } 
+    },(err)=>{
+      switch(err.error.status) { 
+        case 400: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'El empleado ya está registrado.',
+            icon:'error'
+          });
+           break; 
+        }  
+        case 404: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal...',
+            icon:'warning'
+          });
+           break; 
+        } 
+        case 0: { 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal.',
+            icon:'warning'
+          });
+           break; 
+        } 
+        default: { 
+           //statements; 
+           break; 
+        } 
+      } 
+    });
   }
 
 }

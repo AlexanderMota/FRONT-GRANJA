@@ -1,28 +1,49 @@
-<div class="limiter">
+<div class="limiter animated fadeInDown">
         <div class="container-login100">
             <div class="wrap-login100 p-t-50 p-b-90">
-                <form class="login100-form validate-form flex-sb flex-w">
+                <form #registroForm="ngForm"
+                    (ngSubmit)="onSubmit(registroForm)"
+                    class="login100-form validate-form flex-sb flex-w">
     
                     <span class="login100-form-title p-b-51">
                         Crear nueva cuenta
                     </span>
-    
-                    <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                    <div class="wrap-input100 m-b-16">
-                        <input class="input100" 
-                               type="text" 
-                               name="email" 
-                               placeholder="Email">
-    
-                        <span class="focus-input100"></span>
-                    </div>
 
-                    <!-- <span class="text-danger">El nombre es obligatorio</span> -->
+                    <span *ngIf="registroForm.submited && registroForm.controls['nombre'].errors"
+                        class="text-danger animated fadeIn">El nombre es obligatorio</span>
                     <div class="wrap-input100 m-b-16">
                         <input class="input100" 
                                type="text" 
                                name="nombre" 
-                               placeholder="Nombre y apellidos">
+                               [(ngModel)]="empleado.nombre"
+                               required
+                               placeholder="Nombre">
+    
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="wrap-input100 m-b-16">
+                        <input class="input100" 
+                               type="text" 
+                               name="apellidos" 
+                               required
+                               [(ngModel)]="empleado.apellidos"
+                               placeholder="Apellidos">
+    
+                        <span class="focus-input100"></span>
+                    </div>
+    
+                    <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                    <span *ngIf="registroForm.submited && registroForm.controls['email'].errors"
+                        class="text-danger animated fadeIn">El email es obligatorio</span>
+                    <div class="wrap-input100 m-b-16">
+                        <input class="input100" 
+                               type="email" 
+                               name="email" 
+                               [(ngModel)]="empleado.email"
+                               required
+                               email
+                               placeholder="Email">
     
                         <span class="focus-input100"></span>
                     </div>
@@ -31,8 +52,11 @@
                     <div class="wrap-input100 m-b-16" data-validate = "Password is required">
                         <input class="input100"
                                type="password" 
-                               name="pass" 
-                               placeholder="Password">
+                               name="password" 
+                               [(ngModel)]="empleado.password"
+                               placeholder="Password"
+                               required
+                               password>
                         <span class="focus-input100"></span>
                     </div>
                     
@@ -45,7 +69,7 @@
                         </div>
     
                         <div>
-                            <a routerLink="/registro" class="txt1">
+                            <a routerLink="/login" class="txt1">
                                 ¿Ya tienes cuenta? / Ingresar
                             </a>
                         </div>

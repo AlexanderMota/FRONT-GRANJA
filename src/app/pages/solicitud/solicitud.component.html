@@ -1,0 +1,19 @@
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <!--<div class="col-md-4">
+            <img src="{{solicitud.fechaSolicitud}}" class="img-fluid rounded-start" alt="...">
+        </div>-->
+        <div class="col-md-8">
+          <div class="card-body">
+           <h5 class="card-title">{{solicitud.empleado.nombre}}</h5>
+           <p class="card-text">{{solicitud.tarea.nombre}}</p>
+           <p class="card-text"><small class="text-muted">{{solicitud.tarea.fechainicio}} - {{solicitud.tarea.fechafin}}</small></p>
+           <div>
+              <img *ngIf="solicitud.tarea.terminada == 'DC'" class="img-logo" src="../../../assets/img/hulk.png" alt="DC">
+              <img *ngIf="solicitud.tarea.terminada != 'DC'" class="img-logo" src="../../../assets/img/batman.png" alt="Marvel">
+           </div>
+           <button type="button" [routerLink]="['/solicitudes']" class="btn btn-primary bg-dark">Menos...</button>
+          </div>
+        </div>
+    </div>
+</div>

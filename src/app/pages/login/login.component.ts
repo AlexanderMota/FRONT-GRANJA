@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
-//import Swal from 'sweetalert2';
 import { UsuarioModel } from '../../models/usuario.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+//import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 
 
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
 
 export class LoginComponent implements OnInit {
@@ -21,14 +20,29 @@ export class LoginComponent implements OnInit {
   recuerdame : boolean = false;
 
   constructor(private auth: AuthService,
-          private router: Router) { }
+          private router: Router/*,
+          nav :NavbarComponent*/) { }
 
   ngOnInit(): void {
+    Swal.fire({
+      allowOutsideClick:false,
+      text:'Espere...',
+      icon:'info'
+    });
+    Swal.showLoading();
+    if(localStorage.getItem('token')){
+      this.auth.conpruebaTokenValido().subscribe(res=>{
+        if(res.status == 201){
+          this.router.navigateByUrl('/home');
+        }
+      });
+    };
     if(localStorage.getItem('nombre') && localStorage.getItem('password')){
       this.usuario.nombre = localStorage.getItem('nombre')!;
       this.usuario.password = localStorage.getItem('password')!;
       this.recuerdame = true;
      }
+     Swal.close();
   }
   login(form: NgForm){
     if(!form.valid){
@@ -47,6 +61,7 @@ export class LoginComponent implements OnInit {
         case 201: { 
           this.auth.guardaToken(res.message!);
            Swal.close();
+           //this.nav.vis = "visible";
 
            if(this.recuerdame){
             localStorage.setItem('nombre', this.usuario.nombre!);

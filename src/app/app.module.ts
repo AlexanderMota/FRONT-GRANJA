@@ -8,16 +8,23 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module'
 
 // Services
-import { AuthService } from './services/auth.service';
 
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { TareaCardComponent } from './components/tarea-card/tarea-card.component';
+import { EmpleadoCardComponent } from './components/empleado-card/empleado-card.component';
+import { SolicitudCardComponent } from './components/solicitud-card/solicitud-card.component';
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
+import { TareasComponent } from './pages/tareas/tareas.component';
+import { EmpleadosComponent } from './pages/empleados/empleados.component';
+import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
+import { TareaComponent } from './pages/tarea/tarea.component';
+import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +32,15 @@ import { RegistroComponent } from './pages/registro/registro.component';
     NavbarComponent,
     HomeComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
+    TareasComponent,
+    EmpleadosComponent,
+    SolicitudesComponent,
+    TareaCardComponent,
+    EmpleadoCardComponent,
+    SolicitudCardComponent,
+    TareaComponent,
+    SolicitudComponent
   ],
   imports: [
     BrowserModule,

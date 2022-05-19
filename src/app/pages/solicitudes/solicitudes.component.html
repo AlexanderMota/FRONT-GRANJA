@@ -1,0 +1,14 @@
+<h1>{{titulo}} <small class="text-muted">{{posttitulo}}</small></h1>
+<hr>
+<div class="card-columns row">
+  <div class="row animated fadeIn fast"  *ngIf="solicitudes.length < 1">
+    <div class="col-md-12">
+      <div class="alert alert-info" role="alert">
+        No existen resultados con el término {{posttitulo}}
+      </div>
+    </div>
+  </div>
+  <app-solicitud-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
+    [solicitud]="solicitud" [index]="i" *ngFor="let solicitud of solicitudes; let i = index;">
+  </app-solicitud-card>  
+</div>

@@ -1,0 +1,18 @@
+<p>solicitud-card works!</p>
+<div>
+    <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
+    <div class="card-body">
+        <h5 class="card-title">{{ solicitud.tarea.nombre }}</h5>
+        <h5 class="card-text">{{ solicitud.tarea.nombre }}</h5>
+        <p class="card-text"><small class="text-muted">{{ solicitud.tarea.descripcion }}</small></p>
+            
+        <!-- linkear botones registrando la ruta en routes -->
+        
+            <a (click)="verHeroe()" [routerLink]="['/solicitud',solicitud.idSolicitud]" class="btn btn-primary bg-dark">Ver mas...</a>
+        
+        
+
+        <!-- linkear botones por método en el controlador del componente -->
+        <!-- <button (click)="verHeroe(i)" type="button" [routerLink]="['/heroe',i]" class="btn btn-primary bg-dark">Ver mas...</button> -->
+    </div>
+</div>

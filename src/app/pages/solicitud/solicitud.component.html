@@ -1,19 +1,41 @@
-<div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-        <!--<div class="col-md-4">
-            <img src="{{solicitud.fechaSolicitud}}" class="img-fluid rounded-start" alt="...">
-        </div>-->
-        <div class="col-md-8">
-          <div class="card-body">
-           <h5 class="card-title">{{solicitud.empleado.nombre}}</h5>
-           <p class="card-text">{{solicitud.tarea.nombre}}</p>
-           <p class="card-text"><small class="text-muted">{{solicitud.tarea.fechainicio}} - {{solicitud.tarea.fechafin}}</small></p>
-           <div>
-              <img *ngIf="solicitud.tarea.terminada == 'DC'" class="img-logo" src="../../../assets/img/hulk.png" alt="DC">
-              <img *ngIf="solicitud.tarea.terminada != 'DC'" class="img-logo" src="../../../assets/img/batman.png" alt="Marvel">
-           </div>
-           <button type="button" [routerLink]="['/solicitudes']" class="btn btn-primary bg-dark">Menos...</button>
-          </div>
-        </div>
-    </div>
+
+<app-navbar></app-navbar>
+
+    <div class="container-login100">
+            
+            <div class="card mb-3" style="max-width: 540px; height: 410px; margin: 20px; align-self: center;">
+                <div class="row g-0">
+                    <!--<div class="col-md-4">
+                        <img src="{{solicitud.fechaSolicitud}}" class="img-fluid rounded-start" alt="...">
+                    </div>-->
+                    <div class="col-md-8">
+                      <div class="card-body">
+                       <h5 class="card-title">{{solicitud.tarea.nombre}}</h5>
+                       <p class="card-text">{{solicitud.tarea.descripcion}}</p>
+                       <p class="card-text"><small class="text-muted">{{solicitud.tarea.fechainicio}} - {{solicitud.tarea.fechafin}}</small></p>
+                       <button type="button" [routerLink]="['/solicitudes']" class="btn btn-primary bg-dark">Menos...</button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3" style="max-width: 540px; margin-top: 20px; align-self: center;">
+                <div class="row g-0">
+                    <!--<div class="col-md-4">
+                        <img src="{{solicitud.fechaSolicitud}}" class="img-fluid rounded-start" alt="...">
+                    </div>-->
+                    <div class="col-md-8">
+                      <div class="card-body">
+                       <h5 class="card-title">{{solicitud.empleado.nombre}}</h5>
+                       <p class="card-text">{{solicitud.empleado.apellidos}}</p>
+                       <p class="card-text"><small class="text-muted">{{solicitud.empleado.email}} - {{solicitud.empleado.telefono}}</small></p>
+                       <div>
+                          <img *ngIf="solicitud.tarea.terminada == 'DC'" class="img-logo" src="../../../assets/img/hulk.png" width="300px" alt="DC">
+                          <img *ngIf="solicitud.tarea.terminada != 'DC'" class="img-logo" src="../../../assets/img/batman.png" width="300px" alt="Marvel">
+                       </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
 </div>
+

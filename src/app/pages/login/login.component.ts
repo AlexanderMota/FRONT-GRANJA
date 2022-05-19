@@ -20,8 +20,7 @@ export class LoginComponent implements OnInit {
   recuerdame : boolean = false;
 
   constructor(private auth: AuthService,
-          private router: Router/*,
-          nav :NavbarComponent*/) { }
+          private router: Router) { }
 
   ngOnInit(): void {
     Swal.fire({
@@ -61,14 +60,12 @@ export class LoginComponent implements OnInit {
         case 201: { 
           this.auth.guardaToken(res.message!);
            Swal.close();
-           //this.nav.vis = "visible";
 
            if(this.recuerdame){
             localStorage.setItem('nombre', this.usuario.nombre!);
             localStorage.setItem('password', this.usuario.password!);
            }
-           
-            this.router.navigateByUrl('/home');
+            this.router.navigateByUrl('/');
            break; 
         }
         case 0: { 

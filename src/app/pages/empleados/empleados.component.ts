@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EmpleadoModel } from 'src/app/models/empleado.model';
+import { EmpleadoService } from 'src/app/services/empleado.service';
 
 @Component({
   selector: 'app-empleados',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmpleadosComponent implements OnInit {
 
-  constructor() { }
+  private empleados : EmpleadoModel[] = [];
+
+  constructor(private empServ:EmpleadoService) { }
 
   ngOnInit(): void {
+    
+    this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe(res=>{
+      this.empleados = res;
+      console.log(this.empleados);
+    });
   }
-
 }

@@ -16,7 +16,8 @@ const routes: Routes = [
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
   { path: 'registro', component: RegistroComponent },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '**', component: HomeComponent , canActivate: [ AuthGuard ] }
 ];
 
 @NgModule({

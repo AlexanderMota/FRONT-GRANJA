@@ -8,15 +8,22 @@ import { RegistroComponent } from './pages/registro/registro.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareasComponent } from './pages/tareas/tareas.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component'
+import { TareaComponent } from './pages/tarea/tarea.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent , canActivate: [ AuthGuard ]},
+
   { path: 'tareas', component: TareasComponent , canActivate: [ AuthGuard ]},
+  { path: 'tarea/nueva', component: TareaComponent , canActivate: [ AuthGuard ]},
+
   { path: 'empleados', component: EmpleadosComponent , canActivate: [ AuthGuard ]},
+
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
+
   { path: 'registro', component: RegistroComponent },
   { path: 'login', component: LoginComponent },
+
   { path: '**', component: HomeComponent , canActivate: [ AuthGuard ] }
 ];
 

@@ -1,29 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { TareaModel } from 'src/app/models/tarea.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { TareaService } from 'src/app/services/tarea.service';
 import Swal from 'sweetalert2';
-import { EmpleadoModel } from '../../models/empleado.model';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-registro',
-  templateUrl: './registro.component.html',
-  styleUrls: ['./registro.component.css']
+  selector: 'app-tarea-form',
+  templateUrl: './tarea-form.component.html'
 })
-export class RegistroComponent implements OnInit {
+export class TareaFormComponent implements OnInit {
 
-  empleado: EmpleadoModel = new EmpleadoModel();
-  recuerdame : boolean = false;
+  tarea: TareaModel = new TareaModel();
+  titulo:string = "";
+  textBtn:string = "";
 
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService, private tarServ:TareaService, private actRoute:ActivatedRoute) {
+    this.actRoute.params.subscribe(params=>{
+      console.log(params);
+      if(params['id']){
+        this.titulo = "Edita tarea";
+        this.textBtn = "Guardar cambios"
+        tarServ.getTareaById(localStorage.getItem('token')!,params['id']).subscribe(res=>{
+          this.tarea=res;
+        });
+      }else{
+        this.titulo = "Nueva tarea";
+        this.textBtn = "Crear tarea"
+      }
+    });
+   }
 
-  ngOnInit() { 
-    this.empleado = new EmpleadoModel();
-  } 
-  onSubmit(form: NgForm){
+  ngOnInit(): void {
+  }
+  onSubmit(form:NgForm){
+    console.log(this.tarea);
     if(!form.valid){
       return;
     }
-    
     Swal.fire({
       allowOutsideClick:false,
       text:'Espere...',
@@ -31,16 +46,11 @@ export class RegistroComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this.auth.registrarEmpleado(this.empleado!).subscribe(res => {
+    this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+      console.log(res.status);
       switch(res.status) { 
         case 201: { 
            Swal.close();
-
-           if(this.recuerdame){
-            localStorage.setItem('nombre', this.empleado!.nombre!);
-            localStorage.setItem('password', this.empleado!.password!);
-           }
-
            break; 
         }
         case 0: { 
@@ -61,15 +71,15 @@ export class RegistroComponent implements OnInit {
         case 400: { 
           Swal.fire({
             allowOutsideClick:false,
-            text:'El empleado ya está registrado.',
+            text:err.error.message,
             icon:'error'
           });
            break; 
         }  
-        case 401: { 
+        /*case 401: { 
           Swal.fire({
             allowOutsideClick:false,
-            text:'La sesión ha caducado.',
+            text:err.error.message,
             icon:'warning'
           });
            break; 
@@ -77,7 +87,7 @@ export class RegistroComponent implements OnInit {
         case 402: { 
           Swal.fire({
             allowOutsideClick:false,
-            text:'No tiene autorización.',
+            text:err.error.message,
             icon:'warning'
           });
            break; 
@@ -85,15 +95,15 @@ export class RegistroComponent implements OnInit {
         case 404: { 
           Swal.fire({
             allowOutsideClick:false,
-            text:'Algo ha ido mal...',
+            text:err.error.message,
             icon:'warning'
           });
            break; 
-        } 
+        } */
         case 0: { 
           Swal.fire({
             allowOutsideClick:false,
-            text:'Algo ha ido mal.',
+            text:err.error.message,
             icon:'warning'
           });
            break; 

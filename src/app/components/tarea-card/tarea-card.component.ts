@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TareaModel } from 'src/app/models/tarea.model';
 
 @Component({
   selector: 'app-tarea-card',
@@ -7,8 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TareaCardComponent implements OnInit {
 
-  @Input() tarea:any = {};
-  @Input() index:number = 0;
+  @Input() tarea:TareaModel = new TareaModel();
+  //@Input() index:number = 0;
   constructor() { }
 
   ngOnInit(): void {

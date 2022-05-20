@@ -42,11 +42,13 @@ export class SolicitudesComponent implements OnInit {
             allowOutsideClick:false,
             text:'La sesión ha expirado. Vuelva a iniciar sesion',
             icon:'warning'
+          }).then((result) => {
+            this.auth.logout();
+            if (result.isConfirmed) {
+              this.router.navigateByUrl('/');
+            }
           });
           
-          this.auth.logout();
-          this.router.navigateByUrl('/');
-
            break; 
         } 
         case 404: { 

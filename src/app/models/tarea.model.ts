@@ -4,8 +4,8 @@ export class TareaModel{
   nombre: string ="";
   descripcion: string ="";
   importancia: string ="";
-  fechainicio: string ="";
+  fechainicio: Date =new Date();
   fechafin: string ="";
-  terminada: string ="";
+  terminada: boolean =false;
   numeroTrabajadores: number = 0;
 };

@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { UsuarioModel } from '../../models/usuario.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ApiResponseService } from 'src/app/services/api-response.service';
 //import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 
 
@@ -20,15 +21,17 @@ export class LoginComponent implements OnInit {
   recuerdame : boolean = false;
 
   constructor(private auth: AuthService,
-          private router: Router) { }
+          private router: Router,
+          private resPop:ApiResponseService) { }
 
   ngOnInit(): void {
-    Swal.fire({
+    this.resPop.resCargando('Espere...');
+    /*Swal.fire({
       allowOutsideClick:false,
       text:'Espere...',
       icon:'info'
     });
-    Swal.showLoading();
+    Swal.showLoading();*/
     if(localStorage.getItem('token')){
       this.auth.conpruebaTokenValido().subscribe(res=>{
         if(res.status == 201){
@@ -37,7 +40,7 @@ export class LoginComponent implements OnInit {
       });
     };
     if(localStorage.getItem('nombre') && localStorage.getItem('password')){
-      this.usuario.nombre = localStorage.getItem('nombre')!;
+      this.usuario.email = localStorage.getItem('nombre')!;
       this.usuario.password = localStorage.getItem('password')!;
       this.recuerdame = true;
      }
@@ -48,67 +51,44 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    Swal.fire({
-      allowOutsideClick:false,
-      text:'Espere...',
-      icon:'info'
-    });
-    Swal.showLoading();
-    
+    this.resPop.resCargando('Espere...');
+
     this.auth.login(this.usuario).subscribe(res => {
-      switch(res.status) { 
-        case 201: { 
+      switch(res.status) {
+        case 201: {
           this.auth.guardaToken(res.message!);
            Swal.close();
 
            if(this.recuerdame){
-            localStorage.setItem('nombre', this.usuario.nombre!);
+            localStorage.setItem('nombre', this.usuario.email!);
             localStorage.setItem('password', this.usuario.password!);
            }
             this.router.navigateByUrl('/');
+           break;
+        }
+        case 0: {
+          this.resPop.resMensajeWrnBtn('Algo ha ido mal.');
+           break;
+        }
+        default: {
+           //statements;
+           break;
+        }
+      }
+    },(err)=>{
+      switch(err.error.status) {
+        case 400: {
+          this.resPop.resMensajeErrBtn('Uno de los parametros es erroneo.');
+           break;
+        }
+        case 404: { 
+          this.resPop.resMensajeErrBtn('No hay usuarios con ese nombre.');
+           break; 
+        } 
+        case 0: {
+          this.resPop.resMensajeWrnBtn('Algo ha ido mal.');
            break; 
         }
-        case 0: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'Algo ha ido mal.',
-            icon:'warning'
-          });
-           break; 
-        } 
-        default: { 
-           //statements; 
-           break; 
-        } 
-      } 
-    },(err)=>{
-      switch(err.error.status) { 
-        case 400: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'Uno de los parametros es erroneo.',
-            icon:'error'
-          });
-          console.log("cerrando swal");
-           break; 
-        }  
-        case 404: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'No hay usuarios con ese nombre.',
-            icon:'error'
-          });
-          console.log("cerrando swal");
-           break; 
-        } 
-        case 0: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'Algo ha ido mal.',
-            icon:'warning'
-          });
-           break; 
-        } 
         default: { 
            //statements; 
            break; 

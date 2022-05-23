@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ApiResponseService } from 'src/app/services/api-response.service';
 import Swal from 'sweetalert2';
 import { EmpleadoModel } from '../../models/empleado.model';
 import { AuthService } from '../../services/auth.service';
@@ -14,7 +15,7 @@ export class RegistroComponent implements OnInit {
   empleado: EmpleadoModel = new EmpleadoModel();
   recuerdame : boolean = false;
 
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService, private resApi: ApiResponseService) { }
 
   ngOnInit() { 
     this.empleado = new EmpleadoModel();
@@ -24,12 +25,7 @@ export class RegistroComponent implements OnInit {
       return;
     }
     
-    Swal.fire({
-      allowOutsideClick:false,
-      text:'Espere...',
-      icon:'info'
-    });
-    Swal.showLoading();
+    this.resApi.resCargando('Espere...');
 
     this.auth.registrarEmpleado(this.empleado!).subscribe(res => {
       switch(res.status) { 
@@ -44,11 +40,7 @@ export class RegistroComponent implements OnInit {
            break; 
         }
         case 0: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'Algo ha ido mal.',
-            icon:'warning'
-          });
+          this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
            break; 
         } 
         default: { 
@@ -67,11 +59,12 @@ export class RegistroComponent implements OnInit {
            break; 
         }  
         case 401: { 
+          /*this.resApi.resMensajeWrnBtn('La sesión ha caducado.');
           Swal.fire({
             allowOutsideClick:false,
             text:'La sesión ha caducado.',
             icon:'warning'
-          });
+          });*/
            break; 
         } 
         case 402: { 

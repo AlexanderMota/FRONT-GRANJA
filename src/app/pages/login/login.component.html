@@ -10,15 +10,15 @@
                 </span>
 
                 <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                    <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
-                    class="text-danger animated fadeIn">El nombre es obligatorio</span>
+                    <span *ngIf="registroForm.submitted && registroForm.controls['email'].errors"
+                    class="text-danger animated fadeIn">El correo es obligatorio</span>
                 <div class="wrap-input100 m-b-16">
                     <input class="input100" 
-                           type="text" 
-                           name="nombre"
-                           [(ngModel)]="usuario.nombre"
+                           type="email" 
+                           name="email"
+                           [(ngModel)]="usuario.email"
                            required
-                           username
+                           email
                            placeholder="Username">
 
                     <span class="focus-input100"></span>

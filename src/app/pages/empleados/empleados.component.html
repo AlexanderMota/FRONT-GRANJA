@@ -1,3 +1,17 @@
 
-    <app-navbar></app-navbar>
-<p>empleados works!</p>
+<app-navbar></app-navbar>
+
+<h1>{{titulo}} <small class="text-muted">{{posttitulo}}</small></h1>
+<hr>
+<div class="card-columns row">
+  <div class="row animated fadeIn fast"  *ngIf="empleados.length < 1">
+    <div class="col-md-12">
+      <div class="alert alert-info" role="alert">
+        No existen resultados con el término {{posttitulo}}
+      </div>
+    </div>
+  </div>
+  <app-empleado-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
+    [empleado]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
+  </app-empleado-card>  
+</div>

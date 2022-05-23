@@ -1,5 +1,6 @@
 
 export class TareaModel{
+  _id: string = "";
   idTarea: number = 0;
   nombre: string ="";
   descripcion: string ="";

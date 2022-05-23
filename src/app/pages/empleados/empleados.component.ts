@@ -9,7 +9,9 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
 })
 export class EmpleadosComponent implements OnInit {
 
-  private empleados : EmpleadoModel[] = [];
+  titulo="Lista de empleados";
+  posttitulo="Lista de todos los empleados en plantilla";
+  empleados : EmpleadoModel[] = [];
 
   constructor(private empServ:EmpleadoService) { }
 
@@ -17,7 +19,7 @@ export class EmpleadosComponent implements OnInit {
     
     this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe(res=>{
       this.empleados = res;
-      console.log(this.empleados);
+      //console.log(this.empleados);
     });
   }
 }

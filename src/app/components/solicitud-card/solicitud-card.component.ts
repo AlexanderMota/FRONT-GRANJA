@@ -15,7 +15,4 @@ export class SolicitudCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  verHeroe(){
-    
-  }
 }

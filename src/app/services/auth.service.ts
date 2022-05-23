@@ -14,6 +14,7 @@ export class AuthService {
 
   vis = "visible";
   private token : string ="";
+  private horaCon : Date = new Date();
 
   //Crear nuevo usuario
   //private urlSignUp = 'https://api-granja.azurewebsites.net/api/auth/signup';
@@ -30,11 +31,15 @@ export class AuthService {
 
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('fintoken');
     this.token = "";
     this.vis = "collapse";
   }
 
   login(usuario : UsuarioModel) : Observable<ApiResponse>{
+    this.horaCon = new Date(Date.now());
+    localStorage.setItem("fintoken",this.horaCon.getTime().toString())
+    //onsole.log(this.horaCon);
     return this.http.post<ApiResponse>(this.urlSignIn, usuario);
   }
 
@@ -54,10 +59,21 @@ export class AuthService {
     this.vis = "visible";
   }
   esAutenticado():boolean{
+
     if(localStorage.getItem('token')){
-      return localStorage.getItem('token')!.length > 0;
+      const expira = Number(localStorage.getItem("fintoken"));
+      const expiraDate = new Date();
+      expiraDate.setTime(expira);
+
+      if(expiraDate > new Date()){
+        this.logout();
+
+        return true;
+      }else{
+        return true;
+      }
     }else{
-      return this.token.length > 0;
+      return false;
     }
   }
   conpruebaTokenValido():Observable<ApiResponse>{

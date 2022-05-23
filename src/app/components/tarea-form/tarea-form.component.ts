@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TareaModel } from 'src/app/models/tarea.model';
+import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { TareaService } from 'src/app/services/tarea.service';
 import Swal from 'sweetalert2';
@@ -15,15 +16,19 @@ export class TareaFormComponent implements OnInit {
   tarea: TareaModel = new TareaModel();
   titulo:string = "";
   textBtn:string = "";
+  private paramId : string = "";
 
-  constructor(private auth:AuthService, private tarServ:TareaService, private actRoute:ActivatedRoute) {
+  constructor(private resApi:ApiResponseService, private tarServ:TareaService, private actRoute:ActivatedRoute) {
     this.actRoute.params.subscribe(params=>{
-      console.log(params);
+      //console.log(params);
       if(params['id']){
         this.titulo = "Edita tarea";
         this.textBtn = "Guardar cambios"
-        tarServ.getTareaById(localStorage.getItem('token')!,params['id']).subscribe(res=>{
+        this.paramId = params['id'];
+        //console.log("contructor route paramid=>\n"+this.paramId);
+        tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
           this.tarea=res;
+          //console.log("contructor route params=>\n"+res);
         });
       }else{
         this.titulo = "Nueva tarea";
@@ -35,84 +40,53 @@ export class TareaFormComponent implements OnInit {
   ngOnInit(): void {
   }
   onSubmit(form:NgForm){
-    console.log(this.tarea);
-    if(!form.valid){
+    if(!form.valid || this.tarea.importancia.length < 1){
       return;
     }
-    Swal.fire({
-      allowOutsideClick:false,
-      text:'Espere...',
-      icon:'info'
-    });
-    Swal.showLoading();
-
-    this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
-      console.log(res.status);
-      switch(res.status) { 
-        case 201: { 
-           Swal.close();
-           break; 
-        }
-        case 0: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'Algo ha ido mal.',
-            icon:'warning'
-          });
-           break; 
+    this.resApi.resCargando('Espere...');
+    if(this.paramId.length > 0){
+      this.tarServ.patchTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+        switch(res.status) { 
+          case 201: { 
+            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+             break; 
+          }
+          case 202: { 
+            this.resApi.resMensajeSucBtn('Tarea modificada con éxito');
+             break; 
+          }
+          case 0: { 
+            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+             break; 
+          } 
+          default: { 
+             //statements; 
+             break; 
+          } 
         } 
-        default: { 
-           //statements; 
-           break; 
+      },(err)=>{
+        this.resApi.resMensajeErrBtn(err.error.message);
+      });
+    }else{
+      this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+        switch(res.status) { 
+          case 201: { 
+            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+             break; 
+          }
+          case 0: { 
+            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+             break; 
+          } 
+          default: { 
+             //statements; 
+             break; 
+          } 
         } 
-      } 
-    },(err)=>{
-      switch(err.error.status) { 
-        case 400: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:err.error.message,
-            icon:'error'
-          });
-           break; 
-        }  
-        /*case 401: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:err.error.message,
-            icon:'warning'
-          });
-           break; 
-        } 
-        case 402: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:err.error.message,
-            icon:'warning'
-          });
-           break; 
-        } 
-        case 404: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:err.error.message,
-            icon:'warning'
-          });
-           break; 
-        } */
-        case 0: { 
-          Swal.fire({
-            allowOutsideClick:false,
-            text:err.error.message,
-            icon:'warning'
-          });
-           break; 
-        } 
-        default: { 
-           //statements; 
-           break; 
-        } 
-      } 
-    });
+      },(err)=>{
+        this.resApi.resMensajeErrBtn(err.error.message);
+      });
+    }
   }
 }
+

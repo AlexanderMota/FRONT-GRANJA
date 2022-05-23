@@ -14,9 +14,11 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent , canActivate: [ AuthGuard ]},
 
   { path: 'tareas', component: TareasComponent , canActivate: [ AuthGuard ]},
-  { path: 'tarea/nueva', component: TareaComponent , canActivate: [ AuthGuard ]},
+  { path: 'tareas/nueva', component: TareaComponent , canActivate: [ AuthGuard ]},
+  { path: 'tarea/:id', component: TareaComponent , canActivate: [ AuthGuard ] },
 
   { path: 'empleados', component: EmpleadosComponent , canActivate: [ AuthGuard ]},
+  //{ path: 'empleado/:id', component: EmpleadoCardComponent , canActivate: [ AuthGuard ]},
 
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },

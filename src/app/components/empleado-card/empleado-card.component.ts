@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { EmpleadoModel } from 'src/app/models/empleado.model';
 
 @Component({
   selector: 'app-empleado-card',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class EmpleadoCardComponent implements OnInit {
 
-  @Input() heroe:any = {};
+  @Input() empleado:EmpleadoModel = new EmpleadoModel();
   @Input() index:number = 0;
   
   constructor() { }

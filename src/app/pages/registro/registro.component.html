@@ -6,7 +6,7 @@
                     class="login100-form validate-form flex-sb flex-w">
     
                     <span class="login100-form-title p-b-51">
-                        Crear nueva cuenta
+                        Registrar personal
                     </span>
 
                     <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
@@ -46,6 +46,21 @@
                                required
                                email
                                placeholder="Email">
+    
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                    <span *ngIf="registroForm.submitted && registroForm.controls['tlf'].errors"
+                        class="text-danger animated fadeIn">El email es obligatorio</span>
+                    <div class="wrap-input100 m-b-16">
+                        <input class="input100" 
+                               type="text" 
+                               name="tlf" 
+                               [(ngModel)]="empleado!.telefono"
+                               required
+                               phone
+                               placeholder="Teléfono">
     
                         <span class="focus-input100"></span>
                     </div>

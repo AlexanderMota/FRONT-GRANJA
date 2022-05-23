@@ -17,11 +17,15 @@ export class EmpleadoService {
 
   constructor(private http: HttpClient) { }
 
-  getAllEmpleados(token:string):Observable<[EmpleadoModel]> {
+  getAllEmpleados(token:string,pageSize = 20, pageNum = 1):Observable<[EmpleadoModel]> {
     return this.http.get<[EmpleadoModel]>(this.urlGetAllEmpleados, {
       headers: new HttpHeaders({
         Authorization: token
-      })
+      }),
+      params: {
+        pageSize,
+        pageNum
+      }
     });
   }
   getEmpleadoById(token:string,id:string):Observable<EmpleadoModel> {

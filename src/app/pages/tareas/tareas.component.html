@@ -1,3 +1,17 @@
 
 <app-navbar></app-navbar>
-<p>tareas works!</p>
+
+<h1>{{titulo}} <small class="text-muted">{{posttitulo}}</small></h1>
+<hr>
+<div class="card-columns row">
+  <div class="row animated fadeIn fast"  *ngIf="tareas.length < 1">
+    <div class="col-md-12">
+      <div class="alert alert-info" role="alert">
+        No existen resultados con el término {{posttitulo}}
+      </div>
+    </div>
+  </div>
+  <app-tarea-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
+    [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
+  </app-tarea-card>  
+</div>

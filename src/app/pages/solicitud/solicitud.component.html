@@ -13,6 +13,7 @@
                        <h5 class="card-title">{{solicitud.tarea.nombre}}</h5>
                        <p class="card-text">{{solicitud.tarea.descripcion}}</p>
                        <p class="card-text"><small class="text-muted">{{solicitud.tarea.fechainicio}} - {{solicitud.tarea.fechafin}}</small></p>
+                       <button type="button" (click)="agregaEmpleadoaTarea()" class="btn btn-outline-success">Agregar empleado</button>
                        <button type="button" [routerLink]="['/solicitudes']" class="btn btn-primary bg-dark">Menos...</button>
                       </div>
                     </div>
@@ -29,8 +30,8 @@
                        <p class="card-text">{{solicitud.empleado.apellidos}}</p>
                        <p class="card-text"><small class="text-muted">{{solicitud.empleado.email}} - {{solicitud.empleado.telefono}}</small></p>
                        <div>
-                          <img *ngIf="solicitud.tarea.terminada == 'DC'" class="img-logo" src="../../../assets/img/hulk.png" width="300px" alt="DC">
-                          <img *ngIf="solicitud.tarea.terminada != 'DC'" class="img-logo" src="../../../assets/img/batman.png" width="300px" alt="Marvel">
+                          <img *ngIf="solicitud.tarea.terminada" class="img-logo" src="../../../assets/img/hulk.png" width="300px" alt="DC">
+                          <img *ngIf="!solicitud.tarea.terminada" class="img-logo" src="../../../assets/img/batman.png" width="300px" alt="Marvel">
                        </div>
                       </div>
                     </div>

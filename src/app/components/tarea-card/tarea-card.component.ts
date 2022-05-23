@@ -9,10 +9,14 @@ import { TareaModel } from 'src/app/models/tarea.model';
 export class TareaCardComponent implements OnInit {
 
   @Input() tarea:TareaModel = new TareaModel();
-  //@Input() index:number = 0;
+  @Input() index:number = 0;
+  fechainiciolocal:string = this.tarea.fechainicio.getDate() +"/"+(this.tarea.fechainicio.getMonth() + 1) +"/"+this.tarea.fechainicio.getFullYear() 
   constructor() { }
 
   ngOnInit(): void {
-  }
+    if(this.tarea.descripcion.length > 50){
+      this.tarea.descripcion = (this.tarea.descripcion.slice(0,50) + "...");
 
+    }
+  }
 }

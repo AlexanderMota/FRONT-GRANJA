@@ -26,6 +26,7 @@ import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component'
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 import { TareaFormComponent } from './components/tarea-form/tarea-form.component';
+import { TareaDetailsComponent } from './components/tarea-details/tarea-details.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { TareaFormComponent } from './components/tarea-form/tarea-form.component
     SolicitudCardComponent,
     TareaComponent,
     SolicitudComponent,
-    TareaFormComponent
+    TareaFormComponent,
+    TareaDetailsComponent
   ],
   imports: [
     BrowserModule,

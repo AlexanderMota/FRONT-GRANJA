@@ -6,7 +6,7 @@ export class TareaModel{
   descripcion: string ="";
   importancia: string ="";
   fechainicio: Date =new Date();
-  fechafin: string ="";
+  fechafin: Date =new Date();
   terminada: boolean =false;
   numeroTrabajadores: number = 0;
 };

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ApiResponse } from '../models/apiResponse.model';
 
@@ -7,7 +8,7 @@ import { ApiResponse } from '../models/apiResponse.model';
 })
 export class ApiResponseService {
 
-  constructor() { }
+  constructor(private router:Router) { }
   resMensajeSucBtn(msn:string){
     Swal.fire({
       allowOutsideClick:false,
@@ -17,6 +18,13 @@ export class ApiResponseService {
   }
   resMensajeErrBtnRedir(msn:string,redir:string){
 
+    Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'error'
+    }).then(()=>{
+      this.router.navigateByUrl(redir);
+    });
   }
   resMensajeErrBtn(msn:string){
     Swal.fire({
@@ -26,7 +34,6 @@ export class ApiResponseService {
     });
   }
   resMensajeWrnBtn(msn:string){
-
     Swal.fire({
       allowOutsideClick:false,
       text:msn,

@@ -7,14 +7,15 @@ import { HttpClientModule } from '@angular/common/http';
 // Routes
 import { AppRoutingModule } from './app-routing.module'
 
-// Services
-
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TareaCardComponent } from './components/tarea-card/tarea-card.component';
 import { EmpleadoCardComponent } from './components/empleado-card/empleado-card.component';
 import { SolicitudCardComponent } from './components/solicitud-card/solicitud-card.component';
+import { TareaFormComponent } from './components/tarea-form/tarea-form.component';
+import { TareaDetailsComponent } from './components/tarea-details/tarea-details.component';
+import { EmpleadoLineaComponent } from './components/empleado-linea/empleado-linea.component';
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
@@ -25,8 +26,6 @@ import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
-import { TareaFormComponent } from './components/tarea-form/tarea-form.component';
-import { TareaDetailsComponent } from './components/tarea-details/tarea-details.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +43,8 @@ import { TareaDetailsComponent } from './components/tarea-details/tarea-details.
     TareaComponent,
     SolicitudComponent,
     TareaFormComponent,
-    TareaDetailsComponent
+    TareaDetailsComponent,
+    EmpleadoLineaComponent
   ],
   imports: [
     BrowserModule,

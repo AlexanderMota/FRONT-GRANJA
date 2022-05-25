@@ -11,9 +11,11 @@ export class EmpleadoCardComponent implements OnInit {
   @Input() empleado:EmpleadoModel = new EmpleadoModel();
   @Input() index:number = 0;
   
-  constructor() { }
+  constructor() { 
+    console.log(this.empleado);}
 
   ngOnInit(): void {
+    this.empleado = this.empleado;
   }
 
 }

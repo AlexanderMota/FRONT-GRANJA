@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { TareaModel } from 'src/app/models/tarea.model';
+import { ComponentMessageService } from 'src/app/services/component-message.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { TareaService } from 'src/app/services/tarea.service';
 
@@ -13,11 +14,13 @@ import { TareaService } from 'src/app/services/tarea.service';
 export class TareaDetailsComponent implements OnInit {
   tarea: TareaModel = new TareaModel();
   empleados: EmpleadoModel[] = [];
+  @Input() oculto:boolean = false;
   private paramId : string = "";
 
   constructor(private tarServ:TareaService, 
-    private actRoute:ActivatedRoute,
-    private empServ: EmpleadoService) {
+    private empServ: EmpleadoService,
+    private compMess:ComponentMessageService,
+    private actRoute:ActivatedRoute) {
     
       this.actRoute.params.subscribe(params=>{
         //console.log(params);
@@ -39,7 +42,10 @@ export class TareaDetailsComponent implements OnInit {
         });
     //console.log(this.empleados);
  }
-
+ oculta(){
+   this.oculto = !this.oculto;
+   this.compMess.emiteDato.emit({dato:this.oculto});
+ }
   ngOnInit(): void {
   }
 

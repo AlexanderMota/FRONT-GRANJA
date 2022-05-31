@@ -13,6 +13,7 @@ export class TareaService {
   //Post: Añade una tarea
   //private urlGetAllTareas = 'https://api-granja.azurewebsites.net/api/tareas/solicitudes/todas';
   private baseUrl = 'http://localhost:4300/api/tareas/';
+  private urlTareasByIdEmpleado = this.baseUrl+"empleado/";
 
   constructor(private http: HttpClient) { }
 
@@ -30,6 +31,17 @@ export class TareaService {
   getTareaById(token:string,id:string):Observable<TareaModel> {
     //console.log(id);
     return this.http.get<TareaModel>(this.baseUrl+id ,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })/*,
+      params:{
+        id:id
+      }*/
+    });
+  }
+  getTareaByIdEmpleado(token:string,idEmpleado:string):Observable<[TareaModel]> {
+    //console.log(id);
+    return this.http.get<[TareaModel]>(this.urlTareasByIdEmpleado+idEmpleado ,{
       headers: new HttpHeaders({
         Authorization: token
       })/*,

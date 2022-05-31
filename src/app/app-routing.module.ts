@@ -9,6 +9,7 @@ import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component'
 import { TareasComponent } from './pages/tareas/tareas.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component'
 import { TareaComponent } from './pages/tarea/tarea.component';
+import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent , canActivate: [ AuthGuard ]},
@@ -18,7 +19,7 @@ const routes: Routes = [
   { path: 'tarea/:id', component: TareaComponent , canActivate: [ AuthGuard ] },
 
   { path: 'empleados', component: EmpleadosComponent , canActivate: [ AuthGuard ]},
-  //{ path: 'empleado/:id', component: EmpleadoCardComponent , canActivate: [ AuthGuard ]},
+  { path: 'empleado/:id', component: EmpleadoDetailsComponent , canActivate: [ AuthGuard ]},
 
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },

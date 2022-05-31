@@ -12,11 +12,14 @@ import Swal from 'sweetalert2';
 export class SolicitudComponent /*implements OnInit*/ {
 
   solicitud:SolicitudModel=new SolicitudModel();
+  private solId:string ="";
   constructor(private solServ:SolicitudService, private actRoute:ActivatedRoute, private resPop: ApiResponseService) { 
     this.actRoute.params.subscribe(params=>{
       console.log(params);
       solServ.getSolicitudById(localStorage.getItem('token')!,params['id']).subscribe(res=>{
         this.solicitud=res;
+        this.solId=params['id'];
+      console.log(this.solicitud);
       });
     });
   }
@@ -28,7 +31,7 @@ export class SolicitudComponent /*implements OnInit*/ {
     this.solServ.postEmpleadoATarea(
       localStorage.getItem('token')!,
       this.solicitud.empleado._id,
-      this.solicitud.tarea._id
+      this.solicitud.tarea._id, this.solId
     ).subscribe(res=>{
         console.log("respuesta back: "+res);
         switch(res.status) {

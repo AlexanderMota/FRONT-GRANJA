@@ -7,15 +7,18 @@
         padding: 200px;
     }
     .cuerpoTarj{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         padding: 0px;
         margin: 20px;
-        width: 420px;
+        min-width: 420px;
     }
     .cuadroTxt{
         height: 250px;
     }
 </style>
-<div class="contenedor  card animated fadeInDown">
+<div class="contenedor  card animated fadeInDown" [hidden] = "oculto">
     <div class="cuerpoTarj card" >
         
         <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
@@ -25,16 +28,25 @@
             <p class="cuadroTxt card-text"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
                 
             <!-- linkear botones registrando la ruta en routes -->
-            <a  [routerLink]="['/tarea',tarea._id]" class="btn btn-primary bg-dark">Ver mas...</a>
+            <button (click)="oculta()" >
+                <a class="btn btn-primary bg-dark">Editar</a>
+            </button>
 
             <!-- linkear botones por método en el controlador del componente -->
             <!-- <button (click)="verHeroe(i)" type="button" [routerLink]="['/heroe',i]" class="btn btn-primary bg-dark">Ver mas...</button> -->
         </div>
     </div>
     <div class="cuerpoTarj card container">
-        <app-empleado-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
-            [empleado]="empleado" *ngFor="let empleado of empleados; let i = index;">
-        </app-empleado-card>
+        
+        <!--<div class="container card-body">
+            <h5 class="card animated fadeIn fast" *ngFor="let empleado of empleados; let i = index;">
+                {{ (i+1) + " : " + empleado.nombre}}
+            </h5>
+
+        </div>-->
+        <app-empleado-linea class="card animated fadeIn fast"  style="width: 18rem; margin:20px;" 
+            [empleado]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
+        </app-empleado-linea>
     </div>
 </div>
 

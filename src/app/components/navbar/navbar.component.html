@@ -43,12 +43,20 @@
             <a class="nav-link disabled">Disabled</a>
           </li>-->
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <div class="d-flex" role="search">
+          <input 
+            class="form-control me-2" 
+            #txtBuscar 
+            (keyup.enter)="busca( txtBuscar.value )"
+            type="search" 
+            placeholder="Buscar" 
+            aria-label="Search"/>
           <button class="btn btn-outline-success" type="submit"
+          
+            (click)="busca( txtBuscar.value )"
             style="margin: 0,0,0,20;">Search</button>
           <button class="btn btn-outline-danger" (click)="logout()">Salir</button>
-        </form>
+        </div>
       </div>
     </div>
   </nav>

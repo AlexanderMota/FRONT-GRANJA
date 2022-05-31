@@ -26,6 +26,7 @@ import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
+import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SolicitudComponent } from './pages/solicitud/solicitud.component';
     SolicitudComponent,
     TareaFormComponent,
     TareaDetailsComponent,
-    EmpleadoLineaComponent
+    EmpleadoLineaComponent,
+    EmpleadoDetailsComponent
   ],
   imports: [
     BrowserModule,

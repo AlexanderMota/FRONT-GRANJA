@@ -14,6 +14,7 @@ export class EmpleadoLineaComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.empleado.nombre = "ejemplo";
   }
 
 }

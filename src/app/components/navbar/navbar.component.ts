@@ -24,7 +24,9 @@ export class NavbarComponent implements OnInit {
       this.vis = "hidden";
     }
   }*/
-
+  busca(str:string){
+    console.log(str);
+  }
   logout(){
     this.auth.logout();
     this.route.navigateByUrl('/login');

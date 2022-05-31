@@ -22,8 +22,10 @@ export class ApiResponseService {
       allowOutsideClick:false,
       text:msn,
       icon:'error'
-    }).then(()=>{
-      this.router.navigateByUrl(redir);
+    }).then((result)=>{
+      if (result.isConfirmed) {
+        this.router.navigateByUrl(redir);
+      }
     });
   }
   resMensajeErrBtn(msn:string){

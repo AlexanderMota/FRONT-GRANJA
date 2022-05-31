@@ -8,7 +8,7 @@ import { TareaService } from 'src/app/services/tarea.service';
   templateUrl: './tarea.component.html'
 })
 export class TareaComponent implements OnInit {
-
+  public edita:boolean=false;
   //tarea:TareaModel=new TareaModel();
   constructor(private tarServ:TareaService, private actRoute:ActivatedRoute) { 
     /*this.actRoute.params.subscribe(params=>{

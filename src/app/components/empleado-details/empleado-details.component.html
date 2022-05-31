@@ -1,0 +1,11 @@
+<app-navbar  ></app-navbar>
+<div class="container container-fluid card">
+    
+    <app-empleado-card [empleado]="empleado" class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;">
+    </app-empleado-card> 
+    <div class="container-lg  card">
+        <app-tarea-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
+          [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
+        </app-tarea-card>  
+    </div>
+</div>

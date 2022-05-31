@@ -38,10 +38,10 @@ export class SolicitudService {
       })
     });
   }
-  postEmpleadoATarea(token:string,idEmpleado:string,idTarea:string):Observable<ApiResponse> {
+  postEmpleadoATarea(token:string,idEmpleado:string,idTarea:string,idSolicitud:string):Observable<ApiResponse> {
     //console.log(idEmpleado +" /// "+idTarea);
     return this.http.post<ApiResponse>(this.urlConfirmaSolicitud+
-      "?idTarea="+idTarea+"&idEmpleado="+idEmpleado, "",{
+      "?idTarea="+idTarea+"&idEmpleado="+idEmpleado+"&idSolicitud="+idSolicitud, "",{
       headers: new HttpHeaders({
         Authorization: token
       })/*,

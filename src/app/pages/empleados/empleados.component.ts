@@ -9,7 +9,7 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
 })
 export class EmpleadosComponent implements OnInit {
 
-  titulo="Lista de empleados";
+  titulo="Empleados";
   posttitulo="Lista de todos los empleados en plantilla";
   empleados : EmpleadoModel[] = [];
 

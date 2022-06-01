@@ -3,18 +3,27 @@
         height: 50px;
     }
     .cuerpoTarj{
-        padding: 20px;
+        min-height: 270px;
+    }
+    .subCuerpoTarj{
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        height: 230px;
+    }
+    .botonTarea{
+        width: 100px;
     }
 </style>
-<div>
+<div class="cuerpoTarj">
     <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
-    <div class="cuerpoTarj card-body">
+    <div class="subCuerpoTarj card-body">
         <h4 class="card-title">{{ tarea.nombre }}</h4>
         <h5 class="card-text">{{ tarea.fechainicio }}</h5>
         <p class="cuadroTxt card-text"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
             
         <!-- linkear botones registrando la ruta en routes -->
-        <a  [routerLink]="['/tarea',tarea._id]" class="btn btn-primary bg-dark">Ver mas...</a>
+        <a  [routerLink]="['/tarea',tarea._id]" class="botonTarea btn btn-primary bg-dark">Ver mas...</a>
 
         <!-- linkear botones por método en el controlador del componente -->
         <!-- <button (click)="verHeroe(i)" type="button" [routerLink]="['/heroe',i]" class="btn btn-primary bg-dark">Ver mas...</button> -->

@@ -1,9 +1,13 @@
 
 <app-navbar></app-navbar>
-
-<h1>{{titulo}} <small class="text-muted">{{posttitulo}}</small></h1>
+<div class="container">
+  <h1 class="container">{{titulo}} </h1>
+  <h2 class="container"> 
+    <small class="text-muted">{{posttitulo}}</small>
+  </h2>
+</div>
 <hr>
-<div class="card-columns row">
+<div class="container card-columns">
   <div class="row animated fadeIn fast"  *ngIf="solicitudes.length < 1">
     <div class="col-md-12">
       <div class="alert alert-info" role="alert">

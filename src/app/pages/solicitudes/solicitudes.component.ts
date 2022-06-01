@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 export class SolicitudesComponent implements OnInit {
 
   titulo="Solicitudes";
-  posttitulo="Lista de empleados interesados en tareas.";
+  posttitulo="Lista de empleados interesados en tareas";
   solicitudes:SolicitudModel[] = [];
 
   constructor(private solServ:SolicitudService,

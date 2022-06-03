@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
+import { ComponentMessageService } from 'src/app/services/component-message.service';
 
 @Component({
   selector: 'app-empleado-linea',
@@ -7,14 +8,13 @@ import { EmpleadoModel } from 'src/app/models/empleado.model';
   styleUrls: ['./empleado-linea.component.css']
 })
 export class EmpleadoLineaComponent implements OnInit {
-  @Input() empleado: EmpleadoModel = new EmpleadoModel();
+  @Input() empleado: EmpleadoModel[] = [];
+  @Input() emp: EmpleadoModel = new EmpleadoModel();
   @Input() index:number = 0;
   constructor() {
-    console.log(this.empleado);
    }
 
   ngOnInit(): void {
-    this.empleado.nombre = "ejemplo";
   }
 
 }

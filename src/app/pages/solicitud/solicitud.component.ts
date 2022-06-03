@@ -74,4 +74,30 @@ export class SolicitudComponent /*implements OnInit*/ {
       } */ 
     });
   }
+  rechazarSolicitud(){
+    console.log("idSolicitud > "+this.solicitud.idSolicitud)
+    this.resPop.resCargando('Espere...');
+    this.solServ.deleteSolicitud(
+      localStorage.getItem('token')!,
+      this.solicitud.idSolicitud,
+    ).subscribe(res=>{
+        console.log("respuesta back: "+res);
+        switch(res.status) {
+          case 201: {
+            Swal.close();
+            this.resPop.resMensajeWrnBtnRedir("Solicitud rechazada con éxito.","solicitudes");
+            break;
+          
+          }
+          case 403: {
+            Swal.close();
+            this.resPop.resMensajeErrBtn("La solicitud no se pudo rechazar.");
+            break;
+          
+          }
+        }
+      },(err)=>{
+        this.resPop.resMensajeErrBtn(err.error.status+': '+err.error.message);
+    });
+  }
 }

@@ -1,23 +1,12 @@
 <style>
-    .subcontenedor{
-        margin: 0;
-    }
-    .cuerpoTarj{
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        padding: 0px;
-        margin: 20px;
-        min-width: 420px;
-    }
     .cuadroTxt{
-        height: 250px;
+        padding: 15px;
     }
 </style>
-<div >
+<a  [routerLink]="['/empleado',emp._id]" class="btn btn-dark stretched-link">
     <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
-        <h5 class="animated fadeIn fast" >
-            {{ (index+1) + " : " + empleado.nombre}}
+        <h5 class="cuadroTxt animated fadeIn fast" >
+            {{ (index+1) + " : " + emp.nombre + " " + emp.apellidos }}
         </h5>
 
-</div>
+</a>

@@ -72,4 +72,15 @@ export class TareaService {
       })
     });
   }
+  deleteTarea(token:string,tar:TareaModel):Observable<boolean>{
+    //console.log(tar);
+    return this.http.delete<boolean>(this.baseUrl+tar._id,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })/*,
+      params:{
+        id:tar._id
+      }*/
+    });
+  }
 }

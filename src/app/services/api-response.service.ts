@@ -16,12 +16,11 @@ export class ApiResponseService {
       icon:'success'
     });
   }
-  resMensajeErrBtnRedir(msn:string,redir:string){
-
+  resMensajeSucBtnRedir(msn:string,redir:string){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
-      icon:'error'
+      icon:'success'
     }).then((result)=>{
       if (result.isConfirmed) {
         this.router.navigateByUrl(redir);
@@ -35,11 +34,34 @@ export class ApiResponseService {
       icon:'error'
     });
   }
+  resMensajeErrBtnRedir(msn:string,redir:string){
+
+    Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'error'
+    }).then((result)=>{
+      if (result.isConfirmed) {
+        this.router.navigateByUrl(redir);
+      }
+    });
+  }
   resMensajeWrnBtn(msn:string){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
       icon:'warning'
+    });
+  }
+  resMensajeWrnBtnRedir(msn:string,redir:string){
+    Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'warning'
+    }).then((result)=>{
+      if (result.isConfirmed) {
+        this.router.navigateByUrl(redir);
+      }
     });
   }
   resCargando(msn:string){

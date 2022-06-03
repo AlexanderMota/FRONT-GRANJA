@@ -20,7 +20,7 @@ export class EmpleadoDetailsComponent implements OnInit {
       //console.log(params);
         if(params['id']){
           await this.tarServ.getTareaByIdEmpleado(localStorage.getItem('token')!,params['id']).subscribe(res=>{
-            console.log("res tareas: " + res);
+            //console.log("res tareas: " + res);
             this.tareas = res;
             //console.log(this.solicitudes);
           },(err)=>{

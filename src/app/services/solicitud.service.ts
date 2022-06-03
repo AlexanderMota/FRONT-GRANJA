@@ -44,11 +44,17 @@ export class SolicitudService {
       "?idTarea="+idTarea+"&idEmpleado="+idEmpleado+"&idSolicitud="+idSolicitud, "",{
       headers: new HttpHeaders({
         Authorization: token
-      })/*,
-      params:{
-        idTarea:idTarea,
-        idEmpleado:idEmpleado
-      }*/
+      })
+    });
+  }
+  
+  deleteSolicitud(token:string,idSolicitud:string):Observable<ApiResponse> {
+    //console.log(idEmpleado +" /// "+idTarea);
+    return this.http.delete<ApiResponse>(this.urlGetSolicitudById+
+      "?id="+idSolicitud,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
     });
   }
 }

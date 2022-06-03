@@ -1,26 +1,33 @@
 <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
+  .imgCabecera {
+    background-image: url("../../../assets/images/cabecera-cesped.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
+  
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
     }
-  </style>
+  }
+</style>
   
 <app-navbar></app-navbar>
-<section class="py-5 text-center container animated fadeIn fast">
+<section class="imgCabecera py-5 text-center animated fadeIn fast">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Farm-Data</h1>
-        <p class="lead text-muted">Portal para la gestión del trabajo personal generado de las actividades de la empresa.</p>
-        <p>
+        <h1 class="fw-light" style="color: white;">Farm-Data</h1>
+        <p class="lead" style="color: white;">Portal para la gestión del trabajo personal generado de las actividades de la empresa.</p>
+        <p style="display: flex; justify-content: space-around;">
           <a 
             href="https://getbootstrap.com/docs/5.1/examples/album/#" 
             class="btn btn-primary my-2">

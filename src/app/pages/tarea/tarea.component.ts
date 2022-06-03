@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TareaModel } from 'src/app/models/tarea.model';
 import { TareaService } from 'src/app/services/tarea.service';
 
 @Component({
@@ -9,16 +8,15 @@ import { TareaService } from 'src/app/services/tarea.service';
 })
 export class TareaComponent implements OnInit {
   public edita:boolean=false;
-  //tarea:TareaModel=new TareaModel();
-  constructor(private tarServ:TareaService, private actRoute:ActivatedRoute) { 
-    /*this.actRoute.params.subscribe(params=>{
-      tarServ.getTareaById(localStorage.getItem('token')!,params['id']).subscribe(res=>{
-        this.tarea=res;
-        //console.log(this.tarea);
-      });
-    });*/
-  }
-
+  constructor(private actRoute:ActivatedRoute) { 
+    this.actRoute.params.subscribe(params=>{
+        if(!params['id']){
+          this.edita = true;
+        }
+      }
+    );
+  };
+  
   ngOnInit(): void {
   }
 

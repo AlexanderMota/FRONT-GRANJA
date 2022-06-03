@@ -43,12 +43,12 @@ export class AuthService {
     return this.http.post<ApiResponse>(this.urlSignIn, usuario);
   }
 
-  registrarEmpleado(empleado: EmpleadoModel):Observable<ApiResponse> {
+  registrarEmpleado(token:string,empleado: EmpleadoModel):Observable<ApiResponse> {
     empleado.idEmpleado = 0;
-    let stt : Number = 0;
+    console.log(empleado);
     return this.http.post<ApiResponse>(this.urlSignUp, empleado,{
       headers: new HttpHeaders({
-        Authorization: this.token
+        Authorization: token
       })
     });
   }

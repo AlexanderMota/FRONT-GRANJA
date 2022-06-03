@@ -26,12 +26,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.resPop.resCargando('Espere...');
-    /*Swal.fire({
-      allowOutsideClick:false,
-      text:'Espere...',
-      icon:'info'
-    });
-    Swal.showLoading();*/
+    
     if(localStorage.getItem('token')){
       this.auth.conpruebaTokenValido().subscribe(res=>{
         if(res.status == 201){
@@ -62,6 +57,9 @@ export class LoginComponent implements OnInit {
            if(this.recuerdame){
             localStorage.setItem('nombre', this.usuario.email!);
             localStorage.setItem('password', this.usuario.password!);
+           }else{
+            localStorage.removeItem('nombre');
+            localStorage.removeItem('password');
            }
             this.router.navigateByUrl('/');
            break;

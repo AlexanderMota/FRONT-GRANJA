@@ -27,7 +27,8 @@ export class RegistroComponent implements OnInit {
     
     this.resApi.resCargando('Espere...');
 
-    this.auth.registrarEmpleado(this.empleado!).subscribe(res => {
+    this.auth.registrarEmpleado(localStorage.getItem("token")!, this.empleado!).subscribe(res => {
+      console.log(res);
       switch(res.status) { 
         case 201: { 
            Swal.close();

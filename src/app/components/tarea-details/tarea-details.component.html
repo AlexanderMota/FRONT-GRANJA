@@ -24,12 +24,21 @@
         <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
         <div class="card-body">
             <h4 class="card-title">{{ tarea.nombre }}</h4>
-            <h5 class="card-text">{{ tarea.fechainicio }}</h5>
+            <input id="inputFecha" class="inputs input100"
+                disabled
+                type="datetime-local" 
+                name="fechainicio" 
+                [(ngModel)]="tarea!.fechainicio"
+                style="padding: 0px;">
             <p class="cuadroTxt card-text"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
                 
             <!-- linkear botones registrando la ruta en routes -->
             <button (click)="oculta()" >
                 <a class="btn btn-secondary">Editar</a>
+            </button>
+            
+            <button (click)="borraTarea()" >
+                <a class="btn btn-dange">Borrar</a>
             </button>
 
             <!-- linkear botones por método en el controlador del componente -->
@@ -45,7 +54,7 @@
 
         </div>-->
         <app-empleado-linea class="card animated fadeIn fast"  style="width: 18rem; margin:20px;" 
-            [empleado]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
+            [emp]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
         </app-empleado-linea>
     </div>
 </div>

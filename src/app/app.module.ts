@@ -27,6 +27,7 @@ import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component'
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
+import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-detail.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { EmpleadoDetailsComponent } from './components/empleado-details/empleado
     TareaFormComponent,
     TareaDetailsComponent,
     EmpleadoLineaComponent,
-    EmpleadoDetailsComponent
+    EmpleadoDetailsComponent,
+    EmpleadoDetailComponent
   ],
   imports: [
     BrowserModule,

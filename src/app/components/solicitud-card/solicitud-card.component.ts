@@ -11,7 +11,12 @@ export class SolicitudCardComponent implements OnInit {
   @Input() solicitud:SolicitudModel = new SolicitudModel();
   @Input() index:number = 0;
   
-  constructor() { }
+  constructor() { 
+    
+    if(this.solicitud.tarea.descripcion.length > 50){
+      this.solicitud.tarea.descripcion = (this.solicitud.tarea.descripcion.slice(0,50) + "...");
+    }
+  }
 
   ngOnInit(): void {
   }

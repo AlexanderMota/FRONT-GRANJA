@@ -23,7 +23,7 @@ export class TareasComponent implements OnInit {
     
     
     this.tarServ.getAllTareas(localStorage.getItem('token')!).subscribe(res=>{
-      this.tareas = res;
+      this.tareas = res.sort();
       //console.log(this.solicitudes);
     },(err)=>{
       switch(err.error.status) { 

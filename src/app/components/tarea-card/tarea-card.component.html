@@ -4,22 +4,31 @@
     }
     .cuerpoTarj{
         min-height: 270px;
+        width: 18rem; 
+        margin:20px;
     }
     .subCuerpoTarj{
         display: flex;
         flex-direction: column;
         justify-content: end;
         height: 230px;
+        margin: 0;
     }
     .botonTarea{
         width: 100px;
     }
 </style>
-<div class="cuerpoTarj">
+<div class="cuerpoTarj card container animated fadeIn fast">
     <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
-    <div class="subCuerpoTarj card-body">
+    <div class=" card-body">
         <h4 class="card-title">{{ tarea.nombre }}</h4>
-        <h5 class="card-text">{{ tarea.fechainicio }}</h5>
+        
+        <input id="inputFecha" class="inputs input100"
+            disabled
+            type="datetime-local" 
+            name="fechainicio" 
+            [(ngModel)]="tarea!.fechainicio"
+            style="padding: 0px;">
         <p class="cuadroTxt card-text"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
             
         <!-- linkear botones registrando la ruta en routes -->

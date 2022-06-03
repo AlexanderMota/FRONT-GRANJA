@@ -3,15 +3,14 @@
     <div class="card-body">
         <h5 class="card-title">{{ solicitud.empleado.nombre }}</h5>
         <h5 class="card-text">{{ solicitud.tarea.nombre }}</h5>
-        <p class="card-text"><small class="text-muted">{{ solicitud.tarea.descripcion }}</small></p>
+        <input id="inputFecha" class="inputs input100"
+            disabled
+            type="datetime-local" 
+            name="fechainicio" 
+            [(ngModel)]="solicitud.tarea!.fechainicio"
+            style="padding: 0px;">
             
-        <!-- linkear botones registrando la ruta en routes -->
+        <a  [routerLink]="['/solicitud',solicitud.idSolicitud]" class="btn btn-primary bg-dark">Ver mas...</a>
         
-            <a  [routerLink]="['/solicitud',solicitud.idSolicitud]" class="btn btn-primary bg-dark">Ver mas...</a>
-        
-        
-
-        <!-- linkear botones por método en el controlador del componente -->
-        <!-- <button (click)="verHeroe(i)" type="button" [routerLink]="['/heroe',i]" class="btn btn-primary bg-dark">Ver mas...</button> -->
     </div>
 </div>

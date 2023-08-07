@@ -38,15 +38,16 @@ export class AuthService {
 
   login(usuario : UsuarioModel) : Observable<ApiResponse>{
     this.horaCon = new Date(Date.now());
-    localStorage.setItem("fintoken",this.horaCon.getTime().toString())
+    localStorage.setItem("fintoken",this.horaCon.getTime().toString());
     //onsole.log(this.horaCon);
     return this.http.post<ApiResponse>(this.urlSignIn, usuario);
   }
 
   registrarEmpleado(token:string,empleado: EmpleadoModel):Observable<ApiResponse> {
-    empleado.idEmpleado = 0;
-    console.log(empleado);
-    return this.http.post<ApiResponse>(this.urlSignUp, empleado,{
+    //empleado.idEmpleado = 0;
+    //console.log(empleado);
+    const {nombre,apellidos,telefono,email,password,rol} = empleado
+    return this.http.post<ApiResponse>(this.urlSignUp, {nombre,apellidos,telefono,email,password,rol},{
       headers: new HttpHeaders({
         Authorization: token
       })
@@ -76,7 +77,7 @@ export class AuthService {
       return false;
     }
   }
-  conpruebaTokenValido():Observable<ApiResponse>{
+  compruebaTokenValido():Observable<ApiResponse>{
     return this.http.post<ApiResponse>(this.urlTokenValido + "?token="+localStorage.getItem('token')!,"");
   }
   getToken():string{

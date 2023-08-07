@@ -57,10 +57,16 @@ export class ApiResponseService {
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
-      icon:'warning'
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
     }).then((result)=>{
       if (result.isConfirmed) {
         this.router.navigateByUrl(redir);
+      }else/* if (result.dismiss === 'cancel') */{
+        // Acción cuando se hace clic en el botón Cancelar
+        console.log('Botón Cancelar presionado');
       }
     });
   }

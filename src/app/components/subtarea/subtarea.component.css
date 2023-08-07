@@ -1,0 +1,43 @@
+.subs{
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+}
+.subtarea{
+    margin: 0 10px 0 0;
+    height: 330px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.card{
+    margin-bottom: 10px;
+}
+.detalles{
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.coment{
+    padding: 0 20px;
+}
+.fecha{
+    text-align: end;
+}

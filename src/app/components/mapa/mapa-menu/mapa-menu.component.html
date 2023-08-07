@@ -1,0 +1,7 @@
+<ul class="list-group animated fadeInLeft" *ngIf='muestraMenu'>
+    <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" class="list-group-item" routerLinkActive="active">
+        {{ item.nombre }}
+    </li>
+    <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
+</ul>
+<img *ngIf='!muestraMenu' class="botonMenu fadeOutRight" src="../../../../assets/images/icons/barra-de-menus.png" (click)="muestraOcultaMenu()">

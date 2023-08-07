@@ -1,21 +1,27 @@
-
-<app-navbar></app-navbar>
 <div class="container">
   <h1 class="container">{{titulo}} </h1>
   <h2 class="container"> 
     <small class="text-muted">{{posttitulo}}</small>
   </h2>
+  <button type="button" class="btn btn-primary" (click)="abreVentana()">Nuevo empleado</button>
+
 </div>
 <hr>
-<div class="container card-columns">
-  <div class="row animated fadeIn fast"  *ngIf="empleados.length < 1">
+<div class="container">
+  <ng-template #emps
+   class="animated fadeIn fast">
     <div class="col-md-12">
       <div class="alert alert-info" role="alert">
         No existen resultados con el término {{posttitulo}}
       </div>
     </div>
+  </ng-template>
+  <div *ngIf="empleados.length > 0; else emps">
+    <app-empleado-card class="" [empleado]="empleado" [index]="i" 
+      *ngFor="let empleado of empleados; let i = index;">
+    </app-empleado-card>  
   </div>
-  <app-empleado-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
-    [empleado]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
-  </app-empleado-card>  
+</div>
+<div>
+  <app-registro *ngIf="showP" [roles]="roles" (eventoEmiteCierraNuevaPersona)='receiveMessage($event)'></app-registro>
 </div>

@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TareaCardComponent } from './components/tarea-card/tarea-card.component';
+import { ComentariosComponent } from './components/comentarios/comentarios.component';
 import { EmpleadoCardComponent } from './components/empleado-card/empleado-card.component';
 import { SolicitudCardComponent } from './components/solicitud-card/solicitud-card.component';
 import { TareaFormComponent } from './components/tarea-form/tarea-form.component';
@@ -28,6 +29,10 @@ import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-detail.component';
+import { MapaComponent } from './components/mapa/mapa.component';
+import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
+import { SubtareaComponent } from './components/subtarea/subtarea.component';
+import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,7 @@ import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-d
     LoginComponent,
     RegistroComponent,
     TareasComponent,
+    ComentariosComponent,
     EmpleadosComponent,
     SolicitudesComponent,
     TareaCardComponent,
@@ -48,7 +54,11 @@ import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-d
     TareaDetailsComponent,
     EmpleadoLineaComponent,
     EmpleadoDetailsComponent,
-    EmpleadoDetailComponent
+    EmpleadoDetailComponent,
+    MapaComponent,
+    UbicacionComponent,
+    SubtareaComponent,
+    MapaMenuComponent
   ],
   imports: [
     BrowserModule,

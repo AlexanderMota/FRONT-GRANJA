@@ -13,7 +13,11 @@ export class TareaService {
   //Post: Añade una tarea
   //private urlGetAllTareas = 'https://api-granja.azurewebsites.net/api/tareas/solicitudes/todas';
   private baseUrl = 'http://localhost:4300/api/tareas/';
+  private urlTareasByIdTarea = this.baseUrl+"byid/";
+  private urlSubtareas = this.baseUrl+"subtareas/";
+  private urlSuperTareas = this.baseUrl+"supertareas/";
   private urlTareasByIdEmpleado = this.baseUrl+"empleado/";
+  private urlAgregaEmpleadoATarea = this.baseUrl+"addempleado/";
 
   constructor(private http: HttpClient) { }
 
@@ -30,57 +34,66 @@ export class TareaService {
   }
   getTareaById(token:string,id:string):Observable<TareaModel> {
     //console.log(id);
-    return this.http.get<TareaModel>(this.baseUrl+id ,{
-      headers: new HttpHeaders({
-        Authorization: token
-      })/*,
-      params:{
-        id:id
-      }*/
-    });
-  }
-  getTareaByIdEmpleado(token:string,idEmpleado:string):Observable<[TareaModel]> {
-    //console.log(id);
-    return this.http.get<[TareaModel]>(this.urlTareasByIdEmpleado+idEmpleado ,{
-      headers: new HttpHeaders({
-        Authorization: token
-      })/*,
-      params:{
-        id:id
-      }*/
-    });
-  }
-  patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
-    tar.idTarea = 0;
-    //console.log(tar);
-    const {idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
-    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
-      headers: new HttpHeaders({
-        Authorization: token
-      })/*,
-      params:{
-        id:tar._id
-      }*/
-    });
-  }
-  postTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
-    tar.idTarea = 0;
-    const {idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
-    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
+    return this.http.get<TareaModel>(this.urlTareasByIdTarea+id ,{
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  deleteTarea(token:string,tar:TareaModel):Observable<boolean>{
-    //console.log(tar);
-    return this.http.delete<boolean>(this.baseUrl+tar._id,{
+  getTareaByIdEmpleado(token:string,idEmpleado:string):Observable<[TareaModel]> {
+    return this.http.get<[TareaModel]>(this.urlTareasByIdEmpleado+idEmpleado ,{
       headers: new HttpHeaders({
         Authorization: token
-      })/*,
-      params:{
-        id:tar._id
-      }*/
+      })
+    });
+  }
+  getSuperTareas(token:string):Observable<[TareaModel]> {
+    return this.http.get<[TareaModel]>(this.urlSuperTareas ,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  getSubtareas(token:string,idTarea:string):Observable<[TareaModel]> {
+    return this.http.get<[TareaModel]>(this.urlSubtareas+idTarea ,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
+    tar.idTarea = 0;
+    const {idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
+    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  postTarea(token:string,tar:TareaModel,idSuper:string ="0b"):Observable<ApiResponse>{
+    tar.idTarea = 0;
+    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
+    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
+      headers: new HttpHeaders({
+        Authorization: token
+      }),
+      params: {
+        idSuper
+      }
+    });
+  }
+  postEmpleadoATarea(token:string,idTarea:string,idEmpleado:string,idSolicitud:string):Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(this.urlAgregaEmpleadoATarea, {idTarea,idEmpleado,idSolicitud},{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  deleteTarea(token:string,idTar:string):Observable<boolean>{
+    return this.http.delete<boolean>(this.baseUrl+idTar,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
     });
   }
 }

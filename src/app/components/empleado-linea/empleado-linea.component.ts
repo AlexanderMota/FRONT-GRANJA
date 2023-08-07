@@ -16,5 +16,4 @@ export class EmpleadoLineaComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

@@ -1,19 +1,10 @@
 
-<style>
-  .tituloListTarea{
-    
-  }
-  .contListTarea{
-
-  }
-</style>
-<app-navbar></app-navbar>
-
 <div class="container">
   <h1 class="container">{{titulo}} </h1>
   <h2 class="container"> 
     <small class="text-muted">{{posttitulo}}</small>
   </h2>
+  <button type="button" class="btn btn-primary" (click)="abreVentana()">Nueva tarea</button>
 </div>
 <hr>
 <div class="container card-columns">
@@ -25,4 +16,9 @@
   <app-tarea-card 
     [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
   </app-tarea-card>  
+</div>
+<div>
+  <app-tarea-form *ngIf='showP' [imps]="imps" [supers]="supers" 
+  [departamentos]="departamentos" (eventoEmite)='receiveMessage($event)'>
+  </app-tarea-form>
 </div>

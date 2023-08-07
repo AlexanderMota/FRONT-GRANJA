@@ -10,11 +10,10 @@ export class TareaComponent implements OnInit {
   public edita:boolean=false;
   constructor(private actRoute:ActivatedRoute) { 
     this.actRoute.params.subscribe(params=>{
-        if(!params['id']){
-          this.edita = true;
-        }
+      if(!params['id']){
+        this.edita = true;
       }
-    );
+    });
   };
   
   ngOnInit(): void {

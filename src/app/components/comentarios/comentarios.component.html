@@ -1,0 +1,52 @@
+<div class="card"
+    *ngFor="let comentario of comentarios;">
+    <div class="detalles">
+        <p>{{comentario.nombre}}</p>
+        <p class="fecha">{{comentario.fecha}}</p>
+    </div>
+    <p class="coment">{{comentario.descripcion}}</p>
+</div>  
+<div class="formCont">
+    <form #registroForm="ngForm" (ngSubmit)="onSubmit(registroForm)"
+        class="formulario">
+
+        <div>
+            <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
+                class="text-danger animated fadeIn">La descripción es obligatoria.</span>
+            <div class="wrap-input100 m-b-16 descr">
+                <input class="input100" 
+                        type="text" 
+                        name="nombre" 
+                        [(ngModel)]="comentario!.nombre"
+                        required
+                        placeholder="Descripción">
+
+                <span class="focus-input100"></span>
+            </div>
+            <div class="container-login100-form-btn m-t-17">
+                <button class="login100-form-btn" type="submit">
+                    Comentar
+                </button>
+            </div>
+
+        </div>
+
+        <span *ngIf="registroForm.submitted && registroForm.controls['descripcion'].errors"
+            class="text-danger animated fadeIn">No has escrito nada en el comentario.</span>
+        <div class="wrap-input100  cuadroTxt">
+            <textarea class="input100" 
+                    name="descripcion" 
+                    required
+                    [(ngModel)]="comentario!.descripcion"
+                    placeholder="Comentario"
+                    style="padding: 15px 15px 15px 38px; min-height: 128px; max-height: 512px;"
+                    maxlength="800">
+
+            <span class="focus-input100"></span>
+        </div>
+        <div class="input-group">
+            <textarea class="form-control" aria-label="With textarea"></textarea>
+        </div>
+    </form>
+
+</div>

@@ -1,31 +1,39 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ComponentMessageService } from 'src/app/services/component-message.service';
+import { EmpleadoService } from 'src/app/services/empleado.service';
 import { TareaService } from 'src/app/services/tarea.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tarea-form',
-  templateUrl: './tarea-form.component.html'
+  templateUrl: './tarea-form.component.html',
+  styleUrls: ['./tarea-form.component.css']
 })
+
 export class TareaFormComponent implements OnInit {
 
-  @Input() oculto:boolean = true;
+  @Output() eventoEmite = new EventEmitter<boolean>();
   tarea: TareaModel = new TareaModel();
+  @Input() imps : string[] = [];
+  @Input() supers : TareaModel[] = [];
+  @Input() departamentos : { nombre: string }[] = [];
+  //depart : { nombre: string } = {nombre : ""};
+  idSuper : string = "";
   titulo:string = "";
   textBtn:string = "";
   private paramId : string = "";
 
-  constructor(private resApi:ApiResponseService, 
+  constructor(
+    private resApi:ApiResponseService, 
     private tarServ:TareaService, 
-    private compMess:ComponentMessageService,
     private actRoute:ActivatedRoute) {
     this.actRoute.params.subscribe(params=>{
-      //console.log(params);
+      //console.log(params['id']);
       if(params['id']){
         this.titulo = "Edita tarea";
         this.textBtn = "Guardar cambios"
@@ -39,16 +47,17 @@ export class TareaFormComponent implements OnInit {
         this.titulo = "Nueva tarea";
         this.textBtn = "Crear tarea"
       }
+      
     });
    }
 
   ngOnInit(): void {
-    this.compMess.emiteDato.subscribe(dato => {console.log(dato.dato);
+    /*this.compMess.emiteDato.subscribe(dato => {console.log(dato.dato);
   
-    this.oculto=!dato.dato;})
+    this.oculto=!dato.dato;})*/
   }
   onSubmit(form:NgForm){
-    if(!form.valid || this.tarea.importancia.length < 1){
+    if(!form.valid || this.tarea.importancia == "-" || this.tarea.nombre == "" || this.tarea.departamento== "-"){
       return;
     }
     this.resApi.resCargando('Espere...');
@@ -68,21 +77,24 @@ export class TareaFormComponent implements OnInit {
              break; 
           } 
           default: { 
-             //statements; 
              break; 
           } 
-        } 
+        }
       },(err)=>{
         this.resApi.resMensajeErrBtn(err.error.message);
       });
     }else{
-      this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+
+      console.log("tarea nueva: " + this.tarea.departamento);
+      console.log("idSuper: " + this.idSuper);
+      this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe(res => {
         switch(res.status) { 
           case 201: { 
             this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+            this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
              break; 
           }
-          case 0: { 
+          case 400: { 
             this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
              break; 
           } 
@@ -95,10 +107,12 @@ export class TareaFormComponent implements OnInit {
         this.resApi.resMensajeErrBtn(err.error.message);
       });
     }
+    
+    this.eventoEmite.emit(false);
   }
-}
-
-function input() {
-  throw new Error('Function not implemented.');
+  
+  emiteCierraVentana(){
+    this.eventoEmite.emit(false);
+  }
 }
 

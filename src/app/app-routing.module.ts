@@ -9,6 +9,8 @@ import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component'
 import { TareasComponent } from './pages/tareas/tareas.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component'
 import { TareaComponent } from './pages/tarea/tarea.component';
+import { GraficasComponent } from './graficos/graficas.component'
+import { MapasComponent } from './mapas/mapas.component'
 import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 
 const routes: Routes = [
@@ -26,6 +28,9 @@ const routes: Routes = [
 
   { path: 'registro', component: RegistroComponent },
   { path: 'login', component: LoginComponent },
+  
+  { path: 'mapas', component:MapasComponent, loadChildren: () => import('./mapas/mapas.module').then(m => m.MapasModule ), canActivate: [ AuthGuard ] },
+  { path: 'graficos', component:GraficasComponent, loadChildren: () => import('./graficos/graficos.module').then(m => m.GraficosModule ) , canActivate: [ AuthGuard ]},
 
   { path: '**', component: HomeComponent , canActivate: [ AuthGuard ] }
 ];

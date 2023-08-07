@@ -1,0 +1,14 @@
+.card-title{
+    height: 55px;
+    overflow: hidden;
+    white-space: wrap;
+
+}
+.cuadroTxt{
+    height: 100px;
+    overflow: hidden;
+    white-space: wrap;
+}
+.text-muted{
+    margin: 0 0 10px 0;
+}

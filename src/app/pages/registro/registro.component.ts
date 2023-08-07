@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import Swal from 'sweetalert2';
 import { EmpleadoModel } from '../../models/empleado.model';
 import { AuthService } from '../../services/auth.service';
+import { EmpleadoService } from 'src/app/services/empleado.service';
 
 @Component({
   selector: 'app-registro',
@@ -12,14 +13,16 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegistroComponent implements OnInit {
 
+  @Output() eventoEmiteCierraNuevaPersona = new EventEmitter<boolean>();
   empleado: EmpleadoModel = new EmpleadoModel();
-  recuerdame : boolean = false;
+  //recuerdame : boolean = false;
+  @Input() roles:{nombre:string}[] = [];
 
-  constructor(private auth:AuthService, private resApi: ApiResponseService) { }
+  constructor(
+    private auth:AuthService, 
+    private resApi: ApiResponseService) { }
 
-  ngOnInit() { 
-    this.empleado = new EmpleadoModel();
-  } 
+  ngOnInit() { } 
   onSubmit(form: NgForm){
     if(!form.valid){
       return;
@@ -32,11 +35,11 @@ export class RegistroComponent implements OnInit {
       switch(res.status) { 
         case 201: { 
            Swal.close();
-
-           if(this.recuerdame){
+           this.emiteCierraVentana();
+           /*if(this.recuerdame){
             localStorage.setItem('nombre', this.empleado!.nombre!);
             localStorage.setItem('password', this.empleado!.password!);
-           }
+           }*/
 
            break; 
         }
@@ -98,5 +101,8 @@ export class RegistroComponent implements OnInit {
         } 
       } 
     });
+  }
+  emiteCierraVentana(){
+    this.eventoEmiteCierraNuevaPersona.emit(false);
   }
 }

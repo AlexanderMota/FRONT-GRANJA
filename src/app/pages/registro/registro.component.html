@@ -1,111 +1,133 @@
-
-<app-navbar></app-navbar>
-<div class="limiter animated fadeInDown">
-        <div class="container-login100">
-            <div class="wrap-login100 p-t-50 p-b-90">
-                <form #registroForm="ngForm"
-                    (ngSubmit)="onSubmit(registroForm)"
-                    class="login100-form validate-form flex-sb flex-w">
-    
-                    <span class="login100-form-title p-b-51">
-                        Registrar personal
-                    </span>
-
-                    <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
-                        class="text-danger animated fadeIn">El nombre es obligatorio</span>
-                    <div class="wrap-input100 m-b-16">
-                        <input class="input100" 
-                               type="text" 
-                               name="nombre" 
-                               [(ngModel)]="empleado!.nombre"
-                               required
-                               placeholder="Nombre">
-    
-                        <span class="focus-input100"></span>
+<div class="modalc">
+    <div class="modalc-content">  
+        <div class="modalc-container">
+            <button class="botonCerrar" (click)="emiteCierraVentana()">X</button>
+            <div class="limiter animated fadeInDown">
+                <div class="container-login100" style="min-height: 0;">
+                    <div class="wrap-login100 p-t-50 p-b-90" style="padding: 40px 0 60px;">
+                        <form #registroForm="ngForm"
+                            (ngSubmit)="onSubmit(registroForm)"
+                            class="login100-form validate-form flex-sb flex-w">
+            
+                            <span class="login100-form-title p-b-51">
+                                Registrar personal
+                            </span>
+        
+                            <span *ngIf="registroForm.submitted && registroForm.controls['nombre'].errors"
+                                class="text-danger animated fadeIn">El nombre es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                       type="text" 
+                                       name="nombre" 
+                                       [(ngModel)]="empleado!.nombre"
+                                       required
+                                       placeholder="Nombre">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+        
+                            <span *ngIf="registroForm.submitted && registroForm.controls['apellidos'].errors"
+                                class="text-danger animated fadeIn">El apellido es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                       type="text" 
+                                       name="apellidos" 
+                                       required
+                                       [(ngModel)]="empleado!.apellidos"
+                                       placeholder="Apellidos">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+            
+                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <span *ngIf="registroForm.submitted && registroForm.controls['email'].errors"
+                                class="text-danger animated fadeIn">El email es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                       type="email" 
+                                       name="email" 
+                                       [(ngModel)]="empleado!.email"
+                                       required
+                                       email
+                                       placeholder="Email">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+        
+                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <span *ngIf="registroForm.submitted && registroForm.controls['tlf'].errors"
+                                class="text-danger animated fadeIn">El email es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                       type="text" 
+                                       name="tlf" 
+                                       [(ngModel)]="empleado!.telefono"
+                                       required
+                                       phone
+                                       placeholder="Teléfono">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+                        <!--
+                            <span *ngIf="registroForm.submitted && registroForm.controls['puesto'].errors"
+                                class="text-danger animated fadeIn">El puesto es obligatorio</span>
+                        -->
+                            <div class="inputComp wrap-input100 m-b-16">
+                                <label for="inputimp2" class="labels input100">
+                                    Puesto
+                                </label>
+                            
+                                <select [(ngModel)]="empleado!.rol.nombre"
+                                    required
+                                    name="puesto" 
+                                    id="inputimp" class="inputs form-select" name="inputdepart">
+                                    <option selected>-</option>
+                                    <option *ngFor="let rol of roles;">
+                                        {{ rol.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <!-- <span class="text-danger">La contraseña debe de ser más de 6 letras</span> -->
+                            <span *ngIf="registroForm.submitted && registroForm.controls['password'].errors"
+                                class="text-danger animated fadeIn">El password es obligatorio</span>
+                            <div class="wrap-input100 m-b-16" data-validate = "Password is required">
+                                <input class="input100"
+                                       type="password" 
+                                       name="password" 
+                                       [(ngModel)]="empleado!.password"
+                                       placeholder="Password"
+                                       required
+                                       password>
+                                <span class="focus-input100"></span>
+                            </div>
+                            
+                            <!--<div class="flex-sb-m w-full p-t-3 p-b-24">
+                                <div class="contact100-form-checkbox">
+                                    <input [(ngModel)]="recuerdame"
+                                        class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                                    <label class="label-checkbox100" for="ckb1">
+                                        Recordar mi usuario
+                                    </label>
+                                </div>
+            
+                                <div>
+                                    <a routerLink="/login" class="txt1">
+                                        ¿Ya tienes cuenta? / Ingresar
+                                    </a>
+                                </div>
+                            </div>-->
+            
+                            <div class="container-login100-form-btn m-t-17">
+                                <button class="login100-form-btn" type="submit">
+                                    Crear cuenta
+                                </button>
+                            </div>
+                        </form>
                     </div>
-
-                    <span *ngIf="registroForm.submitted && registroForm.controls['apellidos'].errors"
-                        class="text-danger animated fadeIn">El apellido es obligatorio</span>
-                    <div class="wrap-input100 m-b-16">
-                        <input class="input100" 
-                               type="text" 
-                               name="apellidos" 
-                               required
-                               [(ngModel)]="empleado!.apellidos"
-                               placeholder="Apellidos">
-    
-                        <span class="focus-input100"></span>
-                    </div>
-    
-                    <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                    <span *ngIf="registroForm.submitted && registroForm.controls['email'].errors"
-                        class="text-danger animated fadeIn">El email es obligatorio</span>
-                    <div class="wrap-input100 m-b-16">
-                        <input class="input100" 
-                               type="email" 
-                               name="email" 
-                               [(ngModel)]="empleado!.email"
-                               required
-                               email
-                               placeholder="Email">
-    
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                    <span *ngIf="registroForm.submitted && registroForm.controls['tlf'].errors"
-                        class="text-danger animated fadeIn">El email es obligatorio</span>
-                    <div class="wrap-input100 m-b-16">
-                        <input class="input100" 
-                               type="text" 
-                               name="tlf" 
-                               [(ngModel)]="empleado!.telefono"
-                               required
-                               phone
-                               placeholder="Teléfono">
-    
-                        <span class="focus-input100"></span>
-                    </div>
-                    
-                    <!-- <span class="text-danger">La contraseña debe de ser más de 6 letras</span> -->
-                    <span *ngIf="registroForm.submitted && registroForm.controls['password'].errors"
-                        class="text-danger animated fadeIn">El password es obligatorio</span>
-                    <div class="wrap-input100 m-b-16" data-validate = "Password is required">
-                        <input class="input100"
-                               type="password" 
-                               name="password" 
-                               [(ngModel)]="empleado!.password"
-                               placeholder="Password"
-                               required
-                               password>
-                        <span class="focus-input100"></span>
-                    </div>
-                    
-                    <div class="flex-sb-m w-full p-t-3 p-b-24">
-                        <div class="contact100-form-checkbox">
-                            <input [(ngModel)]="recuerdame"
-                                class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                            <label class="label-checkbox100" for="ckb1">
-                                Recordar mi usuario
-                            </label>
-                        </div>
-    
-                        <div>
-                            <a routerLink="/login" class="txt1">
-                                ¿Ya tienes cuenta? / Ingresar
-                            </a>
-                        </div>
-                    </div>
-    
-                    <div class="container-login100-form-btn m-t-17">
-                        <button class="login100-form-btn" type="submit">
-                            Crear cuenta
-                        </button>
-                    </div>
-    
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    
+</div>
     

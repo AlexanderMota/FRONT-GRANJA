@@ -10,13 +10,24 @@ export class TareaCardComponent implements OnInit {
 
   @Input() tarea:TareaModel = new TareaModel();
   @Input() index:number = 0;
+  title : string = "";
+  descRes : string = "";
   fechamostrar : string = this.tarea.fechainicio.toLocaleDateString();;
   fechainiciolocal:string = this.tarea.fechainicio.getDate() +"/"+(this.tarea.fechainicio.getMonth() + 1) +"/"+this.tarea.fechainicio.getFullYear() ;
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
-    if(this.tarea.descripcion.length > 50){
-      this.tarea.descripcion = (this.tarea.descripcion.slice(0,50) + "...");
+    if(this.tarea.nombre.length > 15){
+      this.title = (this.tarea.nombre.slice(0,15) + "...");
+    }else{
+      this.title = this.tarea.nombre;
+    }
+    if(this.tarea.descripcion.length > 75){
+      this.descRes = (this.tarea.descripcion.slice(0,75) + "...");
+    }
+    if(this.descRes.length < 1){
+      this.descRes = "Tarea sin descripción."
     }
   }
 }

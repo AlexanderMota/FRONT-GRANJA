@@ -1,5 +1,6 @@
 
 export class ApiResponse{
-  status: Number = 0;
+  status: number = 0;
   message: string ="";
+  id: string ="";
 }

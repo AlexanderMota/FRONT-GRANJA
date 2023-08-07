@@ -1,24 +1,5 @@
-<style>
-    .cuadroTxt{
-        height: 50px;
-    }
-    .cuerpoTarj{
-        min-height: 270px;
-        width: 18rem; 
-        margin:20px;
-    }
-    .subCuerpoTarj{
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        height: 230px;
-        margin: 0;
-    }
-    .botonTarea{
-        width: 100px;
-    }
-</style>
-<div class="cuerpoTarj card container animated fadeIn fast">
+
+<div class="cuerpoTarj card animated fadeIn fast">
     <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
     <div class=" card-body">
         <h4 class="card-title">{{ tarea.nombre }}</h4>
@@ -29,7 +10,9 @@
             name="fechainicio" 
             [(ngModel)]="tarea!.fechainicio"
             style="padding: 0px;">
-        <p class="cuadroTxt card-text"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
+        <p class="cuadroTxt card-text">
+            <small class=" text-muted">{{ tarea.descripcion }}</small>
+        </p>
             
         <!-- linkear botones registrando la ruta en routes -->
         <a  [routerLink]="['/tarea',tarea._id]" class="botonTarea btn btn-primary bg-dark">Ver mas...</a>

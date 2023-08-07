@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.resPop.resCargando('Espere...');
     
     if(localStorage.getItem('token')){
-      this.auth.conpruebaTokenValido().subscribe(res=>{
+      this.auth.compruebaTokenValido().subscribe(res=>{
         if(res.status == 201){
           this.router.navigateByUrl('/home');
         }

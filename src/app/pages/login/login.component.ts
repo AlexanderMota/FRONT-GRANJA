@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import jwtDecode from 'jwt-decode';
 
 import { AuthService } from '../../services/auth.service';
 import { UsuarioModel } from '../../models/usuario.model';
@@ -51,7 +52,12 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.usuario).subscribe(res => {
       switch(res.status) {
         case 201: {
-          this.auth.guardaToken(res.message!);
+          /*console.log(res.message);
+          let aver = {empleado:{nombre:""}};
+          aver = jwtDecode(res.message);
+          console.log(localStorage.getItem("rol"));*/
+          
+          this.auth.guardaToken(res.message);
            Swal.close();
 
            if(this.recuerdame){

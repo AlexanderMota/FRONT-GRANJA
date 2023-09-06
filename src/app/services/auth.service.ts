@@ -12,22 +12,24 @@ import { UsuarioModel } from '../models/usuario.model';
 })
 export class AuthService {
 
-  vis = "visible";
+  vis = "novisible";
   private token : string ="";
   private horaCon : Date = new Date();
 
-  //Crear nuevo usuario
-  //private urlSignUp = 'https://api-granja.azurewebsites.net/api/auth/signup';
-  private urlSignUp = 'http://localhost:4300/api/auth/signup';
-  
-  //Login
-  //private urlSignIn = 'https://api-granja.azurewebsites.net/api/auth/signin';
-  private urlSignIn = 'http://localhost:4300/api/auth/signin';
+  constructor(private http: HttpClient/*, private nav : NavbarComponent*/) { }
 
   //Token valido
   //private urlTokenValido = 'https://api-granja.azurewebsites.net/api/auth';
   private urlTokenValido = 'http://localhost:4300/api/auth';
-  constructor(private http: HttpClient/*, private nav : NavbarComponent*/) { }
+
+  //Crear nuevo usuario
+  //private urlSignUp = 'https://api-granja.azurewebsites.net/api/auth/signup';
+  private urlSignUp = this.urlTokenValido+'/signup';
+  
+  //Login
+  //private urlSignIn = 'https://api-granja.azurewebsites.net/api/auth/signin';
+  private urlSignIn = this.urlTokenValido+'/signin';
+
 
   logout(){
     localStorage.removeItem('token');
@@ -57,10 +59,12 @@ export class AuthService {
   guardaToken(token:string){
     this.token = token;
     localStorage.setItem('token',token);
-    this.vis = "visible";
+    //this.vis = "visible";
   }
+  /*guardaRol(rol:string){
+    localStorage.setItem('rol',rol);
+  }*/
   esAutenticado():boolean{
-
     if(localStorage.getItem('token')){
       const expira = Number(localStorage.getItem("fintoken"));
       const expiraDate = new Date();

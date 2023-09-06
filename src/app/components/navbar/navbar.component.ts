@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TareaModel } from 'src/app/models/tarea.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { TareaService } from 'src/app/services/tarea.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,12 +11,20 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent implements OnInit {
   autenticado = false;
-  constructor(private auth:AuthService, private route:Router) { 
+  supertareas: TareaModel[] = [];
+
+  constructor(private auth:AuthService, private route:Router, private tarServ:TareaService) { 
     this.autenticado = this.auth.esAutenticado();
   }
 
   ngOnInit(): void {
     this.autenticado = this.auth.esAutenticado();
+    if(this.autenticado){
+      this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {
+        this.supertareas = res;
+        console.log(this.supertareas);
+      });
+    }
   }
 
   /*navAuth(){

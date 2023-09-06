@@ -7,18 +7,22 @@
   <button type="button" class="btn btn-primary" (click)="abreVentana()">Nueva tarea</button>
 </div>
 <hr>
-<div class="container card-columns">
+<div class="container">
   <div class="row animated fadeIn fast"  *ngIf="tareas.length < 1">
       <div class="alert alert-info" role="alert">
         No existen resultados con el término {{posttitulo}}
       </div>
   </div>
-  <app-tarea-card 
-    [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
-  </app-tarea-card>  
+  <div class="tarjetas">
+
+    <!--Arreglar problema "wrap tarjetas" usando media-querys-->
+    <app-tarea-card class="tarjeta"
+      [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
+    </app-tarea-card>  
+  </div>
 </div>
 <div>
   <app-tarea-form *ngIf='showP' [imps]="imps" [supers]="supers" 
-  [departamentos]="departamentos" (eventoEmite)='receiveMessage($event)'>
+    [departamentos]="departamentos" (eventoEmite)='receiveMessage($event)'>
   </app-tarea-form>
 </div>

@@ -8,7 +8,7 @@
 </div>
 <hr>
 <div class="container">
-  <div class="row animated fadeIn fast"  *ngIf="tareas.length < 1">
+  <div class="row animated fadeIn fast"  *ngIf="subtareas.length < 1">
       <div class="alert alert-info" role="alert">
         No existen resultados con el término {{posttitulo}}
       </div>
@@ -17,12 +17,12 @@
 
     <!--Arreglar problema "wrap tarjetas" usando media-querys-->
     <app-tarea-card class="tarjeta"
-      [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
+      [tarea]="tarea" [index]="i" *ngFor="let tarea of subtareas; let i = index;">
     </app-tarea-card>  
   </div>
 </div>
 <div>
-  <app-tarea-form *ngIf='showP' [imps]="imps" [supers]="supers" 
+  <app-tarea-form *ngIf='showP' [imps]="imps"
     [departamentos]="departamentos" (eventoEmite)='receiveMessage($event)'>
   </app-tarea-form>
 </div>

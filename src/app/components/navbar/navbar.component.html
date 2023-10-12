@@ -43,7 +43,7 @@
           <li><a class="dropdown-item" href="#">Action</a></li>
           <li><a class="dropdown-item" href="#">Another action</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li *ngFor="let tarea of supertareas;"><a class="dropdown-item" href="tarea/{{tarea._id}}">{{tarea.nombre}}</a></li>
+          <li *ngFor="let tarea of supertareas;" (click)="guardaCentro(tarea._id)"><a class="dropdown-item" >{{tarea.nombre}}</a></li>
           <!--<app-tarea-card class="tarjeta"
       [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
     </app-tarea-card>  -->

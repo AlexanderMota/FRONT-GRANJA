@@ -32,13 +32,10 @@ export class TareaDetailsComponent implements OnInit {
   private paramId : string = "";
 
   constructor(
-    private ubiServ:UbicacionService,
     private tarServ:TareaService,
     private empServ: EmpleadoService,
-    private compMess:ComponentMessageService,
     private actRoute:ActivatedRoute,
-    private resPop:ApiResponseService,
-    private auth:AuthService) {
+    private resPop:ApiResponseService) {
     
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
@@ -85,6 +82,8 @@ export class TareaDetailsComponent implements OnInit {
   }
   emiteCierraVentana(){
     this.showPEmpD = false;
+    
+    location.reload();
   }
   async agregaTrabajadorATarea(idEmpleado:string){
     const flag = await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{

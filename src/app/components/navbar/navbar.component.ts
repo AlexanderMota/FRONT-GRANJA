@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
     if(this.autenticado){
       this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {
         this.supertareas = res;
-        console.log(this.supertareas);
+        //console.log(this.supertareas);
       });
     }
   }
@@ -41,5 +41,10 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();
     this.route.navigateByUrl('/login');
     this.autenticado = false;
+    localStorage.setItem('centroActual',"");
+  }
+  guardaCentro(centro:string){
+    localStorage.setItem('centroActual', centro);
+    location.reload();
   }
 }

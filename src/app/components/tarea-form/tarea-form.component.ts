@@ -20,7 +20,7 @@ export class TareaFormComponent implements OnInit {
   @Output() eventoEmite = new EventEmitter<boolean>();
   tarea: TareaModel = new TareaModel();
   @Input() imps : string[] = [];
-  @Input() supers : TareaModel[] = [];
+  /*@Input()*/ supers : TareaModel[] = [];
   @Input() departamentos : { nombre: string }[] = [];
   //depart : { nombre: string } = {nombre : ""};
   idSuper : string = "";
@@ -46,6 +46,10 @@ export class TareaFormComponent implements OnInit {
       }else{
         this.titulo = "Nueva tarea";
         this.textBtn = "Crear tarea"
+        tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+          this.supers.push(res);
+          //console.log("contructor route params=>\n"+res);
+        });
       }
       
     });
@@ -83,6 +87,7 @@ export class TareaFormComponent implements OnInit {
       },(err)=>{
         this.resApi.resMensajeErrBtn(err.error.message);
       });
+      
     }else{
 
       console.log("tarea nueva: " + this.tarea.departamento);

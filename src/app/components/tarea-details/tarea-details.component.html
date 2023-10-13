@@ -21,7 +21,7 @@
             <p class="cuadroTxt card"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
                 
             <!-- linkear botones registrando la ruta en routes -->
-            <button (click)="abreVentana()" >
+            <button (click)="abreFormTarea()" >
                 <a class="btn btn-secondary" >Editar</a>
             </button>
 
@@ -44,12 +44,16 @@
     <app-subtarea class="subtareas"></app-subtarea>
     <app-comentarios  class="comentarios"></app-comentarios>
     
-    <app-mapa class="mapa"></app-mapa>
+    <app-mapa class="mapa" (eventoEmite)='receiveMessageFormVehi($event)'></app-mapa>
 </div>
 
 <div>
-    <app-tarea-form *ngIf='showP' (eventoEmite)='receiveMessage($event)'></app-tarea-form>
+    <app-tarea-form *ngIf='showP1' (eventoEmite)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>
+<div>
+    <app-transportes-form *ngIf='showP2' (eventoEmite)='receiveMessageFormVehi($event)'></app-transportes-form>
+</div>
+
 <div class="modalcEmp" *ngIf='showPEmpD'>
     <div class="modalcEmp-content">
         

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 interface MenuItem  {
   ruta: string;
@@ -12,6 +12,9 @@ interface MenuItem  {
 })
 export class MapaMenuComponent {
 
+  @Output() 
+  eventoEmite = new EventEmitter<boolean>();
+  
   muestraMenu = false;
 
   constructor() { }
@@ -30,5 +33,9 @@ export class MapaMenuComponent {
   ];
   muestraOcultaMenu(){
     this.muestraMenu = !this.muestraMenu;
+  }
+  muestraFormVehi(){
+    this.muestraOcultaMenu();
+    this.eventoEmite.emit(true);
   }
 }

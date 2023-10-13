@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
@@ -13,12 +13,19 @@ import { environment } from 'src/environments/environment';
 export class MapaComponent implements OnInit, AfterViewInit {
 
   //private vehiculos : VehiculoModel[] = [];
-  @ViewChild('mapa') divMapa!: ElementRef;
-  ubi:UbicacionModel = new UbicacionModel();
+  @ViewChild('mapa') 
+  divMapa!: ElementRef;
+  
+  @Output() 
+  eventoEmite = new EventEmitter<boolean>();
 
-  @Input() index:number = 0;
-  @Input() idTarea:string = "F";
+  @Input() 
+  index:number = 0;
+  @Input() 
+  idTarea:string = "F";
+
   private mapa!:mapboxgl.Map;
+  ubi:UbicacionModel = new UbicacionModel();
   marcadores:mapboxgl.Marker[] = [];
 
   constructor(
@@ -136,6 +143,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
       }
     }
     );
+  }
+  
+  receiveMessageFormVehi($event: boolean){
+    //showP2 = $event;
+    this.eventoEmite.emit($event);
   }
   /*getIndicaciones(medio = "cycling",geometries = "geojson", puntoPartida = [0.0,0.0], puntoDestino = [0.0,0.0]):Observable<[any]> {
     medio += "/";

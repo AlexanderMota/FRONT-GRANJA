@@ -33,6 +33,8 @@ import { MapaComponent } from './components/mapa/mapa.component';
 import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
 import { SubtareaComponent } from './components/subtarea/subtarea.component';
 import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.component';
+import { TransportesFormComponent } from './components/transportes-form/transportes-form.component';
+import { TransporteComponent } from './pages/transporte/transporte.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.compone
     MapaComponent,
     UbicacionComponent,
     SubtareaComponent,
-    MapaMenuComponent
+    MapaMenuComponent,
+    TransportesFormComponent,
+    TransporteComponent
   ],
   imports: [
     BrowserModule,

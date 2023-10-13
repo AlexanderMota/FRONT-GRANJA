@@ -25,7 +25,8 @@ export class TareaDetailsComponent implements OnInit {
   empleados: EmpleadoModel[] = [];
   empleadosDisp: EmpleadoModel[] = [];
   //empleadoNuevo: EmpleadoModel = {_id: 'Empleados', idEmpleado : 0, nombre : "", apellidos:"",telefono:"", email:"", password:""};
-  showP : boolean= false;
+  showP1 : boolean= false;
+  showP2 : boolean= false;
   showPEmpD : boolean= false;
 
   //@Input() oculto:boolean = false;
@@ -74,11 +75,18 @@ export class TareaDetailsComponent implements OnInit {
     })
   }
 
-  abreVentana(){
-    this.showP = true;
+  abreFormTarea(){
+    this.showP1 = true;
   }
-  receiveMessage($event: boolean){
-    this.showP = $event;
+  /*abreFormTransporte(){
+    this.showP2 = true;
+  }*/
+  receiveMessageFormTarea($event: boolean){
+    this.showP1 = $event;
+  }
+  receiveMessageFormVehi($event: boolean){
+    console.log("receiveMessageFormVehi: "+$event);
+    this.showP2 = $event;
   }
   emiteCierraVentana(){
     this.showPEmpD = false;

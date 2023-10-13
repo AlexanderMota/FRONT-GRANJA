@@ -1,0 +1,92 @@
+<div class="modalc">
+    <div class="modalc-content">  
+        <div class="modalc-container animated fadeInDown">
+
+            <button class="botonCerrar " (click)="emiteCierraVentana()">X</button>
+            <div class="limiter " >
+                <div class="container-login100" style="min-height: auto; padding: 0;">
+                    <div class="wrap-login100 p-t-50 p-b-90" style="padding: 40px 0 60px;">
+                        <form #registroForm="ngForm"
+                            (ngSubmit)="onSubmit(registroForm)"
+                            class="login100-form validate-form flex-sb flex-w">
+            
+                            <span class="login100-form-title p-b-51">
+                                {{titulo}}
+                            </span>
+                            
+                            <span *ngIf="registroForm.submitted && registroForm.controls['propietario'].errors"
+                                class="text-danger animated fadeIn">El propietario es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                    type="text" 
+                                    name="propietario" 
+                                    [(ngModel)]="vehiculo!.propietario"
+                                    required
+                                    placeholder="Propietario">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <span *ngIf="registroForm.submitted && registroForm.controls['matricula'].errors"
+                                class="text-danger animated fadeIn">La matrícula es obligatoria</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                    type="text" 
+                                    name="matricula" 
+                                    [(ngModel)]="vehiculo!.matricula"
+                                    required
+                                    placeholder="Matrícula">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+            
+                            <span *ngIf="registroForm.submitted && registroForm.controls['descripcion'].errors"
+                                class="text-danger animated fadeIn">La descripción es obligatoria</span>
+                            <div class="wrap-input100 m-b-16">
+                                <textarea class="input100" 
+                                        name="descripcion" 
+                                        required
+                                        [(ngModel)]="vehiculo!.descripcion"
+                                        placeholder="Descripcion"
+                                        style="padding: 15px 15px 15px 30px; min-height: 128px; max-height: 500px; ">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="input-group">
+                                <textarea class="form-control" aria-label="With textarea"></textarea>
+                            </div>
+            
+                        
+            
+                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <span *ngIf="registroForm.submitted && vehiculo!.plazas < 1"
+                                class="text-danger animated fadeIn">El vehículo debe tener, al menos, una plaza</span>
+                            <div class="inputComp wrap-input100 m-b-16">
+                                
+                                <label for="inputNum" class="labels input100">
+                                    Plazas
+                                </label>
+                                <input id="inputNum" class="inputs input100"
+                                style="padding: 0;"
+                                type="number" 
+                                name="plazas" 
+                                [(ngModel)]="vehiculo!.plazas"
+                                required>
+            
+                                <span class="focus-input100"></span>
+                            </div>  
+                            
+
+                            <div class="container-login100-form-btn m-t-17">
+                                <button class="login100-form-btn" type="submit">
+                                    {{textBtn}}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

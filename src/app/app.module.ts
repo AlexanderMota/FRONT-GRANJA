@@ -35,6 +35,8 @@ import { SubtareaComponent } from './components/subtarea/subtarea.component';
 import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.component';
 import { TransportesFormComponent } from './components/transportes-form/transportes-form.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
+import { GraficoPruebaComponent } from './components/grafico-prueba/grafico-prueba.component';
+import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-prueba2.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { TransporteComponent } from './pages/transporte/transporte.component';
     SubtareaComponent,
     MapaMenuComponent,
     TransportesFormComponent,
-    TransporteComponent
+    TransporteComponent,
+    GraficoPruebaComponent,
+    GraficoPrueba2Component
   ],
   imports: [
     BrowserModule,

@@ -8,9 +8,10 @@ import { ComponentMessageService } from 'src/app/services/component-message.serv
   styleUrls: ['./empleado-linea.component.css']
 })
 export class EmpleadoLineaComponent implements OnInit {
-  @Input() empleado: EmpleadoModel[] = [];
-  @Input() emp: EmpleadoModel = new EmpleadoModel();
-  @Input() index:number = 0;
+  @Input() 
+  emp: EmpleadoModel = new EmpleadoModel();
+  @Input() 
+  index:number = 0;
   constructor() {
    }
 

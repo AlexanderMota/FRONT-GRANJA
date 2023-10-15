@@ -24,6 +24,8 @@ export class TareaFormComponent implements OnInit {
   imps : string[] = [];
   @Input() 
   departamentos : { nombre: string }[] = [];
+  @Input() 
+  flag : boolean = true;
   
   //depart : { nombre: string } = {nombre : ""};
   supers : TareaModel[] = [];
@@ -37,30 +39,51 @@ export class TareaFormComponent implements OnInit {
     private resApi:ApiResponseService, 
     private tarServ:TareaService, 
     private actRoute:ActivatedRoute) {
+    
+   }
+
+  ngOnInit(): void {
     this.actRoute.params.subscribe(params=>{
-      //console.log(params['id']);
+    //console.log(params['id']);
       if(params['id']){
-        this.titulo = "Edita tarea";
-        this.textBtn = "Guardar cambios"
-        this.paramId = params['id'];
-        //console.log("contructor route paramid=>\n"+this.paramId);
-        tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
-          this.tarea=res;
-          //console.log("contructor route params=>\n"+res);
-        });
+        if(this.flag){
+          this.titulo = "Edita tarea";
+          this.textBtn = "Guardar cambios"
+          this.paramId = params['id'];
+          //console.log("contructor route paramid=>\n"+this.paramId);
+          this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
+            this.tarea=res;
+            //console.log("contructor route params=>\n"+res);
+          });
+          this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+            this.supers[0] = res;
+            //console.log("contructor route params=>\n"+res);
+          });
+        }else{
+          /*const elemento = document.getElementById('organizacion');
+          if(elemento){
+            elemento.style.display = 'none';
+          }*/
+          document.getElementById('organizacion')!.style.display = 'none';
+          this.titulo = "Crea subtarea";
+          this.textBtn = "Guardar tarea"
+          this.paramId = params['id'];
+          //console.log("contructor route paramid=>\n"+this.paramId);
+          this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
+            this.supers[0] =res;
+            //console.log("contructor route params=>\n"+res);
+          });
+        }
       }else{
         this.titulo = "Nueva tarea";
         this.textBtn = "Crear tarea"
-        tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
-          this.supers.push(res);
+        this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+          this.supers[0] = res;
           //console.log("contructor route params=>\n"+res);
         });
       }
       
     });
-   }
-
-  ngOnInit(): void {
     /*this.compMess.emiteDato.subscribe(dato => {console.log(dato.dato);
   
     this.oculto=!dato.dato;})*/

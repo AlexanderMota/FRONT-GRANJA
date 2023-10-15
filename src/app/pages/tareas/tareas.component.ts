@@ -19,8 +19,8 @@ export class TareasComponent implements OnInit {
   posttitulo="Lista de todas las tareas disponibles";
   subtareas:TareaModel[] = [];
   imps:string[] = [];
-  supers:TareaModel[] = [];
   departamentos:{nombre:string}[] = [];
+  supers:TareaModel[] = [];
   paramIdSuper = "";
 
   constructor(

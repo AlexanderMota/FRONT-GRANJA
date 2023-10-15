@@ -26,8 +26,11 @@ export class TareaDetailsComponent implements OnInit {
   empleadosDisp: EmpleadoModel[] = [];
   //empleadoNuevo: EmpleadoModel = {_id: 'Empleados', idEmpleado : 0, nombre : "", apellidos:"",telefono:"", email:"", password:""};
   showP1 : boolean= false;
+  flag : boolean= false;
   showP2 : boolean= false;
   showPEmpD : boolean= false;
+  imps:string[] = [];
+  departamentos:{nombre:string}[] = [];
 
   //@Input() oculto:boolean = false;
   private paramId : string = "";
@@ -75,7 +78,13 @@ export class TareaDetailsComponent implements OnInit {
     })
   }
 
-  abreFormTarea(){
+  abreFormTarea(flag:boolean){
+    this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
+      this.departamentos = res;
+      this.imps = ["Crítica","Alta","Media","Baja"];
+      //console.log(res);
+    });
+    this.flag = flag;
     this.showP1 = true;
   }
   /*abreFormTransporte(){
@@ -85,7 +94,7 @@ export class TareaDetailsComponent implements OnInit {
     this.showP1 = $event;
   }
   receiveMessageFormVehi($event: boolean){
-    console.log("receiveMessageFormVehi: "+$event);
+    //console.log("receiveMessageFormVehi: "+$event);
     this.showP2 = $event;
   }
   emiteCierraVentana(){

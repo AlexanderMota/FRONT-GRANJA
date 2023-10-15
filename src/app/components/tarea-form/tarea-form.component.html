@@ -101,21 +101,21 @@
                             
                                 <select [(ngModel)]="tarea!.importancia" 
                                     id="inputimp" class="inputs form-select" name="inputgrupo">
-                                    <option selected>-</option>
+                                    <option *ngIf="imps.length > 1" selected>-</option>
                                     <option *ngFor="let imp of imps;">{{ imp }}</option>
                                 </select>
                             </div>
 
                             <span *ngIf="registroForm.submitted && tarea!.importancia == '-'"
                                 class="text-danger animated fadeIn">Debe indicar a qué grupo pertenece esta tarea</span>
-                            <div class="inputComp wrap-input100 m-b-16">
+                            <div class="inputComp wrap-input100 m-b-16" #organizacion id="organizacion" >
                                 <label for="inputimp2" class="labels input100">
                                     Organización
                                 </label>
                             
                                 <select [(ngModel)]="idSuper"
                                     id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
-                                    <option selected>-</option>
+                                    <option *ngIf="supers.length > 1">-</option>
                                     <option *ngFor="let super of supers; let i = index;">
                                         <!--<span class="idOculto">id: {{super._id}} - </span>-->
                                         {{ super.nombre }}
@@ -143,7 +143,7 @@
                             
                                 <select [(ngModel)]="tarea!.departamento"
                                     id="inputimp" class="inputs form-select" name="inputdepart">
-                                    <option selected>-</option>
+                                    <option *ngIf="departamentos.length > 1" selected>-</option>
                                     <option *ngFor="let departamento of departamentos;">
                                         {{ departamento.nombre }}
                                     </option>

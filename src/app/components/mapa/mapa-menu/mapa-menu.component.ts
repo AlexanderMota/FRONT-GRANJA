@@ -25,8 +25,7 @@ export class MapaMenuComponent {
     {
       ruta: '/mapas/fullscreen',
       nombre: 'Transportes'
-    },
-    {
+    }, {
       ruta: '/mapas/zoom-range',
       nombre: 'Añade transporte'
     }

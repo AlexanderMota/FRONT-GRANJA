@@ -2,6 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UbicacionModel } from '../models/ubicacion.model';
+import { environment } from 'src/environments/environment';
+import { MapBoxResponseModel } from '../models/mapBoxResponse.model';
+import { MapBoxRouteResponseModel } from '../models/mapBoxRouteResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +14,46 @@ export class UbicacionService {
   private baseUrl = 'http://localhost:4300/api/ubicacion/';
   private urlUbiByIdTarea = this.baseUrl+"tarea/";
 
+  private baseUrlMapBox = 'https://api.mapbox.com/';
+  private urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
+  private urlMapBoxGetRoute = this.baseUrlMapBox + 'directions/v5/mapbox/';
+  
   constructor(private http: HttpClient) { }
 
-  getAllUbicaciones(token:string,pageSize = 20,pageNum = 1):Observable<[UbicacionModel]> {
+  getMapBoxRoute( medio = "",
+    puntoPartida = [0.0,0.0], 
+    puntoDestino = [0.0,0.0],
+    geometries = "geojson" ) : Observable<MapBoxRouteResponseModel> {
+    return this.http.get<MapBoxRouteResponseModel>(
+      this.urlMapBoxGetRoute+medio+"/"+
+      puntoPartida[0]+','+puntoPartida[1]+';'+
+      puntoDestino[0]+','+puntoDestino[1], {
+      params: {
+        geometries:geometries,
+        access_token:environment.mapboxToken
+      }
+    });
+  }
+  getMapBoxUbicacionByCoordenadas(coord:{lng:number,lat:number}):
+    Observable<MapBoxResponseModel> {
+    return this.http.get<MapBoxResponseModel>(
+      this.urlMapBoxBuscaUbi+coord.lng+","+coord.lat+".json", {
+      params: {
+        access_token:environment.mapboxToken
+      }
+    });
+  }
+  getMapBoxUbicacion(busca:string):Observable<MapBoxResponseModel> {
+    return this.http.get<MapBoxResponseModel>(this.urlMapBoxBuscaUbi+busca+".json", {
+      //headers: new HttpHeaders({ }),
+      params: {
+        access_token:environment.mapboxToken
+      }
+    });
+  }
+  getAllUbicaciones(token:string,
+    pageSize = 20,
+    pageNum = 1) : Observable<[UbicacionModel]> {
     return this.http.get<[UbicacionModel]>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
@@ -24,7 +64,10 @@ export class UbicacionService {
       }
     });
   }
-  getUbiByIdTarea(token:string, idTarea:string,pageSize = 1,pageNum = 1):Observable<[UbicacionModel]> {
+  getUbiByIdTarea(token:string, 
+    idTarea : string,
+    pageSize = 1,
+    pageNum = 1) : Observable<[UbicacionModel]> {
     return this.http.get<[UbicacionModel]>(this.urlUbiByIdTarea+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
@@ -34,5 +77,43 @@ export class UbicacionService {
         pageNum
       }
     });
+  }
+}
+export class EstilosMapBoxEnum {
+  static baseurl: string = "mapbox://styles/mapbox/";
+  static Calles: string = EstilosMapBoxEnum.baseurl + "streets-v12";
+  static Caminos: string = EstilosMapBoxEnum.baseurl + "outdoors-v12";
+  static Claro: string = EstilosMapBoxEnum.baseurl + "light-v11";
+  static Oscuro: string = EstilosMapBoxEnum.baseurl + "dark-v11";
+  static Terreno: string = EstilosMapBoxEnum.baseurl + "satellite-v9";
+  static Satélite: string = EstilosMapBoxEnum.baseurl + "satellite-streets-v12";
+  static Navegación: string = EstilosMapBoxEnum.baseurl + "navigation-day-v1";
+  static Direcciones: string = EstilosMapBoxEnum.baseurl + "navigation-night-v1";
+  static getArray():{ nombre: string; url: string; }[]{
+    let arr = [];
+    arr.push({nombre:"Calles",url:EstilosMapBoxEnum.Calles});
+    arr.push({nombre:"Caminos",url:EstilosMapBoxEnum.Caminos});
+    arr.push({nombre:"Claro",url:EstilosMapBoxEnum.Claro});
+    arr.push({nombre:"Oscuro",url:EstilosMapBoxEnum.Oscuro});
+    arr.push({nombre:"Terreno",url:EstilosMapBoxEnum.Terreno});
+    arr.push({nombre:"Satélite",url:EstilosMapBoxEnum.Satélite});
+    arr.push({nombre:"Navegación",url:EstilosMapBoxEnum.Navegación});
+    arr.push({nombre:"Direcciones",url:EstilosMapBoxEnum.Direcciones});
+    return arr;
+  }
+}
+export class MediosTransporteMapBoxEnum {
+  static conduccion_trafico: string = "driving-traffic";
+  static conduccion: string = "driving";
+  static caminando: string = "walking";
+  static bicicleta: string = "cycling";
+  static getArray():{ nombre: string; clave: string; }[]{
+    let arr = [];
+    arr.push({nombre:"Tráfico",clave:MediosTransporteMapBoxEnum.conduccion_trafico});
+    arr.push({nombre:"Conducción",clave:MediosTransporteMapBoxEnum.conduccion});
+    arr.push({nombre:"Caminando",clave:MediosTransporteMapBoxEnum.caminando});
+    arr.push({nombre:"Bicicleta",clave:MediosTransporteMapBoxEnum.bicicleta});
+    console.log(arr);
+    return arr;
   }
 }

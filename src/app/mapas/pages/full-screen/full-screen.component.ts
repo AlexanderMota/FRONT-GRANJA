@@ -72,7 +72,14 @@ export class FullScreenComponent implements AfterViewInit {
       center: [-0.4904,38.3464], // starting position
       zoom: 10
     });
-    // set the bounds of the map
+
+    // Agregar barra de navegación
+    //this.mapa.addControl(new mapboxgl.NavigationControl());
+
+
+
+    
+    // set the bounds of the map 
     /*const bounds = [
       [-123.069003, 45.395273],
       [-122.303707, 45.612333]

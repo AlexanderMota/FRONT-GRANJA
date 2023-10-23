@@ -13,5 +13,10 @@
     </li>
 </ul>-->
 <div #mapa id="mapa">
-    <app-mapa-menu (eventoEmite)='receiveMessageFormVehi($event)'></app-mapa-menu>
-</div>
+    <app-mapa-menu 
+        (eventoEmiteBuscaUbi)='receiveMessageBuscaUbi($event)' 
+        (eventoEmiteFormVehi)='sendMessageFormVehi($event)'
+        (eventoEmiteCambiaEstiloMapa)="receiveMessageCambiaEstiloMapa($event)"
+        (eventoEmiteMedioTransporteMapa)="receiveMessageMedioTransporteMapa($event)">
+    </app-mapa-menu>
+</div> 

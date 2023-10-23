@@ -1,9 +1,60 @@
+<img *ngIf='muestraBotonMenu' class="botonMenu fadeOutRight" src="../../../../assets/images/icons/barra-de-menus.png" (click)="muestraOcultaMenu()">
 <ul class="list-group animated fadeInLeft" *ngIf='muestraMenu'>
+    <li class="list-group-item" (click)="muestraOcultaBarraBusca()">Buscar</li>
     <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" class="list-group-item" routerLinkActive="active">
         {{ item.nombre }}
+    </li>
+    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa
     </li>
     <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte
     </li>
     <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
 </ul>
-<img *ngIf='!muestraMenu' class="botonMenu fadeOutRight" src="../../../../assets/images/icons/barra-de-menus.png" (click)="muestraOcultaMenu()">
+<ul class="list-group animated fadeInLeft" *ngIf='muestraMenuEstilos'>
+    <li *ngFor="let estilo of estilosMapa" class="list-group-item" (click)="sendEstiloMapa(estilo.url)">
+        {{ estilo.nombre }}
+    </li>
+    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Atrás</li>
+</ul>
+<div *ngIf='muestraBarraBusca'>
+    <div  class="barraBuscaComp animated fadeInLeft">
+        <img class="botonMenuAtras"
+            src="../../../../assets/images/icons/atras.png" 
+            (click)="muestraOcultaBarraBusca()">
+        <input 
+              class="form-control barraBusca" 
+              #txtBuscarUbi 
+              (keyup.enter)="buscaUbicacion( txtBuscarUbi.value )"
+              type="search" 
+              placeholder="Buscar ubicación" 
+              aria-label="Search"
+              [(ngModel)]="inputValue"/>
+        <img (click)="buscaUbicacion(txtBuscarUbi.value)" 
+            class="botonMenuBusca" 
+            src="../../../../assets/images/icons/lupa.png">
+    </div>
+    
+    <ul class="list-group3 animated fadeInLeft" id="listaMedios">
+        <li *ngFor="let medio of mediosMapa" 
+            class="list-group-item" 
+            (click)="sendMedioTransporteMapa(medio.clave)"
+            [class.selected]="medio.clave === medioSelect">
+            {{ medio.nombre }}
+        </li>
+    </ul>
+
+    <ul class="list-group2 animated fadeInDown"
+        *ngIf='resMapBox.features.length > 0'>
+        <li class="list-group-item listaBuscador"
+            *ngFor="let feature of resMapBox.features"
+            (click)="clickOcurrenciaUbi(feature)">
+            <div class="lineaBusca1">{{ feature.text }}</div>
+            <div class="lineaBusca2">{{ feature.place_name }}</div>
+        </li>
+    </ul>
+    <ul class="list-group2 animated fadeInLeft" *ngIf='resMapBox.features.length == 0 && resMapBox.query.length > 0'>
+        <li class="list-group-item">
+            Ubicación no encontrada
+        </li>
+    </ul>
+</div>

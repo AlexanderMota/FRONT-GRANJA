@@ -12,7 +12,7 @@ const routes: Routes = [{
     { path:'zoom-range', component: ZoomRangeComponent },
     { path:'marcadores', component: MarcadoresComponent },
     { path:'propiedades', component: PropiedadesComponent },
-    { path:'**', redirectTo: '/mapas/propiedades' }
+    { path:'**', redirectTo: '/mapas/' }
   ]
 }];
 

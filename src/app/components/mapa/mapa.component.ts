@@ -2,8 +2,10 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Outp
 import { ActivatedRoute } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
-import { UbicacionService } from 'src/app/services/ubicacion.service';
+import { UbicacionService, EstilosMapBoxEnum, MediosTransporteMapBoxEnum } from 'src/app/services/ubicacion.service';
 import { environment } from 'src/environments/environment';
+import { MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
+
 
 @Component({
   selector: 'app-mapa',
@@ -17,48 +19,71 @@ export class MapaComponent implements OnInit, AfterViewInit {
   divMapa!: ElementRef;
   
   @Output() 
-  eventoEmite = new EventEmitter<boolean>();
+  private eventoEmiteFormVehi = new EventEmitter<boolean>();
 
   @Input() 
   index:number = 0;
   @Input() 
-  idTarea:string = "F";
+  idTarea:string = "";
 
-  private mapa!:mapboxgl.Map;
-  ubi:UbicacionModel = new UbicacionModel();
+  mapa!:mapboxgl.Map;
+  private ubiCentro:UbicacionModel = new UbicacionModel();
+  private medio : string = MediosTransporteMapBoxEnum.conduccion;
   marcadores:mapboxgl.Marker[] = [];
 
-  constructor(
-    private actRoute:ActivatedRoute,
-    private ubiServ: UbicacionService) { 
+  constructor( private actRoute:ActivatedRoute,
+    private ubiServ: UbicacionService ) { }
 
-    //console.log("idTarea1: " + this.ubi.idTarea +this.index);
-  }
   ngOnInit(): void {
-      this.actRoute.params.subscribe(async params=>{
-        if(params['id']){
-          console.log("mapa: "+params['id']);
-          await this.ubiServ.getUbiByIdTarea(localStorage.getItem('token')!,params['id'])
-          .subscribe(async res=>{
-            console.log("mapa: "+res);
-            this.ubi=res[res.length - 1];
-            if(this.ubi){
-              this.agregarMarcadorAuto({lng:this.ubi.longitud,lat:this.ubi.latitud});
-              this.vuelaUbi({lng:this.ubi.longitud,lat:this.ubi.latitud},17);
-            }
-          });
-        }
-      });
-    //console.log("idTarea2: " + this.ubi.idTarea+this.index);
     
   } 
-  /*ngOnChanges() {
-    if(this.ubi.latitud > 0){
-    }
-    this.vuelaUbi({lng:this.ubi.longitud,lat:this.ubi.latitud});38.4136547,-0.5157158
-    //console.log("idTarea4: " + this.ubi.descripcion +"/"+this.idTarea);38.4179851,-0.4134316
-  }*/
+  ngAfterViewInit(): void {
+    this.iniciaMapa();
+    this.muestraCentroTrabajo();
+    this.clickMapaActivo();
+  }
+
+  private iniciaMapa(){
+    (mapboxgl as any).accessToken = environment.mapboxToken;
+    this.mapa = new mapboxgl.Map({
+      container: this.divMapa.nativeElement,
+      style: EstilosMapBoxEnum.Satélite,
+      center: [-0.4904,38.3464], // starting position
+      zoom: 10
+    });
+    // Agregar barra de navegación
+    this.mapa.addControl(new mapboxgl.NavigationControl());
+  }
   
+  clickMapaActivo(){
+    this.mapa.on('click', event => {
+      this.agregarMarcador(event.lngLat, true);
+      this.ubiServ.getMapBoxRoute(this.medio, 
+        [event.lngLat.lng,event.lngLat.lat],
+        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.pintaRuta(res.routes[0].geometry.coordinates);
+      });
+    });
+  }
+
+  muestraCentroTrabajo(){
+    this.actRoute.params.subscribe(async params=>{
+      if(params['id']){
+        await this.ubiServ.getUbiByIdTarea(
+          localStorage.getItem('token')!,params['id'])
+        .subscribe(async res=>{
+          this.ubiCentro=res[res.length - 1];
+          if(this.ubiCentro){
+            this.agregarMarcador({lng: this.ubiCentro.longitud,
+              lat: this.ubiCentro.latitud}, false);
+            this.vuelaUbi({lng:this.ubiCentro.longitud,
+              lat:this.ubiCentro.latitud}, 17);
+          }
+        });
+      }
+    });
+  }
+
   vuelaUbi({lng= 0 ,lat= 0},zoom=5){
     if(lng != 0 && lat != 0){
 
@@ -68,94 +93,91 @@ export class MapaComponent implements OnInit, AfterViewInit {
       zoom:zoom
     });
   }
-  ngAfterViewInit(): void {
-    //console.log("---ngAfterViewInit: " + this.ubi.idTarea+"/"+this.index);
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    
-    (mapboxgl as any).accessToken = environment.mapboxToken;
-    this.mapa = new mapboxgl.Map({
-      container: this.divMapa.nativeElement,
-      style: 'mapbox://styles/mapbox/satellite-v9',
-      center: [-0.4904,38.3464], // starting position
-      zoom: 10
-    });
 
-    
-    
-  }
-  agregarMarcadorAuto({lng=0.0,lat=0.0}){
+  agregarMarcador(coordenadas:{lng:number,lat:number},movil:boolean){
+    if(this.marcadores[1]){
+      this.marcadores[1].remove();
+      this.marcadores.splice(1,1);
+    }
     const color ='#xxxxxx'.replace(/x/g, y =>(Math.random()*16|0).toString(16));
-    
-    this.divMapa
 
-    this.marcadores.push(
+    this.marcadores[this.marcadores.length]=
       new mapboxgl.Marker({
-        draggable:false,
+        draggable:movil,
         color:color
-      }).setLngLat([lng,lat])
-          .addTo(this.mapa)
-    );
-  }
-  agregarMarcador(){
-    const color ='#xxxxxx'.replace(/x/g, y =>(Math.random()*16|0).toString(16));
-    
-    this.divMapa
+      }).setLngLat([coordenadas.lng,coordenadas.lat])
+          .addTo(this.mapa);
 
-    this.marcadores.push(
-      new mapboxgl.Marker({
-        draggable:true,
-        color:color
-      }).setLngLat(this.mapa.getCenter())
-          .addTo(this.mapa)
-    );
-    //console.log(this.marcadores[0].getLngLat());
-    /*if(this.marcadores.length > 1){
-      this.cargaRuta();
-      this.muestraRuta();
-    }*/
+    //agrega listener al marcador
+    if(this.marcadores[1]){
+      this.marcadores[this.marcadores.length-1].on('dragend', () => {
+        const newLngLat = this.marcadores[this.marcadores.length-1].getLngLat();
+        const nuevaLatitud = newLngLat.lat;
+        const nuevaLongitud = newLngLat.lng;
+        console.log('Latitud:', nuevaLatitud);
+        console.log('Longitud:', nuevaLongitud);
+
+        this.ubiServ.getMapBoxRoute(this.medio, 
+          [this.marcadores[this.marcadores.length-1].getLngLat().lng,
+          this.marcadores[this.marcadores.length-1].getLngLat().lat],
+          [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+          this.pintaRuta(res.routes[0].geometry.coordinates);
+        });
+      });
+    }
   }
-  load(/*ruta: {routes: Array<string>, waypoints: Array<string>, code: string, uuid: string} */){
+
+  sendMessageFormVehi($event: boolean){
+    this.eventoEmiteFormVehi.emit($event);
+  }
   
-    // Add starting point to the map
+  receiveMessageBuscaUbi($event: MapBoxFeature){
+    this.agregarMarcador({lng:$event.center[0],lat:$event.center[1]},true);
+    this.vuelaUbi({lng:$event.center[0],lat:$event.center[1]},17 );
+    this.ubiServ.getMapBoxRoute(this.medio, 
+      [$event.center[0],$event.center[1]],
+      [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+      this.pintaRuta(res.routes[0].geometry.coordinates);
+    });
+  }
+  pintaRuta(ruta:[]){
+
+    if (this.mapa.getSource('route')) {
+      this.mapa.removeLayer('route');
+      this.mapa.removeSource('route');
+    }
+
     this.mapa.addLayer({
-      id: 'point',
-      type: 'circle',
+      id: 'route',
+      type: 'line',
       source: {
         type: 'geojson',
         data: {
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Point',
-                coordinates: [-0.4904,38.3464]
-              }
-            }
-          ]
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: ruta
+          }
         }
       },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
       paint: {
-        'circle-radius': 10,
-        'circle-color': '#3887be'
-      }
-    }
-    );
-  }
-  
-  receiveMessageFormVehi($event: boolean){
-    //showP2 = $event;
-    this.eventoEmite.emit($event);
-  }
-  /*getIndicaciones(medio = "cycling",geometries = "geojson", puntoPartida = [0.0,0.0], puntoDestino = [0.0,0.0]):Observable<[any]> {
-    medio += "/";
-    return this.http.get<[any]>(this.mapboxUrl+medio+puntoPartida[0]+','+puntoPartida[1]+';'+puntoDestino[0]+','+puntoDestino[1], {
-      params: {
-        geometries:geometries,
-        access_token:environment.mapboxToken
+        'line-color': '#3887be',
+        'line-width': 5,
+        'line-opacity': 0.75
       }
     });
-  }*/
+  }
+  
+  receiveMessageCambiaEstiloMapa($event: string){
+    this.mapa.setStyle($event);
+  }
+
+  receiveMessageMedioTransporteMapa($event: string){
+    this.medio = $event;
+  }
 }

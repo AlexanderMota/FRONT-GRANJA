@@ -156,8 +156,8 @@ export class MarcadoresComponent implements AfterViewInit {
       center: [lng,lat],
       zoom:this.zoomLevel
     });
-    this.cargaRuta();
-    this.muestraRuta();
+    /*this.cargaRuta();
+    this.muestraRuta();*/
   }
 
   cargaRuta(){
@@ -215,6 +215,7 @@ export class MarcadoresComponent implements AfterViewInit {
       } 
     });
     //console.log(this.marcadores[0].getLngLat().lng + " - " +this.resRoute);
+    this.muestraRuta()
   }
 
   muestraRuta(){

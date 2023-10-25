@@ -179,5 +179,14 @@ export class MapaComponent implements OnInit, AfterViewInit {
 
   receiveMessageMedioTransporteMapa($event: string){
     this.medio = $event;
+    if(this.marcadores.length > 1){
+      this.ubiServ.getMapBoxRoute(this.medio, 
+        [this.marcadores[this.marcadores.length-1].getLngLat().lng,
+        this.marcadores[this.marcadores.length-1].getLngLat().lat],
+        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.pintaRuta(res.routes[0].geometry.coordinates);
+      });
+    }
   }
+
 }

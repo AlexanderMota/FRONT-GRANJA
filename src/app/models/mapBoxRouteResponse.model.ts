@@ -3,10 +3,11 @@ export class MapBoxRouteResponseModel{
 
   waypoints:MapBoxWayPoint[]=[];
 
-
   routes: MapBoxRoute[]=[];
 
   code:string="";
+
+  uuid:string="";
 };
 
 export class MapBoxWayPoint{

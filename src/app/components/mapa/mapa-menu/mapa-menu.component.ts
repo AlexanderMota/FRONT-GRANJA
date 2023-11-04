@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MapBoxResponseModel, MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
+import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
 import { UbicacionService, EstilosMapBoxEnum, MediosTransporteMapBoxEnum } from 'src/app/services/ubicacion.service';
 
 interface MenuItem  {
@@ -22,6 +23,13 @@ export class MapaMenuComponent {
   eventoEmiteCambiaEstiloMapa = new EventEmitter<string>();
   @Output() 
   eventoEmiteMedioTransporteMapa = new EventEmitter<string>();
+  @Output() 
+  eventoEmiteReiniciaMapa = new EventEmitter<boolean>();
+  
+  @Input() 
+  inputSearchValue: string = '';
+  @Input()
+  indicaciones: MapBoxLeg = new MapBoxLeg;
 
   resMapBox: MapBoxResponseModel = new MapBoxResponseModel;
   
@@ -29,8 +37,9 @@ export class MapaMenuComponent {
   muestraMenu = false;
   muestraMenuEstilos = false;
   muestraBarraBusca = false;
-  inputValue: string = '';
+  //muestraIndicaciones = false;
   estilosMapa = EstilosMapBoxEnum.getArray();
+  estiloSelect = this.estilosMapa[5].url;
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
 
@@ -71,17 +80,28 @@ export class MapaMenuComponent {
     .subscribe(async res=>{
       this.resMapBox = res;
     });
+    //this.muestraIndicaciones = true;
   }
   clickOcurrenciaUbi($event: MapBoxFeature){
     this.resMapBox = new MapBoxResponseModel;
-    this.inputValue = $event.place_name;
+    this.inputSearchValue = $event.place_name;
     this.eventoEmiteBuscaUbi.emit($event);
   }
   sendEstiloMapa(str:string){
+    this.estiloSelect = str;
     this.eventoEmiteCambiaEstiloMapa.emit(str);
   }
   sendMedioTransporteMapa(str:string){
     this.eventoEmiteMedioTransporteMapa.emit(str);
     this.medioSelect = str;
+  }
+  reiniciaMapa(){
+    this.muestraOcultaMenu();
+    this.inputSearchValue = '';
+    this.indicaciones = new MapBoxLeg;
+    this.eventoEmiteReiniciaMapa.emit(true);
+  }
+  muestraPuntosDeRecogida(){
+    console.log("por hacer");
   }
 }

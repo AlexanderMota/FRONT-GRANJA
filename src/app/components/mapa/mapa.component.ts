@@ -5,6 +5,7 @@ import { UbicacionModel } from 'src/app/models/ubicacion.model';
 import { UbicacionService, EstilosMapBoxEnum, MediosTransporteMapBoxEnum } from 'src/app/services/ubicacion.service';
 import { environment } from 'src/environments/environment';
 import { MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
+import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
 
 
 @Component({
@@ -30,6 +31,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
   private ubiCentro:UbicacionModel = new UbicacionModel();
   private medio : string = MediosTransporteMapBoxEnum.conduccion;
   marcadores:mapboxgl.Marker[] = [];
+  nombrePuntoPartida:string="";
+  indicaciones: MapBoxLeg = new MapBoxLeg;
 
   constructor( private actRoute:ActivatedRoute,
     private ubiServ: UbicacionService ) { }
@@ -61,6 +64,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.ubiServ.getMapBoxRoute(this.medio, 
         [event.lngLat.lng,event.lngLat.lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.indicaciones = res.routes[0].legs[0];
+        console.log(this.indicaciones);
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     });
@@ -108,21 +113,25 @@ export class MapaComponent implements OnInit, AfterViewInit {
       }).setLngLat([coordenadas.lng,coordenadas.lat])
           .addTo(this.mapa);
 
-    //agrega listener al marcador
+    //agrega listener al marcador y +
     if(this.marcadores[1]){
       this.marcadores[this.marcadores.length-1].on('dragend', () => {
-        const newLngLat = this.marcadores[this.marcadores.length-1].getLngLat();
-        const nuevaLatitud = newLngLat.lat;
-        const nuevaLongitud = newLngLat.lng;
-        console.log('Latitud:', nuevaLatitud);
-        console.log('Longitud:', nuevaLongitud);
-
         this.ubiServ.getMapBoxRoute(this.medio, 
           [this.marcadores[this.marcadores.length-1].getLngLat().lng,
           this.marcadores[this.marcadores.length-1].getLngLat().lat],
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+          this.indicaciones = res.routes[0].legs[0];
           this.pintaRuta(res.routes[0].geometry.coordinates);
         });
+      });
+
+      this.ubiServ.getMapBoxUbicacionByCoordenadas(
+        {lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+        lat:this.marcadores[this.marcadores.length-1].getLngLat().lat}
+      ).subscribe( res => {
+        if(res.features[0]){
+          this.nombrePuntoPartida = res.features[0].place_name;
+        }else this.nombrePuntoPartida = "";
       });
     }
   }
@@ -137,6 +146,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
     this.ubiServ.getMapBoxRoute(this.medio, 
       [$event.center[0],$event.center[1]],
       [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+      this.indicaciones = res.routes[0].legs[0];
       this.pintaRuta(res.routes[0].geometry.coordinates);
     });
   }
@@ -175,6 +185,15 @@ export class MapaComponent implements OnInit, AfterViewInit {
   
   receiveMessageCambiaEstiloMapa($event: string){
     this.mapa.setStyle($event);
+    if(this.marcadores.length > 1){
+      this.ubiServ.getMapBoxRoute(this.medio, 
+        [this.marcadores[this.marcadores.length-1].getLngLat().lng,
+        this.marcadores[this.marcadores.length-1].getLngLat().lat],
+        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.indicaciones = res.routes[0].legs[0];
+        this.pintaRuta(res.routes[0].geometry.coordinates);
+      });
+    }
   }
 
   receiveMessageMedioTransporteMapa($event: string){
@@ -184,9 +203,14 @@ export class MapaComponent implements OnInit, AfterViewInit {
         [this.marcadores[this.marcadores.length-1].getLngLat().lng,
         this.marcadores[this.marcadores.length-1].getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
   }
-
+  receiveReiniciaMapa($event: boolean){
+    if($event){
+      this.ngAfterViewInit();
+    }
+  }
 }

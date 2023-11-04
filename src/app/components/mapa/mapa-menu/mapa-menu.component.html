@@ -1,17 +1,26 @@
 <img *ngIf='muestraBotonMenu' class="botonMenu fadeOutRight" src="../../../../assets/images/icons/barra-de-menus.png" (click)="muestraOcultaMenu()">
 <ul class="list-group animated fadeInLeft" *ngIf='muestraMenu'>
     <li class="list-group-item" (click)="muestraOcultaBarraBusca()">Buscar</li>
+    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa
+    </li>
+    <li><hr class="dropdown-divider"></li>
     <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" class="list-group-item" routerLinkActive="active">
         {{ item.nombre }}
     </li>
-    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa
+    <li class="list-group-item" (click)="muestraPuntosDeRecogida()">Transportes
     </li>
     <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li class="list-group-item" (click)="reiniciaMapa()">Reinicia
     </li>
     <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
 </ul>
 <ul class="list-group animated fadeInLeft" *ngIf='muestraMenuEstilos'>
-    <li *ngFor="let estilo of estilosMapa" class="list-group-item" (click)="sendEstiloMapa(estilo.url)">
+    <li *ngFor="let estilo of estilosMapa" 
+        class="list-group-item" 
+        (click)="sendEstiloMapa(estilo.url)"
+        [class.selected]="estilo.url === estiloSelect">
         {{ estilo.nombre }}
     </li>
     <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Atrás</li>
@@ -28,7 +37,7 @@
               type="search" 
               placeholder="Buscar ubicación" 
               aria-label="Search"
-              [(ngModel)]="inputValue"/>
+              [(ngModel)]="inputSearchValue"/>
         <img (click)="buscaUbicacion(txtBuscarUbi.value)" 
             class="botonMenuBusca" 
             src="../../../../assets/images/icons/lupa.png">
@@ -55,6 +64,16 @@
     <ul class="list-group2 animated fadeInLeft" *ngIf='resMapBox.features.length == 0 && resMapBox.query.length > 0'>
         <li class="list-group-item">
             Ubicación no encontrada
+        </li>
+    </ul>
+</div>
+<div class="direcciones"
+    *ngIf='indicaciones.steps.length > 0'>
+    <ul class="animated fadeInDown">
+        <li class="list-group-item"
+            *ngFor="let step of indicaciones.steps">
+            <div class="lineaBusca1">{{ step.maneuver.instruction }}</div>
+            <div class="lineaBusca2">{{ step.distance }} > {{ step.name || "Vía sin nombre" }}</div>
         </li>
     </ul>
 </div>

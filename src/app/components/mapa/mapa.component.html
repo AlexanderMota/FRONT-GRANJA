@@ -14,9 +14,12 @@
 </ul>-->
 <div #mapa id="mapa">
     <app-mapa-menu 
+        [indicaciones]="indicaciones"
+        [inputSearchValue]="nombrePuntoPartida"
         (eventoEmiteBuscaUbi)='receiveMessageBuscaUbi($event)' 
         (eventoEmiteFormVehi)='sendMessageFormVehi($event)'
         (eventoEmiteCambiaEstiloMapa)="receiveMessageCambiaEstiloMapa($event)"
-        (eventoEmiteMedioTransporteMapa)="receiveMessageMedioTransporteMapa($event)">
+        (eventoEmiteMedioTransporteMapa)="receiveMessageMedioTransporteMapa($event)"
+        (eventoEmiteReiniciaMapa)="receiveReiniciaMapa($event)">
     </app-mapa-menu>
 </div> 

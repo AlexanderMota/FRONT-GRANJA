@@ -4,9 +4,18 @@
     left: 0;
     z-index: 9;
     margin: 10px 0 0 10px;
+    box-sizing: border-box;
 }
-li {
+.list-group li:hover {
+    background-color: #a2d8fc; /* Color de fondo al pasar el ratón por encima */
+}
+.list-group li {
     cursor: pointer;
+}
+.list-group li hr{
+    height: 0px;
+    margin: 0px;
+    border: 0;
 }
 .botonMenu{
     width: 30px;
@@ -108,4 +117,24 @@ li {
 }
 .selected {
     background-color: #a2d8fc;
-  }
+}
+.direcciones{
+    width: 280px;
+    max-height: 460px;
+    position: absolute;
+    z-index: 9;
+    margin: 10px 50px 0 0;
+    padding: 0;
+    right: 0;
+    
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.direcciones ul{
+    margin: 0;
+    padding: 0;
+    border-radius: 3px;
+}
+.direcciones ul li{
+    border: 1px solid black;
+}

@@ -116,7 +116,7 @@
                                 <select [(ngModel)]="idSuper"
                                     id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
                                     <option *ngIf="supers.length > 1">-</option>
-                                    <option *ngFor="let super of supers; let i = index;">
+                                    <option *ngFor="let super of supers; let i = index;" [value]="super._id">
                                         <!--<span class="idOculto">id: {{super._id}} - </span>-->
                                         {{ super.nombre }}
                                     </option>

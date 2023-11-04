@@ -29,6 +29,7 @@ export class UbicacionService {
       puntoPartida[0]+','+puntoPartida[1]+';'+
       puntoDestino[0]+','+puntoDestino[1], {
       params: {
+        steps:true,
         geometries:geometries,
         access_token:environment.mapboxToken
       }

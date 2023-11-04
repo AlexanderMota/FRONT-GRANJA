@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 export class TareaFormComponent implements OnInit {
 
   @Output() 
-  eventoEmite = new EventEmitter<boolean>();
+  eventoEmiteCierraFormTarea = new EventEmitter<boolean>();
 
   @Input() 
   imps : string[] = [];
@@ -46,10 +46,10 @@ export class TareaFormComponent implements OnInit {
     this.actRoute.params.subscribe(params=>{
     //console.log(params['id']);
       if(params['id']){
+        this.paramId = params['id'];
         if(this.flag){
           this.titulo = "Edita tarea";
           this.textBtn = "Guardar cambios"
-          this.paramId = params['id'];
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
             this.tarea=res;
@@ -67,7 +67,7 @@ export class TareaFormComponent implements OnInit {
           document.getElementById('organizacion')!.style.display = 'none';
           this.titulo = "Crea subtarea";
           this.textBtn = "Guardar tarea"
-          this.paramId = params['id'];
+          this.idSuper = this.paramId;
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
             this.supers[0] =res;
@@ -81,6 +81,7 @@ export class TareaFormComponent implements OnInit {
           this.supers[0] = res;
           //console.log("contructor route params=>\n"+res);
         });
+        this.flag = false;
       }
       
     });
@@ -93,7 +94,7 @@ export class TareaFormComponent implements OnInit {
       return;
     }
     this.resApi.resCargando('Espere...');
-    if(this.paramId.length > 0){
+    if(this.flag){
       this.tarServ.patchTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
         switch(res.status) { 
           case 201: { 
@@ -117,35 +118,60 @@ export class TareaFormComponent implements OnInit {
       });
       
     }else{
-/*
-      console.log("tarea nueva: " + this.tarea.departamento);
-      console.log("idSuper: " + this.idSuper);*/
-      this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe(res => {
-        switch(res.status) { 
-          case 201: { 
-            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
-            this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
-             break; 
-          }
-          case 400: { 
-            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
-             break; 
+
+      console.log("tarea nueva: ");
+      console.log(this.tarea);
+      console.log("idSuper: ");
+      console.log(this.idSuper);
+
+      if(this.paramId){
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe(res => {
+          switch(res.status) { 
+            case 201: { 
+              this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+              this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
+               break; 
+            }
+            case 400: { 
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+               break; 
+            } 
+            default: { 
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+               break; 
+            } 
           } 
-          default: { 
-             //statements; 
-             break; 
+        },(err)=>{
+          this.resApi.resMensajeErrBtn(err.error.message);
+        });
+      }else{
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe(res => {
+          switch(res.status) { 
+            case 201: { 
+              this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+              this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
+               break; 
+            }
+            case 400: { 
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+               break; 
+            } 
+            default: { 
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+               break; 
+            } 
           } 
-        } 
-      },(err)=>{
-        this.resApi.resMensajeErrBtn(err.error.message);
-      });
+        },(err)=>{
+          this.resApi.resMensajeErrBtn(err.error.message);
+        });
+      }
     }
     
-    this.eventoEmite.emit(false);
+    this.eventoEmiteCierraFormTarea.emit(false);
   }
   
   emiteCierraVentana(){
-    this.eventoEmite.emit(false);
+    this.eventoEmiteCierraFormTarea.emit(false);
   }
 }
 

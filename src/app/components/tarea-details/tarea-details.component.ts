@@ -31,9 +31,9 @@ export class TareaDetailsComponent implements OnInit {
   showPEmpD : boolean= false;
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
+  paramId : string = "";
 
   //@Input() oculto:boolean = false;
-  private paramId : string = "";
 
   constructor(
     private tarServ:TareaService,
@@ -44,6 +44,7 @@ export class TareaDetailsComponent implements OnInit {
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
         this.paramId = params['id'];
+        console.log(this.paramId);
         await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
         .subscribe(res1=>{
           this.tarea=res1;
@@ -54,7 +55,7 @@ export class TareaDetailsComponent implements OnInit {
           //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
         });
       }else{
-        
+        console.log("algo ha ido mal al cargar la tarea");
       }
     });
     //console.log("---idTarea: " + this.tarea.nombre + "\n---ubi: " + this.ubi._id );
@@ -86,6 +87,7 @@ export class TareaDetailsComponent implements OnInit {
     });
     this.flag = flag;
     this.showP1 = true;
+    console.log(this.paramId);
   }
   /*abreFormTransporte(){
     this.showP2 = true;

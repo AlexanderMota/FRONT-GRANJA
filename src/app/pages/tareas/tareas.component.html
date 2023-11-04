@@ -23,6 +23,6 @@
 </div>
 <div>
   <app-tarea-form *ngIf='showP' [imps]="imps"
-    [departamentos]="departamentos" (eventoEmite)='receiveMessage($event)'>
+    [departamentos]="departamentos" (eventoEmiteCierraFormTarea)='receiveMessage($event)'>
   </app-tarea-form>
 </div>

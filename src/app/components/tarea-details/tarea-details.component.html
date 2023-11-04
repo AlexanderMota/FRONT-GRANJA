@@ -51,10 +51,10 @@
 
 <div>
     <app-tarea-form *ngIf='showP1' [imps]="imps" [departamentos]="departamentos" [flag]="flag" 
-        (eventoEmite)='receiveMessageFormTarea($event)'></app-tarea-form>
+        (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>
 <div>
-    <app-transportes-form *ngIf='showP2' (eventoEmite)='receiveMessageFormVehi($event)'></app-transportes-form>
+    <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveMessageFormVehi($event)'></app-transportes-form>
 </div>
 
 <div class="modalcEmp" *ngIf='showPEmpD'>

@@ -28,7 +28,7 @@ export class SubtareaComponent implements OnInit {
         await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{
           this.subtareas=res;
-          //console.log("comentarios paramID: " + this.subtareas[0].descripcion);
+          console.log("comentarios paramID: " + this.subtareas[0]);
         });
       }else{
         

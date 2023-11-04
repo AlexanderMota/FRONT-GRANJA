@@ -11,7 +11,7 @@ import { VehiculoModel } from 'src/app/models/vehiculo.model';
 export class TransportesFormComponent implements OnInit {
 
   @Output() 
-  eventoEmite = new EventEmitter<boolean>();
+  eventoEmiteCierraFormVehi = new EventEmitter<boolean>();
 
   //showP2:boolean = false;
   vehiculo: VehiculoModel = new VehiculoModel();
@@ -101,6 +101,6 @@ export class TransportesFormComponent implements OnInit {
     this.eventoEmite.emit(false);*/
   }
   emiteCierraVentana(){
-    this.eventoEmite.emit(false);
+    this.eventoEmiteCierraFormVehi.emit(false);
   }
 }

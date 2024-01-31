@@ -37,6 +37,7 @@ import { TransportesFormComponent } from './components/transportes-form/transpor
 import { TransporteComponent } from './pages/transporte/transporte.component';
 import { GraficoPruebaComponent } from './components/grafico-prueba/grafico-prueba.component';
 import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-prueba2.component';
+import { TransporteCardComponent } from './components/transporte-card/transporte-card.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-pr
     TransportesFormComponent,
     TransporteComponent,
     GraficoPruebaComponent,
-    GraficoPrueba2Component
+    GraficoPrueba2Component,
+    TransporteCardComponent
   ],
   imports: [
     BrowserModule,

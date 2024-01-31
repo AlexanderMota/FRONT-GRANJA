@@ -1,1 +1,27 @@
-<p>transporte works!</p>
+<div class="container">
+    <h1 class="container">{{titulo}} </h1>
+    <h2 class="container"> 
+      <small class="text-muted">{{posttitulo}}</small>
+    </h2>
+    <button type="button" class="btn btn-primary" (click)="abreVentana()">Nuevo vehículo</button>
+  
+  </div>
+  <hr>
+  <div class="container">
+    <ng-template #emps
+     class="animated fadeIn fast">
+      <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+          No existen resultados con el término {{posttitulo}}
+        </div>
+      </div>
+    </ng-template>
+    <div *ngIf="vehiculos.length > 0; else emps">
+      <app-transporte-card class="" [vehi]="vehi" [index]="i" 
+        *ngFor="let vehi of vehiculos; let i = index;">
+      </app-transporte-card>  
+    </div>
+  </div>
+  <div>
+    <app-transportes-form *ngIf="showP" (eventoEmiteCierraFormVehi)='receiveMessage($event)'></app-transportes-form>
+  </div>

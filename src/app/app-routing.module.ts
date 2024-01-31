@@ -12,6 +12,7 @@ import { TareaComponent } from './pages/tarea/tarea.component';
 import { GraficasComponent } from './graficos/graficas.component'
 import { MapasComponent } from './mapas/mapas.component'
 import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
+import { TransporteComponent } from './pages/transporte/transporte.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent , canActivate: [ AuthGuard ]},
@@ -22,6 +23,8 @@ const routes: Routes = [
 
   { path: 'empleados', component: EmpleadosComponent , canActivate: [ AuthGuard ]},
   { path: 'empleado/:id', component: EmpleadoDetailsComponent , canActivate: [ AuthGuard ]},
+  
+  { path: 'transporte', component: TransporteComponent , canActivate: [ AuthGuard ]},
 
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
@@ -31,7 +34,7 @@ const routes: Routes = [
   
   { path: 'mapas', component:MapasComponent, loadChildren: () => import('./mapas/mapas.module').then(m => m.MapasModule ), canActivate: [ AuthGuard ] },
   { path: 'graficos', component:GraficasComponent, loadChildren: () => import('./graficos/graficos.module').then(m => m.GraficosModule ) , canActivate: [ AuthGuard ]},
-
+  
   { path: '**', component: HomeComponent , canActivate: [ AuthGuard ] }
 ];
 

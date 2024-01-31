@@ -37,6 +37,7 @@ export class MapaMenuComponent {
   muestraMenu = false;
   muestraMenuEstilos = false;
   muestraBarraBusca = false;
+  muestraRuta = true;
   //muestraIndicaciones = false;
   estilosMapa = EstilosMapBoxEnum.getArray();
   estiloSelect = this.estilosMapa[5].url;
@@ -104,4 +105,8 @@ export class MapaMenuComponent {
   muestraPuntosDeRecogida(){
     console.log("por hacer");
   }
+  /*ocultaIndicaciones(){
+    this.indicaciones = new MapBoxLeg;
+    this.muestraRuta = !this.muestraRuta;
+  }*/
 }

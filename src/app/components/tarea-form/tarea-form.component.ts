@@ -118,12 +118,12 @@ export class TareaFormComponent implements OnInit {
       });
       
     }else{
-
+/*
       console.log("tarea nueva: ");
       console.log(this.tarea);
       console.log("idSuper: ");
       console.log(this.idSuper);
-
+*/
       if(this.paramId){
         this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe(res => {
           switch(res.status) { 

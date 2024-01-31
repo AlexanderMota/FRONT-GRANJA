@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { VehiculoModel } from '../models/vehiculo.model';
+import { ApiResponse } from '../models/apiResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,14 @@ export class VehiculoService {
         pageSize,
         pageNum
       }
+    });
+  }
+  postVehiculo(token:string, vehiculo:VehiculoModel):Observable<ApiResponse> {
+    const {matricula, propietario, plazas, descripcion} = vehiculo;
+    return this.http.post<ApiResponse>(this.baseUrl, {matricula,propietario, plazas, descripcion},{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
     });
   }
 }

@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { VehiculoModel } from 'src/app/models/vehiculo.model';
+import { ApiResponseService } from 'src/app/services/api-response.service';
+import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 @Component({
   selector: 'app-transportes-form',
@@ -19,26 +21,29 @@ export class TransportesFormComponent implements OnInit {
   textBtn:string = "";
   private paramId : string = "";
 
-  constructor(private actRoute:ActivatedRoute) {
+  constructor( 
+    private resApi:ApiResponseService, 
+    private actRoute:ActivatedRoute, 
+    private vehiServ:VehiculoService ) {
     this.actRoute.params.subscribe(params=>{
       //console.log(params['id']);
-      if(params['id']){
+      /*if(params['id']){
         this.titulo = "Edita vehículo";
         this.textBtn = "Guardar cambios"
         this.paramId = params['id'];
         //console.log("contructor route paramid=>\n"+this.paramId);
-        /*tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
-          this.tarea=res;
+        vehiServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
+          this.vehiculo=res;
           //console.log("contructor route params=>\n"+res);
-        });*/
-      }else{
-        this.titulo = "Nueva tarea";
-        this.textBtn = "Crear tarea"
-        /*tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+        });
+      }else{*/
+        this.titulo = "Nuevo vehiculo";
+        this.textBtn = "Registrar vehiculo"
+        /*vehiServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
           this.supers.push(res);
           //console.log("contructor route params=>\n"+res);
         });*/
-      }
+      //}
       
     }); 
   }
@@ -46,12 +51,12 @@ export class TransportesFormComponent implements OnInit {
   ngOnInit(): void {
   }
   onSubmit(form:NgForm){
-    /*if(!form.valid || this.tarea.importancia == "-" || this.tarea.nombre == "" || this.tarea.departamento== "-"){
+    if(!form.valid || this.vehiculo.matricula == "-" || this.vehiculo.propietario == "" || this.vehiculo.descripcion== "-"){
       return;
     }
     this.resApi.resCargando('Espere...');
-    if(this.paramId.length > 0){
-      this.tarServ.patchTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+    /*if(this.paramId.length > 0){
+      this.vehiServ.patchTarea(localStorage.getItem('token')!, this.vehiculo!).subscribe(res => {
         switch(res.status) { 
           case 201: { 
             this.resApi.resMensajeSucBtn('Tarea creada con éxito');
@@ -73,32 +78,29 @@ export class TransportesFormComponent implements OnInit {
         this.resApi.resMensajeErrBtn(err.error.message);
       });
       
-    }else{
+    }else*/
 
-      console.log("tarea nueva: " + this.tarea.departamento);
-      console.log("idSuper: " + this.idSuper);
-      this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe(res => {
-        switch(res.status) { 
-          case 201: { 
-            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
-            this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
-             break; 
-          }
-          case 400: { 
-            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
-             break; 
-          } 
-          default: { 
-             //statements; 
-             break; 
-          } 
+    console.log("vehiculo nuevo: " + this.vehiculo.matricula);
+    this.vehiServ.postVehiculo(localStorage.getItem('token')!, this.vehiculo ,).subscribe(res => {
+      switch(res.status) { 
+        case 201: { 
+          this.resApi.resMensajeSucBtn('Vehículo creado con éxito');
+            break; 
+        }
+        case 400: { 
+          this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+            break; 
         } 
-      },(err)=>{
-        this.resApi.resMensajeErrBtn(err.error.message);
-      });
-    }
+        default: { 
+            //statements; 
+            break; 
+        } 
+      } 
+    },(err)=>{
+      this.resApi.resMensajeErrBtn(err.error.message);
+    });
     
-    this.eventoEmite.emit(false);*/
+    this.emiteCierraVentana();
   }
   emiteCierraVentana(){
     this.eventoEmiteCierraFormVehi.emit(false);

@@ -54,11 +54,16 @@ export class TareaService {
       })
     });
   }
-  getSubtareas(token:string,idTarea:string):Observable<[TareaModel]> {
+  getSubtareas(token:string,idTarea:string, pageSize=20,
+    pageNum=1):Observable<[TareaModel]> {
     return this.http.get<[TareaModel]>(this.urlSubtareas+idTarea ,{
       headers: new HttpHeaders({
         Authorization: token
-      })
+      }),
+      params: {
+        pageSize:pageSize,
+        pageNum:pageSize
+      }
     });
   }
   patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{

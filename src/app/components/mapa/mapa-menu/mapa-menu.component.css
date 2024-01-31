@@ -138,3 +138,15 @@
 .direcciones ul li{
     border: 1px solid black;
 }
+/*.botonBorraRuta{
+    z-index: 9;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+    margin: 105px 9px 0 0;
+}
+.imgBorraRuta{
+    width: 32px;
+    height: 35px;
+}*/

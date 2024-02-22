@@ -25,6 +25,8 @@ export class MapaMenuComponent {
   eventoEmiteMedioTransporteMapa = new EventEmitter<string>();
   @Output() 
   eventoEmiteReiniciaMapa = new EventEmitter<boolean>();
+  @Output() 
+  eventoEmiteVerTransportes = new EventEmitter<boolean>();
   
   @Input() 
   inputSearchValue: string = '';
@@ -43,6 +45,7 @@ export class MapaMenuComponent {
   estiloSelect = this.estilosMapa[5].url;
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
+  muestraParadas= true;
 
   constructor(private ubiServ : UbicacionService) { }
 
@@ -81,7 +84,6 @@ export class MapaMenuComponent {
     this.indicaciones = new MapBoxLeg;
   }
   buscaUbicacion(str:string){
-    //console.log("barra busca envia: "+str);
 
     this.ubiServ.getMapBoxUbicacion(str)
     .subscribe(async res=>{
@@ -99,8 +101,8 @@ export class MapaMenuComponent {
     this.eventoEmiteCambiaEstiloMapa.emit(str);
   }
   sendMedioTransporteMapa(str:string){
-    this.eventoEmiteMedioTransporteMapa.emit(str);
     this.medioSelect = str;
+    this.eventoEmiteMedioTransporteMapa.emit(str);
   }
   reiniciaMapa(){
     this.muestraOcultaMenu();
@@ -108,8 +110,9 @@ export class MapaMenuComponent {
     this.indicaciones = new MapBoxLeg;
     this.eventoEmiteReiniciaMapa.emit(true);
   }
-  muestraPuntosDeRecogida(){
-    console.log("por hacer");
+  sendVerTransportes(){
+    this.muestraParadas = !this.muestraParadas;
+    this.eventoEmiteVerTransportes.emit(this.muestraParadas);
   }
   /*ocultaIndicaciones(){
     this.indicaciones = new MapBoxLeg;

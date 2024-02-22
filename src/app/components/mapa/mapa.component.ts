@@ -69,10 +69,9 @@ export class MapaComponent implements OnInit, AfterViewInit {
         [event.lngLat.lng,event.lngLat.lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
         this.indicaciones = res.routes[0].legs[0];
-        console.log(this.indicaciones);
+        //console.log(this.indicaciones);
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
-    this.receiveVerTransportes();
   });
   }
 
@@ -220,94 +219,106 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.ngAfterViewInit();
     }
   }
-  receiveVerTransportes(/*$event: boolean*/){
-    //lat 38.42475742385676 / lng -0.4243583587732189
-    //lat 38.41862525328767 / lng -0.4306459479518594
-    //lat 38.398432379976356 / lng -0.43286969841986433
-      //const coords = Object.keys([-0.4243583587732189,38.42475742385676]).map((key) => event.lngLat[key]);
-      /*const end = {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [-0.4243583587732189,38.42475742385676]
-            }
-          }
-        ]
-      };
-      if (this.mapa.getLayer('end')) {
-        this.mapa.getSource('end').setData(end);
-      } else {*/
-        this.mapa.addLayer({
-          id: 'end',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [-0.4243583587732189,38.42475742385676]
-                  }
+  receiveVerTransportes($event: boolean){
+    let dat = [
+      [-0.4243583587732189,38.42475742385676],
+      [-0.4306459479518594,38.41862525328767],
+      [-0.43286969841986433,38.398432379976356]
+    ]
+    if($event){
+      this.ocultaParadas(dat.length);
+    }else{
+      this.pintaParadas(dat);
+      /*this.mapa.addLayer({
+        id: 'parada1',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [-0.4243583587732189,38.42475742385676]
                 }
-              ]
-            }
+              }
+            ]
           }
-        });
-
-
-        this.mapa.addLayer({
-          id: 'end2',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [-0.4306459479518594,38.41862525328767]
-                  }
+        }
+      });
+      this.mapa.addLayer({
+        id: 'parada2',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [-0.4306459479518594,38.41862525328767]
                 }
-              ]
-            }
+              }
+            ]
           }
-        });this.mapa.addLayer({
-          id: 'end3',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [-0.43286969841986433,38.398432379976356]
-                  }
+        }
+      });
+      this.mapa.addLayer({
+        id: 'parada3',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [-0.43286969841986433,38.398432379976356]
                 }
-              ]
-            }
+              }
+            ]
           }
-        });
-
-
-
-
-      //}
+        }
+      });*/
+    }
   }
-  /*receiveVerTransportes($event: boolean){
-  }*/
+  ocultaParadas(dat : number){
+    for( let i = 0; i < dat; i++ ){
+      this.mapa.removeLayer('parada'+i.toString());
+      this.mapa.removeSource('parada'+i.toString());
+    }
+  }
+  pintaParadas(dat : number[][]){
+    for( let i = 0; i < dat.length; i++ ){
+      this.mapa.addLayer({
+        id: 'parada'+i.toString(),
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [dat[i][0],dat[i][1]]
+                }
+              }
+            ]
+          }
+        }
+      });
+    }
+  }
 }

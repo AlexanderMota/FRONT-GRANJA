@@ -7,7 +7,7 @@
     <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" class="list-group-item" routerLinkActive="active">
         {{ item.nombre }}
     </li>
-    <li class="list-group-item" (click)="muestraPuntosDeRecogida()">Transportes
+    <li class="list-group-item" (click)="sendVerTransportes()">Transportes
     </li>
     <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte
     </li>

@@ -6,6 +6,7 @@ import { UbicacionService, EstilosMapBoxEnum, MediosTransporteMapBoxEnum } from 
 import { environment } from 'src/environments/environment';
 import { MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
 import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
+import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
   //private vehiculos : VehiculoModel[] = [];
   @ViewChild('mapa') 
   divMapa!: ElementRef;
+  @ViewChild(MapaMenuComponent)
+  menu!: MapaMenuComponent;
   
   @Output() 
   private eventoEmiteFormVehi = new EventEmitter<boolean>();
@@ -60,6 +63,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   
   clickMapaActivo(){
     this.mapa.on('click', event => {
+      //console.log(event.lngLat);
       this.agregarMarcador(event.lngLat, true);
       this.ubiServ.getMapBoxRoute(this.medio, 
         [event.lngLat.lng,event.lngLat.lat],
@@ -68,7 +72,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
         console.log(this.indicaciones);
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
-    });
+    this.receiveVerTransportes();
+  });
   }
 
   muestraCentroTrabajo(){
@@ -103,6 +108,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
     if(this.marcadores[1]){
       this.marcadores[1].remove();
       this.marcadores.splice(1,1);
+    }else if(this.marcadores.length == 1){
+      this.menu.clickNuevoMarcador();
     }
     const color ='#xxxxxx'.replace(/x/g, y =>(Math.random()*16|0).toString(16));
 
@@ -213,4 +220,94 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.ngAfterViewInit();
     }
   }
+  receiveVerTransportes(/*$event: boolean*/){
+    //lat 38.42475742385676 / lng -0.4243583587732189
+    //lat 38.41862525328767 / lng -0.4306459479518594
+    //lat 38.398432379976356 / lng -0.43286969841986433
+      //const coords = Object.keys([-0.4243583587732189,38.42475742385676]).map((key) => event.lngLat[key]);
+      /*const end = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Point',
+              coordinates: [-0.4243583587732189,38.42475742385676]
+            }
+          }
+        ]
+      };
+      if (this.mapa.getLayer('end')) {
+        this.mapa.getSource('end').setData(end);
+      } else {*/
+        this.mapa.addLayer({
+          id: 'end',
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [-0.4243583587732189,38.42475742385676]
+                  }
+                }
+              ]
+            }
+          }
+        });
+
+
+        this.mapa.addLayer({
+          id: 'end2',
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [-0.4306459479518594,38.41862525328767]
+                  }
+                }
+              ]
+            }
+          }
+        });this.mapa.addLayer({
+          id: 'end3',
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [-0.43286969841986433,38.398432379976356]
+                  }
+                }
+              ]
+            }
+          }
+        });
+
+
+
+
+      //}
+  }
+  /*receiveVerTransportes($event: boolean){
+  }*/
 }

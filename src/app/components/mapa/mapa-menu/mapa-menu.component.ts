@@ -74,6 +74,12 @@ export class MapaMenuComponent {
     this.muestraOcultaMenu();
     this.eventoEmiteFormVehi.emit(true);
   }
+  clickNuevoMarcador(){
+    this.muestraBarraBusca = true;
+    this.muestraBotonMenu = false;
+    this.muestraMenu = false;
+    this.indicaciones = new MapBoxLeg;
+  }
   buscaUbicacion(str:string){
     //console.log("barra busca envia: "+str);
 

@@ -1,19 +1,21 @@
 <img *ngIf='muestraBotonMenu' class="botonMenu fadeOutRight" src="../../../../assets/images/icons/barra-de-menus.png" (click)="muestraOcultaMenu()">
 <ul class="list-group animated fadeInLeft" *ngIf='muestraMenu'>
     <li class="list-group-item" (click)="muestraOcultaBarraBusca()">Buscar</li>
-    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa
-    </li>
+    <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa</li>
+
     <li><hr class="dropdown-divider"></li>
-    <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" class="list-group-item" routerLinkActive="active">
+
+    <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" 
+        class="list-group-item" routerLinkActive="active">
         {{ item.nombre }}
     </li>
-    <li class="list-group-item" (click)="sendVerTransportes()">Transportes
-    </li>
-    <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte
-    </li>
+    <li class="list-group-item" (click)="sendVerTransportes()">Transportes</li>
+    <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte</li>
+    <li class="list-group-item" (click)="activaNuevaUbi()">{{nuevaUbiCadena}}</li>
+
     <li><hr class="dropdown-divider"></li>
-    <li class="list-group-item" (click)="reiniciaMapa()">Reinicia
-    </li>
+    
+    <li class="list-group-item" (click)="reiniciaMapa()">Reinicia</li>
     <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
 </ul>
 <ul class="list-group animated fadeInLeft" *ngIf='muestraMenuEstilos'>

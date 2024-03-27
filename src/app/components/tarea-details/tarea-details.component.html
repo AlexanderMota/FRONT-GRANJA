@@ -1,5 +1,6 @@
 
 <div class="contenedor  card animated fadeInDown" >
+
     <div class="cuerpoTarj card" >
     
         <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
@@ -46,7 +47,10 @@
     <app-subtarea class="subtareas"></app-subtarea>
     <app-comentarios  class="comentarios"></app-comentarios>
     
-    <app-mapa class="mapa" (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'></app-mapa>
+    <app-mapa class="mapa" 
+        (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'
+        (eventoEmiteUbi)="receiveMessageFormUbi($event)">
+    </app-mapa>
 </div>
 
 <div>
@@ -55,6 +59,9 @@
 </div>
 <div>
     <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveMessageFormVehi($event)'></app-transportes-form>
+</div>
+<div>
+    <app-ubicacion-form *ngIf='showP3' [ubicacion]="ubi"></app-ubicacion-form>
 </div>
 
 <div class="modalcEmp" *ngIf='showPEmpD'>

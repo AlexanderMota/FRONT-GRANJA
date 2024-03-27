@@ -38,6 +38,8 @@ import { TransporteComponent } from './pages/transporte/transporte.component';
 import { GraficoPruebaComponent } from './components/grafico-prueba/grafico-prueba.component';
 import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-prueba2.component';
 import { TransporteCardComponent } from './components/transporte-card/transporte-card.component';
+import { UbicacionFormComponent } from './components/ubicacion-form/ubicacion-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -68,14 +70,16 @@ import { TransporteCardComponent } from './components/transporte-card/transporte
     TransporteComponent,
     GraficoPruebaComponent,
     GraficoPrueba2Component,
-    TransporteCardComponent
+    TransporteCardComponent,
+    UbicacionFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

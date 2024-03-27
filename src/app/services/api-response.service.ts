@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { ApiResponse } from '../models/apiResponse.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiResponseService {
 
+export class ApiResponseService {
+  public static icons =  [
+    "warning", "error", "success", "info", "question"
+  ]
   constructor(private router:Router) { }
+
   resMensajeSucBtn(msn:string){
     Swal.fire({
       allowOutsideClick:false,
@@ -27,11 +31,59 @@ export class ApiResponseService {
       }
     });
   }
+  resMensajeSucBtnCancBtn(titulo:string,
+    msn:string,btnAccTxt:string,
+    btnCancel:boolean,btnCancTxt:string):Promise<SweetAlertResult<any>>{
+    return Swal.fire({
+      title: titulo,
+      text: msn,
+      icon: "question",
+      showCancelButton: btnCancel,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: btnAccTxt,
+      cancelButtonText: btnCancTxt,
+    })
+  }
+
+  /*'text'`, `'email'`, `'password'`, `'number'`, `'tel'`, `'range'`, `'textarea'`,
+  `'select'`, `'radio'`, `'checkbox'`, `'file'` and `'url'`.*/
+  async resMensajeInputDate(titulo:string,
+    msn:string,btnAccTxt:string,
+    btnCancel:boolean,btnCancTxt:string):Promise<string>{
+    const { value: date } = await Swal.fire({
+      title: titulo,
+      text: msn,
+      input: "date",
+      showCancelButton: btnCancel,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: btnAccTxt,
+      cancelButtonText: btnCancTxt,
+      /*didOpen: () => {
+        const today = (new Date());
+        //Swal.getInput().min = today.split("T")[0];
+      }*/
+    });
+    if (date) {
+      //Swal.fire("Departure date", date)
+      return date;
+    }else{
+      return "";
+    }
+  }
   resMensajeErrBtn(msn:string){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
       icon:'error'
+    });
+  }
+  resMensajeWrnBtn(msn:string){
+    Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'warning'
     });
   }
   resMensajeErrBtnRedir(msn:string,redir:string){
@@ -44,13 +96,6 @@ export class ApiResponseService {
       if (result.isConfirmed) {
         this.router.navigateByUrl(redir);
       }
-    });
-  }
-  resMensajeWrnBtn(msn:string){
-    Swal.fire({
-      allowOutsideClick:false,
-      text:msn,
-      icon:'warning'
     });
   }
   resMensajeWrnBtnRedir(msn:string,redir:string){
@@ -82,3 +127,6 @@ export class ApiResponseService {
   };
 }
 
+/*enum Icons {
+  warning, error, success, info, question
+}*/

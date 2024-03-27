@@ -1,0 +1,68 @@
+.labels{
+    width: 160px;
+    padding: 15px 0px 0px 30px; 
+    margin: 0px;
+}
+.inputs{
+    height: 30px;
+    margin: 0px 20px 0px 0px;
+    padding: 0 35px 0 10px;
+    font-size: medium;
+    text-align: start;
+}
+.input100{
+    height: 50px;
+}
+.inputComp{
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+}
+.inputs{
+    width: 180px;
+}
+.wrap-input100{
+    display: flex;
+    justify-content: space-between;
+}
+.modalc {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 100px 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    z-index: 99;
+}
+.modalc-content {
+    width: 100%;
+    max-width: 500px;
+}
+.modalc-container {
+    background-color: white;
+    border-radius: 10px;
+}
+.modalc-header {
+    height: 93px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    background-color: rgb(243, 214, 214);
+    border-radius: 4px 4px 0 0;
+}
+.botonCerrar {
+    margin-left: 461px;
+    width: 40px;
+    height: 25px;
+    background-color: red;
+    color: white;
+    border-radius: 0 9px 0 0;
+}
+.idOculto{
+    display: none;
+}

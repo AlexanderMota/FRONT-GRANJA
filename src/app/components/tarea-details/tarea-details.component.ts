@@ -19,19 +19,21 @@ import { UbicacionModel } from 'src/app/models/ubicacion.model';
   styleUrls: ['./tarea-details.component.css']
 })
 export class TareaDetailsComponent implements OnInit {
-  
+
   tarea: TareaModel = new TareaModel();
   comentarios: ComentarioModel[] = [];
   empleados: EmpleadoModel[] = [];
   empleadosDisp: EmpleadoModel[] = [];
   //empleadoNuevo: EmpleadoModel = {_id: 'Empleados', idEmpleado : 0, nombre : "", apellidos:"",telefono:"", email:"", password:""};
   showP1 : boolean= false;
-  flag : boolean= false;
   showP2 : boolean= false;
+  showP3 : boolean= false;
+  flag : boolean= false;
   showPEmpD : boolean= false;
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
   paramId : string = "";
+  ubi:UbicacionModel=new UbicacionModel();
 
   //@Input() oculto:boolean = false;
 
@@ -65,7 +67,9 @@ export class TareaDetailsComponent implements OnInit {
     this.compMess.emiteDato.emit({dato:this.oculto});
   }*/
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.resaltarRango();
+  }
 
   async borraTarea(){
     this.resPop.resCargando('Espere...');
@@ -87,11 +91,11 @@ export class TareaDetailsComponent implements OnInit {
     });
     this.flag = flag;
     this.showP1 = true;
-    console.log(this.paramId);
   }
   /*abreFormTransporte(){
     this.showP2 = true;
   }*/
+  
   receiveMessageFormTarea($event: boolean){
     this.showP1 = $event;
   }
@@ -99,6 +103,16 @@ export class TareaDetailsComponent implements OnInit {
     //console.log("receiveMessageFormVehi: "+$event);
     this.showP2 = $event;
   }
+  receiveMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
+    //console.log($event);
+    this.ubi.titulo = $event.nombre;
+    this.ubi.longitud = $event.lng;
+    this.ubi.latitud = $event.lat;
+    this.showP3 = true;
+  }
+  /*receiveMessageFormUbi($event: boolean){
+    this.showP3 = $event;
+  }*/
   emiteCierraVentana(){
     this.showPEmpD = false;
     
@@ -121,5 +135,34 @@ export class TareaDetailsComponent implements OnInit {
       });
     }
     this.showPEmpD = true;
+  }
+
+
+  
+  // pruebas calendario parada
+  resaltarRango(): void {
+    // Obtener la fecha de inicio y fin del rango deseado
+    const startDate = new Date('2024-02-01');
+    const endDate = new Date('2024-02-10');
+
+    // Obtener el elemento de fecha
+    const dateInput = document.getElementById('dateInput') as HTMLInputElement;
+
+    // Función para formatear la fecha en formato 'YYYY-MM-DD'
+    const formatDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = ('0' + (date.getMonth() + 1)).slice(-2);
+      const day = ('0' + date.getDate()).slice(-2);
+      return `${year}-${month}-${day}`;
+    };
+
+    // Iterar sobre los días en el rango y aplicar estilos
+    const dates = dateInput.querySelectorAll<HTMLInputElement>('input[type="date"]');
+    dates.forEach(date => {
+      const dateValue = new Date(date.value);
+      if (dateValue >= startDate && dateValue <= endDate) {
+        date.style.backgroundColor = 'yellow';
+      }
+    });
   }
 }

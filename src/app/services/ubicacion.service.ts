@@ -5,6 +5,7 @@ import { UbicacionModel } from '../models/ubicacion.model';
 import { environment } from 'src/environments/environment';
 import { MapBoxResponseModel } from '../models/mapBoxResponse.model';
 import { MapBoxRouteResponseModel } from '../models/mapBoxRouteResponse.model';
+import { ApiResponse } from '../models/apiResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,21 @@ export class UbicacionService {
     pageSize = 1,
     pageNum = 1) : Observable<[UbicacionModel]> {
     return this.http.get<[UbicacionModel]>(this.urlUbiByIdTarea+idTarea, {
+      headers: new HttpHeaders({
+        Authorization: token
+      }),
+      params: {
+        pageSize,
+        pageNum
+      }
+    });
+  }
+  postUbi(token:string,
+    ubi:UbicacionModel,
+    pageSize = 1,
+    pageNum = 1) : Observable<ApiResponse> {
+    const {idTarea,titulo,descripcion,longitud,latitud,fechaRecogida} = ubi;
+    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,titulo,descripcion,longitud,latitud,fechaRecogida}, {
       headers: new HttpHeaders({
         Authorization: token
       }),

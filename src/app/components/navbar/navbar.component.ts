@@ -13,12 +13,12 @@ export class NavbarComponent implements OnInit {
   autenticado = false;
   supertareas: TareaModel[] = [];
 
-  constructor(private auth:AuthService, private route:Router, private tarServ:TareaService) { 
-    this.autenticado = this.auth.esAutenticado();
+  constructor(private autServ:AuthService, private route:Router, private tarServ:TareaService) { 
+    this.autenticado = this.autServ.esAutenticado();
   }
 
   ngOnInit(): void {
-    this.autenticado = this.auth.esAutenticado();
+    this.autenticado = this.autServ.esAutenticado();
     if(this.autenticado){
       this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {
         this.supertareas = res;
@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
     console.log(str);
   }
   logout(){
-    this.auth.logout();
+    this.autServ.logout();
     this.route.navigateByUrl('/login');
     this.autenticado = false;
     localStorage.setItem('centroActual',"");

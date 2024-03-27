@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
 import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
 import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
+import { ApiResponseService } from 'src/app/services/api-response.service';
 
 
 @Component({
@@ -16,7 +17,6 @@ import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
 })
 export class MapaComponent implements OnInit, AfterViewInit {
 
-  //private vehiculos : VehiculoModel[] = [];
   @ViewChild('mapa') 
   divMapa!: ElementRef;
   @ViewChild(MapaMenuComponent)
@@ -24,6 +24,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
   
   @Output() 
   private eventoEmiteFormVehi = new EventEmitter<boolean>();
+  @Output() 
+  private eventoEmiteUbi = new EventEmitter<{nombre:string,lng:number,lat:number}>();
 
   @Input() 
   index:number = 0;
@@ -36,12 +38,14 @@ export class MapaComponent implements OnInit, AfterViewInit {
   marcadores:mapboxgl.Marker[] = [];
   nombrePuntoPartida:string="";
   indicaciones: MapBoxLeg = new MapBoxLeg;
+  nuevaUbiActivo = false;
 
-  constructor( private actRoute:ActivatedRoute,
-    private ubiServ: UbicacionService ) { }
+  constructor(
+    private actRoute:ActivatedRoute,
+    private ubiServ: UbicacionService,
+    private apiRespServ: ApiResponseService ) { }
 
   ngOnInit(): void {
-    
   } 
   ngAfterViewInit(): void {
     this.iniciaMapa();
@@ -65,16 +69,27 @@ export class MapaComponent implements OnInit, AfterViewInit {
     this.mapa.on('click', event => {
       //console.log(event.lngLat);
       this.agregarMarcador(event.lngLat, true);
-      this.ubiServ.getMapBoxRoute(this.medio, 
-        [event.lngLat.lng,event.lngLat.lat],
-        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-        this.indicaciones = res.routes[0].legs[0];
-        //console.log(this.indicaciones);
-        this.pintaRuta(res.routes[0].geometry.coordinates);
-      });
-  });
+      if(!this.nuevaUbiActivo){
+        this.ubiServ.getMapBoxRoute(this.medio, 
+          [event.lngLat.lng,event.lngLat.lat],
+          [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+          this.indicaciones = res.routes[0].legs[0];
+          this.pintaRuta(res.routes[0].geometry.coordinates);
+        });
+      }else{
+        this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
+          "¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
+          "Aceptar", true, "Volver").then(value => {
+            if(value.isConfirmed){
+              this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+            }
+          });
+        /*if(){
+          this.apiRespServ.resMensajeInputDate();
+        }*/
+      }
+    });
   }
-
   muestraCentroTrabajo(){
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
@@ -94,19 +109,22 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
 
   vuelaUbi({lng= 0 ,lat= 0},zoom=5){
-    if(lng != 0 && lat != 0){
+    /*if(lng != 0 && lat != 0){
 
-    }
+    }*/
     this.mapa.flyTo({
       center: [lng,lat],
       zoom:zoom
     });
   }
 
+  borraMarcadorClick(){
+    this.marcadores[1].remove();
+    this.marcadores.splice(1,1);
+  }
   agregarMarcador(coordenadas:{lng:number,lat:number},movil:boolean){
-    if(this.marcadores[1]){
-      this.marcadores[1].remove();
-      this.marcadores.splice(1,1);
+    if(this.marcadores[1]){ 
+      this.borraMarcadorClick();
     }else if(this.marcadores.length == 1){
       this.menu.clickNuevoMarcador();
     }
@@ -141,28 +159,17 @@ export class MapaComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-  sendMessageFormVehi($event: boolean){
-    this.eventoEmiteFormVehi.emit($event);
-  }
   
-  receiveMessageBuscaUbi($event: MapBoxFeature){
-    this.agregarMarcador({lng:$event.center[0],lat:$event.center[1]},true);
-    this.vuelaUbi({lng:$event.center[0],lat:$event.center[1]},17 );
-    this.ubiServ.getMapBoxRoute(this.medio, 
-      [$event.center[0],$event.center[1]],
-      [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-      this.indicaciones = res.routes[0].legs[0];
-      this.pintaRuta(res.routes[0].geometry.coordinates);
-    });
-  }
-  pintaRuta(ruta:[]){
-
+  borraRuta(){
     if (this.mapa.getSource('route')) {
       this.mapa.removeLayer('route');
       this.mapa.removeSource('route');
     }
+  }
 
+  pintaRuta(ruta:[]){
+    this.borraRuta();
+    
     this.mapa.addLayer({
       id: 'route',
       type: 'line',
@@ -188,7 +195,57 @@ export class MapaComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  ocultaParadas(dat : number){
+    for( let i = 0; i < dat; i++ ){
+      this.mapa.removeLayer('parada'+i.toString());
+      this.mapa.removeSource('parada'+i.toString());
+    }
+  }
+  pintaParadas(dat : number[][]){
+    for( let i = 0; i < dat.length; i++ ){
+      this.mapa.addLayer({
+        id: 'parada'+i.toString(),
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [dat[i][0],dat[i][1]]
+                }
+              }
+            ]
+          }
+        }
+      });
+    }
+  }
   
+  sendMessageFormVehi($event: boolean){
+    this.eventoEmiteFormVehi.emit($event);
+  }
+  sendMessageFormUbi(even: {nombre:string,lng:number,lat:number}){
+    this.eventoEmiteUbi.emit(even);
+  }
+
+  receiveMessageBuscaUbi($event: MapBoxFeature){
+    this.agregarMarcador({lng:$event.center[0],lat:$event.center[1]},true);
+    this.vuelaUbi({lng:$event.center[0],lat:$event.center[1]},17 );
+    if(!this.nuevaUbiActivo){
+      this.ubiServ.getMapBoxRoute(this.medio, 
+      [$event.center[0],$event.center[1]],
+      [this.ubiCentro.longitud,this.ubiCentro.latitud])
+      .subscribe(res => {
+        this.indicaciones = res.routes[0].legs[0];
+        this.pintaRuta(res.routes[0].geometry.coordinates);
+      });
+    }
+  }
   receiveMessageCambiaEstiloMapa($event: string){
     this.mapa.setStyle($event);
     if(this.marcadores.length > 1){
@@ -229,96 +286,18 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.ocultaParadas(dat.length);
     }else{
       this.pintaParadas(dat);
-      /*this.mapa.addLayer({
-        id: 'parada1',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Point',
-                  coordinates: [-0.4243583587732189,38.42475742385676]
-                }
-              }
-            ]
-          }
-        }
-      });
-      this.mapa.addLayer({
-        id: 'parada2',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Point',
-                  coordinates: [-0.4306459479518594,38.41862525328767]
-                }
-              }
-            ]
-          }
-        }
-      });
-      this.mapa.addLayer({
-        id: 'parada3',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Point',
-                  coordinates: [-0.43286969841986433,38.398432379976356]
-                }
-              }
-            ]
-          }
-        }
-      });*/
     }
   }
-  ocultaParadas(dat : number){
-    for( let i = 0; i < dat; i++ ){
-      this.mapa.removeLayer('parada'+i.toString());
-      this.mapa.removeSource('parada'+i.toString());
+  receiveNuevaUbi($event: boolean){
+    this.nuevaUbiActivo = $event;
+    if(this.nuevaUbiActivo){
+      this.borraRuta();
+      this.borraMarcadorClick();
+      this.indicaciones = new MapBoxLeg;
     }
+    //console.log($event);
   }
-  pintaParadas(dat : number[][]){
-    for( let i = 0; i < dat.length; i++ ){
-      this.mapa.addLayer({
-        id: 'parada'+i.toString(),
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Point',
-                  coordinates: [dat[i][0],dat[i][1]]
-                }
-              }
-            ]
-          }
-        }
-      });
-    }
-  }
+  
+
+
 }

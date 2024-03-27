@@ -20,6 +20,8 @@ export class MapaMenuComponent {
   @Output() 
   eventoEmiteBuscaUbi = new EventEmitter<MapBoxFeature>();
   @Output() 
+  eventoEmiteFormUbi = new EventEmitter<boolean>();
+  @Output() 
   eventoEmiteCambiaEstiloMapa = new EventEmitter<string>();
   @Output() 
   eventoEmiteMedioTransporteMapa = new EventEmitter<string>();
@@ -46,6 +48,8 @@ export class MapaMenuComponent {
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
   muestraParadas= true;
+  nuevaUbi= false;
+  nuevaUbiCadena = "Añadir parada";
 
   constructor(private ubiServ : UbicacionService) { }
 
@@ -78,9 +82,10 @@ export class MapaMenuComponent {
     this.eventoEmiteFormVehi.emit(true);
   }
   clickNuevoMarcador(){
-    this.muestraBarraBusca = true;
     this.muestraBotonMenu = false;
     this.muestraMenu = false;
+    this.muestraMenuEstilos = false;
+    this.muestraBarraBusca = true;
     this.indicaciones = new MapBoxLeg;
   }
   buscaUbicacion(str:string){
@@ -113,6 +118,16 @@ export class MapaMenuComponent {
   sendVerTransportes(){
     this.muestraParadas = !this.muestraParadas;
     this.eventoEmiteVerTransportes.emit(this.muestraParadas);
+  }
+  activaNuevaUbi(){
+    this.muestraOcultaMenu();
+    this.nuevaUbi = !this.nuevaUbi;
+    if(this.nuevaUbi){
+      this.nuevaUbiCadena = "Navegación";
+    }else{
+      this.nuevaUbiCadena = "Añadir parada";
+    }
+    this.eventoEmiteFormUbi.emit(this.nuevaUbi);
   }
   /*ocultaIndicaciones(){
     this.indicaciones = new MapBoxLeg;

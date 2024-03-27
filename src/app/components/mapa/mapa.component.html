@@ -16,11 +16,12 @@
     <app-mapa-menu 
         [indicaciones]="indicaciones"
         [inputSearchValue]="nombrePuntoPartida"
-        (eventoEmiteBuscaUbi)='receiveMessageBuscaUbi($event)' 
         (eventoEmiteFormVehi)='sendMessageFormVehi($event)'
+        (eventoEmiteBuscaUbi)='receiveMessageBuscaUbi($event)' 
         (eventoEmiteCambiaEstiloMapa)="receiveMessageCambiaEstiloMapa($event)"
         (eventoEmiteMedioTransporteMapa)="receiveMessageMedioTransporteMapa($event)"
         (eventoEmiteReiniciaMapa)="receiveReiniciaMapa($event)"
-        (eventoEmiteVerTransportes)="receiveVerTransportes($event)">
+        (eventoEmiteVerTransportes)="receiveVerTransportes($event)"
+        (eventoEmiteFormUbi)="receiveNuevaUbi($event)">
     </app-mapa-menu>
 </div> 

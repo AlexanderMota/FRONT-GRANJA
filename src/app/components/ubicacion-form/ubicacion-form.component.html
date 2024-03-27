@@ -1,0 +1,135 @@
+<div class="modalc">
+    <div class="modalc-content">  
+        <div class="modalc-container animated fadeInDown">
+
+            <button class="botonCerrar " (click)="emiteCierraVentana()">X</button>
+            <div class="limiter " >
+                <div class="container-login100" style="min-height: auto; padding: 0;">
+                    <div class="wrap-login100 p-t-50 p-b-90" style="padding: 40px 0 60px;">
+                        <form #registroForm="ngForm"
+                            (ngSubmit)="onSubmit(registroForm)"
+                            class="login100-form validate-form flex-sb flex-w">
+            
+                            <span class="login100-form-title p-b-51">
+                                {{titulo}}
+                            </span>
+                            
+                            <span *ngIf="registroForm.submitted && registroForm.controls['titulo'].errors"
+                                class="text-danger animated fadeIn">El titulo es obligatorio</span>
+                            <div class="wrap-input100 m-b-16">
+                                <input class="input100" 
+                                    type="text" 
+                                    name="titulo" 
+                                    [(ngModel)]="ubicacion!.titulo"
+                                    required
+                                    placeholder="Título">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <span *ngIf="registroForm.submitted && registroForm.controls['descripcion'].errors"
+                                class="text-danger animated fadeIn">La descripcion es obligatoria</span>
+                            <div class="wrap-input100 m-b-16">
+                                <textarea class="input100" 
+                                    type="text" 
+                                    name="descripcion" 
+                                    [(ngModel)]="ubicacion!.descripcion"
+                                    required
+                                    placeholder="Descripción"
+                                    style="padding: 15px 15px 15px 30px; min-height: 128px; max-height: 500px; ">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="input-group">
+                                <textarea class="form-control" aria-label="With textarea"></textarea>
+                            </div>
+
+
+            
+                            <span *ngIf="registroForm.submitted && registroForm.controls['fechaRecogida'].errors"
+                                class="text-danger animated fadeIn">La fecha Recogida es obligatoria</span>
+                            <div class="wrap-input100 m-b-16">
+                                <label for="inputNum" class="labels input100">
+                                    Inicio
+                                </label>
+                                <input class="inputs input100" 
+                                    style="padding: 0;"
+                                    type="datetime-local" 
+                                    name="fechaRecogida" 
+                                    [(ngModel)]="ubicacion!.fechaRecogida[0]"
+                                    required
+                                    placeholder="Fecha de recogida">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+                            <span *ngIf="registroForm.submitted && registroForm.controls['fechaRecogida'].errors"
+                                class="text-danger animated fadeIn">La fecha Recogida es obligatoria</span>
+                            <div class="wrap-input100 m-b-16">
+                                <label for="inputNum" class="labels input100">
+                                    Fin
+                                </label>
+                                <input class="inputs input100" 
+                                    style="padding: 0;"
+                                    type="datetime-local" 
+                                    name="fechaRecogida" 
+                                    [(ngModel)]="ubicacion!.fechaRecogida[1]"
+                                    required
+                                    placeholder="Fecha de recogida">
+            
+                                <span class="focus-input100"></span>
+                            </div>
+       
+                                
+            
+            
+                        
+            
+                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <span *ngIf="registroForm.submitted && ubicacion!.longitud < 1"
+                                class="text-danger animated fadeIn">El ubicacion debe tener, al menos, una longitud</span>
+                            <div class="inputComp lngLat wrap-input100 m-b-16">
+                                
+                                <label for="inputNum" class="labels input100">
+                                    Longitud
+                                </label>
+                                <input id="inputNum" class="inputs input100"
+                                    style="padding: 0;"
+                                    type="number" 
+                                    name="longitud" 
+                                    [(ngModel)]="ubicacion!.longitud"
+                                    required readonly>
+            
+                                <span class="focus-input100"></span>
+                            </div>  
+                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <span *ngIf="registroForm.submitted && ubicacion!.latitud < 1"
+                                class="text-danger animated fadeIn">El ubicacion debe tener, al menos, una latitud</span>
+                            <div class="inputComp lngLat wrap-input100 m-b-16">
+                                
+                                <label for="inputNum" class="labels input100">
+                                    Latitud
+                                </label>
+                                <input id="inputNum" class="inputs input100"
+                                style="padding: 0;"
+                                type="number" 
+                                name="latitud"
+                                [(ngModel)]="ubicacion!.latitud"
+                                required readonly>
+            
+                                <span class="focus-input100"></span>
+                            </div>  
+                            
+
+                            <div class="container-login100-form-btn m-t-17">
+                                <button class="login100-form-btn" type="submit">
+                                    {{textBtn}}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

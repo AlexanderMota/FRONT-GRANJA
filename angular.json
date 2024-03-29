@@ -74,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "FRONT-GRANJA3:build:production"
+              "buildTarget": "FRONT-GRANJA3:build:production"
             },
             "development": {
-              "browserTarget": "FRONT-GRANJA3:build:development"
+              "buildTarget": "FRONT-GRANJA3:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -85,7 +85,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "FRONT-GRANJA3:build"
+            "buildTarget": "FRONT-GRANJA3:build"
           }
         },
         "test": {

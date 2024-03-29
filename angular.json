@@ -108,5 +108,7 @@
       }
     }
   },
-  "defaultProject": "FRONT-GRANJA3"
+  "cli": {
+    "analytics": "c7311501-ff9e-4a05-81bd-3e8636e7b4b3"
+  }
 }

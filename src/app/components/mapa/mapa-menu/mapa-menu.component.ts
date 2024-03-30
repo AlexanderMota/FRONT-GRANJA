@@ -34,6 +34,8 @@ export class MapaMenuComponent {
   inputSearchValue: string = '';
   @Input()
   indicaciones: MapBoxLeg = new MapBoxLeg;
+  @Input()
+  nuevaUbi= false;
 
   resMapBox: MapBoxResponseModel = new MapBoxResponseModel;
   
@@ -48,7 +50,6 @@ export class MapaMenuComponent {
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
   muestraParadas= true;
-  nuevaUbi= false;
   nuevaUbiCadena = "Añadir parada";
 
   constructor(private ubiServ : UbicacionService) { }

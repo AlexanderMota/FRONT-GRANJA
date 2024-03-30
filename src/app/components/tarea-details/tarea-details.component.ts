@@ -103,7 +103,7 @@ export class TareaDetailsComponent implements OnInit {
     //console.log("receiveMessageFormVehi: "+$event);
     this.showP2 = $event;
   }
-  receiveMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
+  sendMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
     //console.log($event);
     this.ubi.titulo = $event.nombre;
     this.ubi.longitud = $event.lng;
@@ -137,7 +137,9 @@ export class TareaDetailsComponent implements OnInit {
     this.showPEmpD = true;
   }
 
-
+  receiveMessageFormUbi($event: boolean){
+    this.showP3 = $event;
+  }
   
   // pruebas calendario parada
   resaltarRango(): void {

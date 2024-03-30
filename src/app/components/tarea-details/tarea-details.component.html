@@ -49,7 +49,7 @@
     
     <app-mapa class="mapa" 
         (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'
-        (eventoEmiteUbi)="receiveMessageFormUbi($event)">
+        (eventoEmiteUbi)="sendMessageFormUbi($event)">
     </app-mapa>
 </div>
 
@@ -61,7 +61,7 @@
     <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveMessageFormVehi($event)'></app-transportes-form>
 </div>
 <div>
-    <app-ubicacion-form *ngIf='showP3' [ubicacion]="ubi"></app-ubicacion-form>
+    <app-ubicacion-form *ngIf='showP3' [ubicacion]="ubi" (eventoEmiteCierraFormUbi)="receiveMessageFormUbi($event)"></app-ubicacion-form>
 </div>
 
 <div class="modalcEmp" *ngIf='showPEmpD'>

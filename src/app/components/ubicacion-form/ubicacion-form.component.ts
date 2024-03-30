@@ -82,7 +82,8 @@ export class UbicacionFormComponent implements OnInit {
       
     }else*/
 
-    console.log("ubicación nueva: " + this.ubicacion);
+    //console.log("ubicación nueva: " + this.ubicacion);
+    this.emiteCierraVentana();
     this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe(res => {
       switch(res.status) { 
         case 201: { 

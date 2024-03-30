@@ -83,7 +83,9 @@ export class MapaComponent implements OnInit, AfterViewInit {
             if(value.isConfirmed){
               this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
             }
-          });
+          }
+        );
+        this.receiveNuevaUbi(false);
         /*if(){
           this.apiRespServ.resMensajeInputDate();
         }*/
@@ -297,7 +299,4 @@ export class MapaComponent implements OnInit, AfterViewInit {
     }
     //console.log($event);
   }
-  
-
-
 }

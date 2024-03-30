@@ -14,6 +14,7 @@
 </ul>-->
 <div #mapa id="mapa">
     <app-mapa-menu 
+        [nuevaUbi]="nuevaUbiActivo"
         [indicaciones]="indicaciones"
         [inputSearchValue]="nombrePuntoPartida"
         (eventoEmiteFormVehi)='sendMessageFormVehi($event)'

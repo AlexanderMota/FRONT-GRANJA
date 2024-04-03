@@ -35,7 +35,7 @@ export class MapaMenuComponent {
   @Input()
   indicaciones: MapBoxLeg = new MapBoxLeg;
   @Input()
-  nuevaUbi= false;
+  nuevaUbi: boolean = false;
 
   resMapBox: MapBoxResponseModel = new MapBoxResponseModel;
   

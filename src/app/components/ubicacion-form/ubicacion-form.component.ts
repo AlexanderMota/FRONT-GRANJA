@@ -20,15 +20,18 @@ export class UbicacionFormComponent implements OnInit {
   //showP2:boolean = false;
   titulo:string = "";
   textBtn:string = "";
-  private paramId : string = "";
+  //private paramId : string = "";
 
   constructor( 
     private resApi:ApiResponseService, 
     private actRoute:ActivatedRoute, 
     private ubiServ:UbicacionService) {
-    this.actRoute.params.subscribe(params=>{
+      this.titulo = "Nueva ubicación";
+      this.textBtn = "Registrar ubicación"
+    /*this.actRoute.params.subscribe(params=>{
+      
       //console.log(params['id']);
-      /*if(params['id']){
+      if(params['id']){
         this.titulo = "Edita vehículo";
         this.textBtn = "Guardar cambios"
         this.paramId = params['id'];
@@ -37,16 +40,16 @@ export class UbicacionFormComponent implements OnInit {
           this.vehiculo=res;
           //console.log("contructor route params=>\n"+res);
         });
-      }else{*/
+      }else{
         this.titulo = "Nueva ubicación";
         this.textBtn = "Registrar ubicación"
-        /*vehiServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+        vehiServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
           this.supers.push(res);
           //console.log("contructor route params=>\n"+res);
-        });*/
+        });
       //}
       
-    }); 
+    }); */
   }
 
   ngOnInit(): void {
@@ -87,10 +90,11 @@ export class UbicacionFormComponent implements OnInit {
     this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe(res => {
       switch(res.status) { 
         case 201: { 
+          this.emiteCierraVentana();
           this.resApi.resMensajeSucBtn('ubicación creado con éxito');
             break; 
         }
-        case 400: { 
+        case 400: {
           this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
             break; 
         } 
@@ -102,8 +106,7 @@ export class UbicacionFormComponent implements OnInit {
     },(err)=>{
       this.resApi.resMensajeErrBtn(err.error.message);
     });
-    
-    this.emiteCierraVentana();
+    this.ubicacion = new UbicacionModel();
   }
   emiteCierraVentana(){
     this.eventoEmiteCierraFormUbi.emit(false);

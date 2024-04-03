@@ -26,7 +26,9 @@ export class MapaComponent implements OnInit, AfterViewInit {
   private eventoEmiteFormVehi = new EventEmitter<boolean>();
   @Output() 
   private eventoEmiteUbi = new EventEmitter<{nombre:string,lng:number,lat:number}>();
-
+  @Output()
+  nuevaUbiActivo = false;
+  
   @Input() 
   index:number = 0;
   @Input() 
@@ -38,7 +40,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   marcadores:mapboxgl.Marker[] = [];
   nombrePuntoPartida:string="";
   indicaciones: MapBoxLeg = new MapBoxLeg;
-  nuevaUbiActivo = false;
 
   constructor(
     private actRoute:ActivatedRoute,
@@ -81,11 +82,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
           "¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
           "Aceptar", true, "Volver").then(value => {
             if(value.isConfirmed){
+              //this.receiveNuevaUbi(false);
               this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
             }
           }
         );
-        this.receiveNuevaUbi(false);
         /*if(){
           this.apiRespServ.resMensajeInputDate();
         }*/
@@ -140,7 +141,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
           .addTo(this.mapa);
 
     //agrega listener al marcador y +
-    if(this.marcadores[1]){
+    if(this.marcadores[1] && !this.nuevaUbiActivo){
       this.marcadores[this.marcadores.length-1].on('dragend', () => {
         this.ubiServ.getMapBoxRoute(this.medio, 
           [this.marcadores[this.marcadores.length-1].getLngLat().lng,
@@ -148,6 +149,14 @@ export class MapaComponent implements OnInit, AfterViewInit {
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
           this.indicaciones = res.routes[0].legs[0];
           this.pintaRuta(res.routes[0].geometry.coordinates);
+        });
+        this.ubiServ.getMapBoxUbicacionByCoordenadas(
+          {lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+          lat:this.marcadores[this.marcadores.length-1].getLngLat().lat}
+        ).subscribe( res => {
+          if(res.features[0]){
+            this.nombrePuntoPartida = res.features[0].place_name;
+          }else this.nombrePuntoPartida = "";
         });
       });
 
@@ -159,9 +168,47 @@ export class MapaComponent implements OnInit, AfterViewInit {
           this.nombrePuntoPartida = res.features[0].place_name;
         }else this.nombrePuntoPartida = "";
       });
+    }else if(this.marcadores[1] && this.nuevaUbiActivo){
+      this.marcadores[this.marcadores.length-1].on('dragend', () => {
+        this.ubiServ.getMapBoxUbicacionByCoordenadas(
+          {lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+          lat:this.marcadores[this.marcadores.length-1].getLngLat().lat}
+        ).subscribe( res => {
+          if(res.features[0]){
+            this.nombrePuntoPartida = res.features[0].place_name;
+          }else { 
+            this.nombrePuntoPartida = "";
+          }
+        });
+        this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
+          "¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
+          "Aceptar", true, "Volver").then(value => {
+            if(value.isConfirmed){
+              this.receiveNuevaUbi(false);
+              this.sendMessageFormUbi(
+                {
+                  nombre:this.nombrePuntoPartida,
+                  lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+                  lat:this.marcadores[this.marcadores.length-1].getLngLat().lng
+                }
+              );
+            }
+          }
+        );
+      });
+      
+      this.ubiServ.getMapBoxUbicacionByCoordenadas(
+        {lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+        lat:this.marcadores[this.marcadores.length-1].getLngLat().lat}
+      ).subscribe( res => {
+        if(res.features[0]){
+          this.nombrePuntoPartida = res.features[0].place_name;
+        }else this.nombrePuntoPartida = "";
+      });
     }
   }
   
+
   borraRuta(){
     if (this.mapa.getSource('route')) {
       this.mapa.removeLayer('route');
@@ -208,6 +255,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.mapa.addLayer({
         id: 'parada'+i.toString(),
         type: 'circle',
+        paint:{
+          'circle-radius': 10,
+          'circle-color': 'rgba(55,148,179,1)'
+        },
         source: {
           type: 'geojson',
           data: {

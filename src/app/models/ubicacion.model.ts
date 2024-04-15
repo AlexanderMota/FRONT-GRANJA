@@ -4,7 +4,7 @@ export class UbicacionModel{
   idTarea: string ="";
   titulo: string ="";
   descripcion: string ="";
-  fechaRecogida: Date[] = [];
+  fechasRecogida: {fechaInicio:Date,fechaFin:Date, vehiculo:string}[] = [];
   longitud: number =0.0;
   latitud: number =0.0;
   /*limiteSupDer: number =0.0;

@@ -57,7 +57,15 @@ export class LoginComponent implements OnInit {
           aver = jwtDecode(res.message);
           console.log(localStorage.getItem("rol"));*/
           
-          this.auth.guardaToken(res.message);
+          localStorage.setItem('token',res.message);
+          this.auth.getMiId(this.usuario.email).subscribe(res => {
+            switch(res.status) {
+              case 201: {
+                console.log('miid: '+res.message);
+                localStorage.setItem('miid',res.message);
+              }
+            }
+          });
            Swal.close();
 
            if(this.recuerdame){

@@ -56,7 +56,7 @@
                                     style="padding: 0;"
                                     type="datetime-local" 
                                     name="fechaRecogida" 
-                                    [(ngModel)]="ubicacion!.fechaRecogida[0]"
+                                    [(ngModel)]="fechaRecogida[0].fechaInicio"
                                     required
                                     placeholder="Fecha de recogida">
             
@@ -72,7 +72,7 @@
                                     style="padding: 0;"
                                     type="datetime-local" 
                                     name="fechaRecogida" 
-                                    [(ngModel)]="ubicacion!.fechaRecogida[1]"
+                                    [(ngModel)]="fechaRecogida[0].fechaFin"
                                     required
                                     placeholder="Fecha de recogida">
             
@@ -119,6 +119,34 @@
                                 <span class="focus-input100"></span>
                             </div>  
                             
+
+
+
+
+
+                            <span *ngIf="registroForm.submitted &&  coches.length < 0"
+                                class="text-danger animated fadeIn">Debe indicar a qué grupo pertenece esta tarea</span>
+                            <div class="inputComp wrap-input100 m-b-16" #organizacion id="organizacion" >
+                                <label for="inputimp2" class="labels input100">
+                                    Vehículo
+                                </label>
+                            
+                                <select [(ngModel)]="fechaRecogida[0].vehiculo"
+                                    id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
+                                    <option *ngIf="coches.length > 1">-</option>
+                                    <option *ngFor="let coche of coches; let i = index;" [value]="coche.matricula">
+                                    <!--<span class="idOculto">id: {{super._id}} - </span>-->
+
+                                        {{ coche.matricula +" - "+ coche.plazas }}
+                                    </option>
+                                </select>
+                            </div> 
+
+
+
+
+
+
 
                             <div class="container-login100-form-btn m-t-17">
                                 <button class="login100-form-btn" type="submit">

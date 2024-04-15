@@ -30,6 +30,8 @@ export class AuthService {
   //private urlSignIn = 'https://api-granja.azurewebsites.net/api/auth/signin';
   private urlSignIn = this.urlTokenValido+'/signin';
 
+  private urlGetMiId = this.urlTokenValido+'/miid';
+
 
   logout(){
     localStorage.removeItem('token');
@@ -56,11 +58,6 @@ export class AuthService {
     });
   }
 
-  guardaToken(token:string){
-    this.token = token;
-    localStorage.setItem('token',token);
-    //this.vis = "visible";
-  }
   /*guardaRol(rol:string){
     localStorage.setItem('rol',rol);
   }*/
@@ -84,7 +81,14 @@ export class AuthService {
   compruebaTokenValido():Observable<ApiResponse>{
     return this.http.post<ApiResponse>(this.urlTokenValido + "?token="+localStorage.getItem('token')!,"");
   }
-  getToken():string{
-    return this.token;
+  getMiId(mail:string){
+    return this.http.get<ApiResponse>(this.urlGetMiId, {
+      headers: new HttpHeaders({
+        Authorization: localStorage.getItem('token')!
+      }),
+      params: {
+        mail
+      }
+    });
   }
 }

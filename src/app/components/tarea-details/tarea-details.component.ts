@@ -68,7 +68,7 @@ export class TareaDetailsComponent implements OnInit {
   }*/
 
   ngOnInit(): void { 
-    this.resaltarRango();
+    //this.resaltarRango();
   }
 
   async borraTarea(){
@@ -142,7 +142,7 @@ export class TareaDetailsComponent implements OnInit {
   }
   
   // pruebas calendario parada
-  resaltarRango(): void {
+  /*resaltarRango(): void {
     // Obtener la fecha de inicio y fin del rango deseado
     const startDate = new Date('2024-02-01');
     const endDate = new Date('2024-02-10');
@@ -166,5 +166,5 @@ export class TareaDetailsComponent implements OnInit {
         date.style.backgroundColor = 'yellow';
       }
     });
-  }
+  }*/
 }

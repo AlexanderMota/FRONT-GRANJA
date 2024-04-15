@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
+import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 @Component({
   selector: 'app-ubicacion-form',
@@ -20,14 +21,26 @@ export class UbicacionFormComponent implements OnInit {
   //showP2:boolean = false;
   titulo:string = "";
   textBtn:string = "";
+  coches: {matricula:string,plazas:number}[]=[];
+  fechaRecogida: {fechaInicio:Date,fechaFin:Date,vehiculo:string}[]=[{fechaInicio:new Date,fechaFin:new Date,vehiculo:""}];
   //private paramId : string = "";
 
   constructor( 
     private resApi:ApiResponseService, 
     private actRoute:ActivatedRoute, 
-    private ubiServ:UbicacionService) {
+    private ubiServ:UbicacionService,
+    private vehiServ:VehiculoService) {
       this.titulo = "Nueva ubicación";
       this.textBtn = "Registrar ubicación"
+      this.vehiServ.getVehiculosByPropietario(
+        localStorage.getItem("token")!,
+        localStorage.getItem("miid")!).subscribe(res => {
+        
+          //console.log(res);
+          res.forEach(dat =>{
+            this.coches[this.coches.length] = {matricula:dat.matricula,plazas:dat.plazas-(dat.ocupantes.length + 1)};
+          });
+      });
     /*this.actRoute.params.subscribe(params=>{
       
       //console.log(params['id']);
@@ -85,13 +98,15 @@ export class UbicacionFormComponent implements OnInit {
       
     }else*/
 
-    //console.log("ubicación nueva: " + this.ubicacion);
-    this.emiteCierraVentana();
-    this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe(res => {
+    this.ubicacion.fechasRecogida.push(this.fechaRecogida[0]);
+    console.log("ubicación nueva: ");
+    console.log(this.ubicacion.fechasRecogida);
+
+    this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion).subscribe(res => {
       switch(res.status) { 
         case 201: { 
           this.emiteCierraVentana();
-          this.resApi.resMensajeSucBtn('ubicación creado con éxito');
+          this.resApi.resMensajeSucBtn('Ubicación de parada creado con éxito');
             break; 
         }
         case 400: {

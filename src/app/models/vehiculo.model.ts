@@ -1,9 +1,13 @@
 
 export class VehiculoModel{
-  matricula:      string="";
-  propietario:    string="";
-  plazas:         number=0;
-  descripcion:    string="";
-  lugarRecogida : string="";
-  fechaRegistro:  string="";
+  matricula:    string="";
+  marca:        string="";
+  modelo:       string="";
+  color:        string="";
+  propietario:  string="";
+  descripcion:  string="";
+  plazas:       number=0;
+  //puntosDestinoRecogida:[]=[];
+  ocupantes:[]=[];
+  fechaRegistro:string="";
 };

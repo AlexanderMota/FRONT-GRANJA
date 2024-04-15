@@ -14,6 +14,7 @@ export class UbicacionService {
 
   private baseUrl = 'http://localhost:4300/api/ubicacion/';
   private urlUbiByIdTarea = this.baseUrl+"tarea/";
+  private urlUbiParadasDisp = this.baseUrl+"paradas/";
 
   private baseUrlMapBox = 'https://api.mapbox.com/';
   private urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
@@ -80,12 +81,43 @@ export class UbicacionService {
       }
     });
   }
+  getUbiParadasDisp(token:string, 
+    idSuper : string,
+    pageSize = 1,
+    pageNum = 1) : Observable<[UbicacionModel]> {
+    return this.http.get<[UbicacionModel]>(this.urlUbiParadasDisp+idSuper, {
+      headers: new HttpHeaders({
+        Authorization: token
+      }),
+      params: {
+        pageSize,
+        pageNum
+      }
+    });
+  }
+
+
   postUbi(token:string,
     ubi:UbicacionModel,
     pageSize = 1,
     pageNum = 1) : Observable<ApiResponse> {
-    const {idTarea,titulo,descripcion,longitud,latitud,fechaRecogida} = ubi;
-    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,titulo,descripcion,longitud,latitud,fechaRecogida}, {
+    const {idTarea,titulo,descripcion,longitud,latitud} = ubi;
+    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,titulo,descripcion,longitud,latitud}, {
+      headers: new HttpHeaders({
+        Authorization: token
+      }),
+      params: {
+        pageSize,
+        pageNum
+      }
+    });
+  }
+  postUbiParada(token:string,
+    ubi:UbicacionModel,
+    pageSize = 1,
+    pageNum = 1) : Observable<ApiResponse> {
+    const {titulo,descripcion,longitud,latitud,fechasRecogida} = ubi;
+    return this.http.post<ApiResponse>(this.urlUbiParadasDisp, {titulo,descripcion,longitud,latitud,fechasRecogida}, {
       headers: new HttpHeaders({
         Authorization: token
       }),

@@ -48,7 +48,7 @@ export class ApiResponseService {
 
   /*'text'`, `'email'`, `'password'`, `'number'`, `'tel'`, `'range'`, `'textarea'`,
   `'select'`, `'radio'`, `'checkbox'`, `'file'` and `'url'`.*/
-  async resMensajeInputDate(titulo:string,
+  /*async resMensajeInputDate(titulo:string,
     msn:string,btnAccTxt:string,
     btnCancel:boolean,btnCancTxt:string):Promise<string>{
     const { value: date } = await Swal.fire({
@@ -59,11 +59,11 @@ export class ApiResponseService {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: btnAccTxt,
-      cancelButtonText: btnCancTxt,
-      /*didOpen: () => {
-        const today = (new Date());
+      cancelButtonText: btnCancTxt//,
+      //didOpen: () => {
+        //const today = (new Date());
         //Swal.getInput().min = today.split("T")[0];
-      }*/
+      //}
     });
     if (date) {
       //Swal.fire("Departure date", date)
@@ -71,7 +71,36 @@ export class ApiResponseService {
     }else{
       return "";
     }
+  }*/
+  async resMensajeInputSelect(titulo:string,
+    msn:string,btnAccTxt:string,
+    btnCancel:boolean,btnCancTxt:string,opciones:Array<string>):Promise<string>{
+    const { value } = await Swal.fire({
+      title: titulo,
+      text: msn,
+      input: "select",
+      showCancelButton: btnCancel,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: btnAccTxt,
+      cancelButtonText: btnCancTxt,
+      inputOptions:opciones,
+      inputLabel: "Vehículo: ",
+       
+      //didOpen: () => {
+        //const today = (new Date());
+        //Swal.getInput().min = today.split("T")[0];
+      //}
+    });
+    if (value) {
+      //Swal.fire("Departure date", date)
+      return value;
+    }else{
+      return "";
+    }
   }
+
+
   resMensajeErrBtn(msn:string){
     Swal.fire({
       allowOutsideClick:false,

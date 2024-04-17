@@ -13,7 +13,6 @@ import { UsuarioModel } from '../models/usuario.model';
 export class AuthService {
 
   vis = "novisible";
-  private token : string ="";
   private horaCon : Date = new Date();
 
   constructor(private http: HttpClient/*, private nav : NavbarComponent*/) { }
@@ -36,7 +35,6 @@ export class AuthService {
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('fintoken');
-    this.token = "";
     this.vis = "collapse";
   }
 

@@ -8,6 +8,7 @@ import { MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
 import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
 import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
 import { ApiResponseService } from 'src/app/services/api-response.service';
+import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 
 @Component({
@@ -35,7 +36,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   idTarea:string = "";
 
   mapa!:mapboxgl.Map;
-  private clickHandler: any;
   private ubiCentro:UbicacionModel = new UbicacionModel();
   private medio : string = MediosTransporteMapBoxEnum.conduccion;
   marcadores:mapboxgl.Marker[] = [];
@@ -45,6 +45,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   constructor(
     private actRoute:ActivatedRoute,
     private ubiServ: UbicacionService,
+    private vehiServ: VehiculoService,
     private apiRespServ: ApiResponseService ) { }
 
   ngOnInit(): void {
@@ -53,7 +54,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
     this.iniciaMapa();
     this.muestraCentroTrabajo();
     this.clickMapaActivo();
-    this.clickMapaInactivo();
   }
 
   private iniciaMapa(){
@@ -69,7 +69,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   
   clickMapaActivo(){
-    this.clickHandler = this.mapa.on('click', event => {
+    this.mapa.on('click', event => {
       //console.log(event.lngLat);
       this.agregarMarcador(event.lngLat, true);
       if(!this.nuevaUbiActivo){
@@ -94,9 +94,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
         }*/
       }
     });
-  }
-  clickMapaInactivo(){
-    this.mapa.off('click', this.clickHandler);
   }
   muestraCentroTrabajo(){
     this.actRoute.params.subscribe(async params=>{
@@ -258,7 +255,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.mapa.removeSource('parada'+i.toString());
     }
   }
-  pintaParadas(dat : number[][]){
+  pintaParadas(dat : [UbicacionModel]){
     for( let i = 0; i < dat.length; i++ ){
       this.mapa.addLayer({
         id: 'parada'+i.toString(),
@@ -277,39 +274,82 @@ export class MapaComponent implements OnInit, AfterViewInit {
                 properties: {},
                 geometry: {
                   type: 'Point',
-                  coordinates: [dat[i][0],dat[i][1]]
+                  coordinates: [dat[i].longitud,dat[i].latitud]
                 }
               }
             ]
           }
         }
       });
-
+    }
+  }
+  clickParada(dat:[UbicacionModel]){
+    for( let i = 0; i < dat.length; i++ ){
       this.mapa.on('click', 'parada'+i.toString(), (e) => {
         // Aquí puedes ejecutar la función que desees cuando se haga clic en la capa
-        console.log('Se hizo clic en la capa ' + 'parada'+i.toString());
         //console.log(e);
-
-        this.ubiServ.getMapBoxUbicacionByCoordenadas(e.lngLat).subscribe(res => {
+        this.receiveNuevaUbi(this.nuevaUbiActivo);
+        //this.ubiServ.getMapBoxUbicacionByCoordenadas(e.lngLat).subscribe(res => {
           //console.log(res);
           const popup = new mapboxgl.Popup({ offset: [0, -15] })
-            .setLngLat(e.lngLat)
-            .setHTML(
-              `<h3>${res.features[0].text}</h3><p>${res.features[0].place_name}</p>`
-            )
-            .addTo(this.mapa);
+            .setLngLat(e.lngLat).setHTML(
+              `<h3 style="margin: 0px;">${dat[i].titulo}</h3><p style="margin: 15px 0px 0px 0px;">${dat[i].descripcion}</p>`
+            ).addTo(this.mapa);
+          popup.getElement().style.padding = "30px"
+          popup.getElement().style.margin = "30px"
+          popup.getElement().style.cursor = 'pointer';
+          popup.getElement().querySelector("button")!.style.margin = "5px";
+          popup.getElement().querySelector("button")!.style.cursor = "default";
+          popup.getElement().addEventListener('click', () => {
 
-            popup.getElement().addEventListener('click', () => {
-              console.log("click popup: "+res.features[0].text);
+            this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
+            "¿Seguro que desea reservar plaza en esta parada? "+
+            "Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
+            "Aceptar", true, "Volver").then(value => {
+              if(value.isConfirmed){
+                let da: string[] = [];
+                dat[i].fechasRecogida.forEach(val => {
+                  da.push(val.vehiculo + " - " + val.fechaInicio);
+                });
+
+                let index = 0;
+                this.apiRespServ.resMensajeInputSelect("ATENCIÓN",
+                "¿Seguro que desea reservar plaza en esta parada? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
+                "Aceptar", true, "Volver",da).then(value => {
+                  index = parseInt(value);
+                  console.log("por implementar registro de empleado en plaza de coche: "+dat[i].fechasRecogida[index].vehiculo);
+                  
+                  this.vehiServ.patchVehiculo(
+                    localStorage.getItem('token')!,
+                    dat[i].fechasRecogida[index].vehiculo,
+                    localStorage.getItem('miid')!
+                  ).subscribe(res => {
+                      console.log(res.status + " - " + res.message);
+                      if(res.status == 200){
+                        this.apiRespServ.resMensajeSucBtn(res.message);
+                      }else{
+                        this.apiRespServ.resMensajeErrBtn(res.message);
+                      };
+                    }
+                  );
+                });
+                /*this.vehiServ.patchVehiculo(
+                  localStorage.getItem('token')!,
+                  dat[i].fechasRecogida[index].vehiculo,
+                  "644d82e1c7ea3f680d292941"
+                ).subscribe(res => {
+                    console.log(res.status + " - " + res.message);
+                  }
+                );*/
+              }
             });
-            popup.getElement().style.cursor = 'pointer';
-        });
+
+
+
+            
+          });
+        //});
       });
-
-
-
-
-
     }
   }
   
@@ -364,26 +404,27 @@ export class MapaComponent implements OnInit, AfterViewInit {
     }
   }
   receiveVerTransportes($event: boolean){
-    let dat = [[0,0]
-      /*[-0.4243583587732189,38.42475742385676],
+    /*let dat = [[0,0]
+      [-0.4243583587732189,38.42475742385676],
       [-0.4306459479518594,38.41862525328767],
-      [-0.43286969841986433,38.398432379976356]*/
-    ]
+      [-0.43286969841986433,38.398432379976356]
+    ]*/
     
     //644d82e1c7ea3f680d292941 6450bc74fb1155458be8b170
     this.ubiServ.getUbiParadasDisp(localStorage.getItem('token')!, localStorage.getItem('centroActual')!).subscribe(res=>{
-      res.forEach(res =>{
-        /*console.log(res.titulo);
+      /*res.forEach(res =>{
+        console.log(res.titulo);
         console.log(res.longitud);
-        console.log(res.latitud);*/
+        console.log(res.latitud);
         dat.push([res.longitud,res.latitud])
       });
-      console.log(dat.length);
+      console.log(dat.length);*/
 
       if($event){
-        this.ocultaParadas(dat.length);
+        this.ocultaParadas(res.length);
       }else{
-        this.pintaParadas(dat);
+        this.pintaParadas(res);
+        this.clickParada(res);
       }
     });
 

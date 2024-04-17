@@ -11,7 +11,9 @@ export class VehiculoService {
 
   private baseUrl = 'http://localhost:4300/api/vehiculo/';
   private urlVehiByProp = this.baseUrl + "propietario/";
-  private urlVehiByMat = this.baseUrl + "matricula/";
+  private urlVehiByMatr = this.baseUrl + "matricula/";
+  private urlVehiByPara = this.baseUrl + "parada/";
+  private urlVehiByPasa = this.baseUrl + "pasajero/";
   
   constructor(private http: HttpClient) { }
   
@@ -38,7 +40,18 @@ export class VehiculoService {
     });
   }
   getVehiculosByMatricula(token:string, matricula:string, pageSize = 20, pageNum = 1):Observable<VehiculoModel> {
-    return this.http.get<VehiculoModel>(this.urlVehiByMat+matricula, {
+    return this.http.get<VehiculoModel>(this.urlVehiByMatr+matricula, {
+      headers: new HttpHeaders({
+        Authorization: token
+      }),
+      params: {
+        pageSize,
+        pageNum
+      }
+    });
+  }
+  getVehiculosByIdParada(token:string, idParada:string, pageSize = 20, pageNum = 1):Observable<[VehiculoModel]> {
+    return this.http.get<[VehiculoModel]>(this.urlVehiByPara+idParada, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -53,6 +66,14 @@ export class VehiculoService {
   postVehiculo(token:string, vehiculo:VehiculoModel):Observable<ApiResponse> {
     const {matricula, propietario, plazas, descripcion} = vehiculo;
     return this.http.post<ApiResponse>(this.baseUrl, {matricula,propietario, plazas, descripcion},{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+
+  patchVehiculo(token:string, matricula:string,pasajero:string):Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(this.urlVehiByPasa+matricula+"?pasajero="+pasajero,{},{
       headers: new HttpHeaders({
         Authorization: token
       })

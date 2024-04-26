@@ -23,13 +23,13 @@
                 
             <!-- linkear botones registrando la ruta en routes -->
             <button (click)="abreFormTarea(true)" >
-                <a class="btn btn-outline-secondary" >Editar</a>
+                <a class="btn btn-outline-secondary" >{{botonEditar}}</a>
             </button>
             <button (click)="abreFormTarea(false)" >
-                <a class="btn btn-outline-info" >Nueva subtarea</a>
+                <a class="btn btn-outline-info" >{{botonAnadirSubtarea}}</a>
             </button>
             <button (click)="borraTarea()" >
-                <a class="btn btn-outline-warning">Borrar</a>
+                <a class="btn btn-outline-warning">{{botonBorrar}}</a>
             </button>
 
         </div>
@@ -39,7 +39,7 @@
                 [emp]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
             </app-empleado-linea>
             <button class="card btnNuevoEmp" (click)="muestraEmpleadosDisponibles()">
-                Nuevo empleado
+                {{botonNuevoEmp}}
             </button>
         </div>
     </div>
@@ -49,7 +49,9 @@
     
     <app-mapa class="mapa" 
         (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'
-        (eventoEmiteUbi)="sendMessageFormUbi($event)">
+        (eventoEmiteUbi)="sendMessageFormUbi($event)"
+        (eventoEmiteEliminaParada)="receiveMessageEliminaParada($event)"
+        (eventoEmiteEditaParada)="receiveMessageEditaParada($event)">
     </app-mapa>
 </div>
 
@@ -74,6 +76,31 @@
                     <app-empleado-linea class="card " (click)="agregaTrabajadorATarea(empleado._id)"
                         [emp]="empleado" [index]="i" *ngFor="let empleado of empleadosDisp; let i = index;">
                     </app-empleado-linea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modalcEmp" *ngIf='showParadas'>
+    <div class="modalcEmp-content">
+        
+        <div class="modalcEmp-content animated fadeInDown">
+            <div class="modalcEmp-container">
+                <button class="botonCerrar " (click)="emiteCierraVentana2()">X</button>
+                <div class="empleadosDisp ">
+                    
+                    <div class="card" 
+                        *ngFor="let parada of paradas.fechasRecogida; let i = index;">
+                        <a   class="btn btn-dark stretched-link" (click)="eliminaParada( parada )" >
+                            <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
+                            <h5 class="h5letrero animated fadeIn fast" >
+                                {{ (i+1) + " : " + parada.vehiculo + " " + parada.fechaInicio }}
+                            </h5>
+    
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

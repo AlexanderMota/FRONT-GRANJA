@@ -5,6 +5,7 @@ import { ComentarioModel } from 'src/app/models/comentario.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { ComentarioService } from 'src/app/services/comentario.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
 import Swal from 'sweetalert2';
 
@@ -21,7 +22,8 @@ export class SubtareaComponent implements OnInit {
   constructor(
     private resApi: ApiResponseService,
     private actRoute:ActivatedRoute,
-    private tarServ:TareaService) { 
+    private tarServ:TareaService,
+    private localizationService:LocalizationService) { 
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
         this.idTarea = params['id'];
@@ -43,7 +45,9 @@ export class SubtareaComponent implements OnInit {
       return;
     }
     
-    this.resApi.resCargando('Espere...');
+    
+    this.localizationService.getString("mensajesInformacion.espere").subscribe(val =>
+    this.resApi.resCargando(val));
 
 
   }

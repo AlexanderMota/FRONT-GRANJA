@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MapBoxResponseModel, MapBoxFeature } from 'src/app/models/mapBoxResponse.model';
 import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { UbicacionService, EstilosMapBoxEnum, MediosTransporteMapBoxEnum } from 'src/app/services/ubicacion.service';
 
 interface MenuItem  {
@@ -29,6 +30,8 @@ export class MapaMenuComponent {
   eventoEmiteReiniciaMapa = new EventEmitter<boolean>();
   @Output() 
   eventoEmiteVerTransportes = new EventEmitter<boolean>();
+  @Output() 
+  eventoEmiteEliminaParada = new EventEmitter<boolean>();
   
   @Input() 
   inputSearchValue: string = '';
@@ -36,6 +39,8 @@ export class MapaMenuComponent {
   indicaciones: MapBoxLeg = new MapBoxLeg;
   @Input()
   nuevaUbi: boolean = false;
+  @Input()
+  eliminaParada: boolean = false;
 
   resMapBox: MapBoxResponseModel = new MapBoxResponseModel;
   
@@ -50,12 +55,16 @@ export class MapaMenuComponent {
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
   muestraParadas= true;
-  nuevaUbiCadena = "Añadir parada";
+  nuevaUbiCadena = "";
 
-  constructor(private ubiServ : UbicacionService) { }
+  constructor(private ubiServ : UbicacionService,
+    private localizationService: LocalizationService) { 
+      this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
+    }
 
   ngOnInit(): void {
   }
+  // ///////////////////////////////////////////////////
   menuItems: MenuItem[] = [
     {
       ruta: '/mapas/fullscreen',
@@ -124,11 +133,23 @@ export class MapaMenuComponent {
     this.muestraOcultaMenu();
     this.nuevaUbi = !this.nuevaUbi;
     if(this.nuevaUbi){
-      this.nuevaUbiCadena = "Navegación";
+      this.localizationService.getString("botones.navegacion").subscribe(val => this.nuevaUbiCadena = val);
     }else{
-      this.nuevaUbiCadena = "Añadir parada";
+      this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
     }
     this.eventoEmiteFormUbi.emit(this.nuevaUbi);
+    this.eliminaParada = false;
+  }
+  activaEliminaParada(){
+    this.muestraOcultaMenu();
+    this.eliminaParada = !this.eliminaParada;
+    if(this.eliminaParada){
+      //this.localizationService.getString("botones.editar").subscribe(val => this.nuevaUbiCadena = val);
+    }else{
+      //this.localizationService.getString("botones.eliminar").subscribe(val => this.nuevaUbiCadena = val);
+    }
+    this.eventoEmiteEliminaParada.emit(this.eliminaParada);
+    this.nuevaUbi = false;
   }
   /*ocultaIndicaciones(){
     this.indicaciones = new MapBoxLeg;

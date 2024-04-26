@@ -9,6 +9,7 @@ import { MapBoxLeg } from 'src/app/models/mapBoxRouteResponse.model';
 import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 
 
 @Component({
@@ -27,8 +28,13 @@ export class MapaComponent implements OnInit, AfterViewInit {
   private eventoEmiteFormVehi = new EventEmitter<boolean>();
   @Output() 
   private eventoEmiteUbi = new EventEmitter<{nombre:string,lng:number,lat:number}>();
-  @Output()
+  @Output() 
+  private eventoEmiteEliminaParada = new EventEmitter<{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}>();
+  @Output() 
+  private eventoEmiteEditaParada = new EventEmitter<{idUbicacion:string,titulo:string,descripcion:string, longitud:number, latitud:number}>();
+  
   nuevaUbiActivo = false;
+  eliminaParadaActivo = false;
   
   @Input() 
   index:number = 0;
@@ -46,7 +52,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
     private actRoute:ActivatedRoute,
     private ubiServ: UbicacionService,
     private vehiServ: VehiculoService,
-    private apiRespServ: ApiResponseService ) { }
+    private apiRespServ: ApiResponseService,
+    private localizationService: LocalizationService) {
+
+  }
 
   ngOnInit(): void {
   } 
@@ -77,21 +86,18 @@ export class MapaComponent implements OnInit, AfterViewInit {
           [event.lngLat.lng,event.lngLat.lat],
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
           this.indicaciones = res.routes[0].legs[0];
+          this.borraRuta();
           this.pintaRuta(res.routes[0].geometry.coordinates);
         });
-      }else{
-        this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
-          "¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
-          "Aceptar", true, "Volver").then(value => {
-            if(value.isConfirmed){
-              //this.receiveNuevaUbi(false);
-              this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
-            }
-          }
-        );
-        /*if(){
-          this.apiRespServ.resMensajeInputDate();
-        }*/
+      }else{ 
+        this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
+        this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
+        this.localizationService.getString("mensajesInformacion.infoGuardarUbi").subscribe(msg => {
+        this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+        this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg,btnAcc,true,btnCan).then(value => {
+        if(value.isConfirmed){
+          this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+        }})})})})});
       }
     });
   }
@@ -153,6 +159,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
           this.marcadores[this.marcadores.length-1].getLngLat().lat],
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
           this.indicaciones = res.routes[0].legs[0];
+          this.borraRuta();
           this.pintaRuta(res.routes[0].geometry.coordinates);
         });
         this.ubiServ.getMapBoxUbicacionByCoordenadas(
@@ -181,21 +188,24 @@ export class MapaComponent implements OnInit, AfterViewInit {
         ).subscribe( res => {
           if(res.features[0]){
             this.nombrePuntoPartida = res.features[0].place_name;
-            this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
-              "¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
-              "Aceptar", true, "Volver").then(value => {
-                if(value.isConfirmed){
-                  this.receiveNuevaUbi(false);
-                  this.sendMessageFormUbi(
-                    {
-                      nombre:this.nombrePuntoPartida,
-                      lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
-                      lat:this.marcadores[this.marcadores.length-1].getLngLat().lng
-                    }
-                  );
-                }
+
+
+            this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
+            this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
+            this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
+            this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+            this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg, btnAcc, true, btnCan).then(value => {
+              if(value.isConfirmed){
+                this.receiveNuevaUbi(false);
+                this.sendMessageFormUbi(
+                  {
+                    nombre:this.nombrePuntoPartida,
+                    lng:this.marcadores[this.marcadores.length-1].getLngLat().lng,
+                    lat:this.marcadores[this.marcadores.length-1].getLngLat().lng
+                  }
+                );
               }
-            );
+            })})})})});
           }else { 
             this.nombrePuntoPartida = "";
           }
@@ -222,7 +232,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
 
   pintaRuta(ruta:[]){
-    this.borraRuta();
     
     this.mapa.addLayer({
       id: 'route',
@@ -289,66 +298,73 @@ export class MapaComponent implements OnInit, AfterViewInit {
         // Aquí puedes ejecutar la función que desees cuando se haga clic en la capa
         //console.log(e);
         this.receiveNuevaUbi(this.nuevaUbiActivo);
+        let btnResCad = "";
+        let btnEliCad = "";
+        let btnEdiCad = "";
+        this.localizationService.getString("botones.eliminar").subscribe(btnEli =>  btnEliCad = btnEli);
+        this.localizationService.getString("botones.reservar").subscribe(btnRes => btnResCad = btnRes);
+        this.localizationService.getString("botones.editar").subscribe(btnEdi => btnEdiCad = btnEdi);
         //this.ubiServ.getMapBoxUbicacionByCoordenadas(e.lngLat).subscribe(res => {
           //console.log(res);
-          const popup = new mapboxgl.Popup({ offset: [0, -15] })
-            .setLngLat(e.lngLat).setHTML(
-              `<h3 style="margin: 0px;">${dat[i].titulo}</h3><p style="margin: 15px 0px 0px 0px;">${dat[i].descripcion}</p>`
-            ).addTo(this.mapa);
-          popup.getElement().style.padding = "30px"
-          popup.getElement().style.margin = "30px"
-          popup.getElement().style.cursor = 'pointer';
-          popup.getElement().querySelector("button")!.style.margin = "5px";
-          popup.getElement().querySelector("button")!.style.cursor = "default";
-          popup.getElement().addEventListener('click', () => {
+        const popup = new mapboxgl.Popup({ offset: [0, -15] })
+        .setLngLat([dat[i].longitud,dat[i].latitud]).setHTML(
+          `<h3 style="margin: 5px 0px 0px 0px;">${dat[i].titulo}</h3>
+          <hr class="dropdown-divider" style="margin: 5px 0px;">
+          <p style="margin: 5px 0px 15px 0px;">${dat[i].descripcion}</p>
+          <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <a class="boton1 btn btn-outline-info" style="padding: 6px 6px; width: 80px;">${btnResCad}</a>
+            <a class="boton2 btn btn-outline-warning" style="padding: 6px 6px; width: 80px;">${btnEdiCad}</a>
+            <a class="boton3 btn btn-outline-danger" style="padding: 6px 6px; width: 80px;">${btnEliCad}</a>
+          </div>`
+        ).addTo(this.mapa);
+          //<div style="display: flex; flex-direction: row; justify-content: space-between;">
+            //<a class="boton2 btn btn-outline-info">${btnResCad}</a>
+          //</div>
 
-            this.apiRespServ.resMensajeSucBtnCancBtn("ATENCIÓN",
-            "¿Seguro que desea reservar plaza en esta parada? "+
-            "Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
-            "Aceptar", true, "Volver").then(value => {
-              if(value.isConfirmed){
-                let da: string[] = [];
-                dat[i].fechasRecogida.forEach(val => {
-                  da.push(val.vehiculo + " - " + val.fechaInicio);
-                });
+        popup.setMaxWidth("280px");
+        popup.getElement().style.cursor = 'default';
+        popup.getElement().querySelector("button")!.style.width = "20px";
+        popup.getElement().querySelector("button")!.style.cursor = "pointer";
 
-                let index = 0;
-                this.apiRespServ.resMensajeInputSelect("ATENCIÓN",
-                "¿Seguro que desea reservar plaza en esta parada? Tenga en cuenta que se compromete a acudir los días y horas que indique.", 
-                "Aceptar", true, "Volver",da).then(value => {
-                  index = parseInt(value);
-                  console.log("por implementar registro de empleado en plaza de coche: "+dat[i].fechasRecogida[index].vehiculo);
-                  
-                  this.vehiServ.patchVehiculo(
-                    localStorage.getItem('token')!,
-                    dat[i].fechasRecogida[index].vehiculo,
-                    localStorage.getItem('miid')!
-                  ).subscribe(res => {
-                      console.log(res.status + " - " + res.message);
-                      if(res.status == 200){
-                        this.apiRespServ.resMensajeSucBtn(res.message);
-                      }else{
-                        this.apiRespServ.resMensajeErrBtn(res.message);
-                      };
-                    }
-                  );
-                });
-                /*this.vehiServ.patchVehiculo(
-                  localStorage.getItem('token')!,
-                  dat[i].fechasRecogida[index].vehiculo,
-                  "644d82e1c7ea3f680d292941"
-                ).subscribe(res => {
-                    console.log(res.status + " - " + res.message);
-                  }
-                );*/
-              }
+      
+        popup.getElement().querySelector(".boton1")!.addEventListener('click', () => {
+          this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
+          this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
+          this.localizationService.getString("mensajesInformacion.infoReservaPlaza").subscribe(msg => {
+          this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+            let da: string[] = [];
+            dat[i].fechasRecogida.forEach(val => {
+              da.push(val.vehiculo + " - " + val.fechaInicio);
             });
 
-
-
-            
-          });
-        //});
+            let index = 0;
+            this.apiRespServ.resMensajeInputSelect(tit,msg,btnAcc, true, btnCan,da).then(value => {
+              index = parseInt(value);
+              
+              this.vehiServ.patchVehiculo(
+                localStorage.getItem('token')!,
+                dat[i].fechasRecogida[index].vehiculo,
+                localStorage.getItem('miid')!
+              ).subscribe(res => {
+                  console.log(res.status + " - " + res.message);
+                  if(res.status == 200){
+                    this.apiRespServ.resMensajeSucBtn(res.message);
+                  }else{
+                    this.apiRespServ.resMensajeErrBtn(res.message);
+                  };
+                }
+              );
+            });
+          })})})});
+        });
+        popup.getElement().querySelector(".boton2")!.addEventListener('click', () => {
+          console.log("idUbicacion: "+dat[i]._id);
+          this.eventoEmiteEditaParada.emit({idUbicacion:dat[i]._id,titulo:dat[i].titulo,descripcion: dat[i].descripcion, longitud:dat[i].longitud, latitud:dat[i].latitud});
+        });
+        popup.getElement().querySelector(".boton3")!.addEventListener('click', () => {
+          console.log("idUbicacion: "+dat[i]._id);
+          this.eventoEmiteEliminaParada.emit({idUbicacion:dat[i]._id,fechasRecogida:dat[i].fechasRecogida});
+        });
       });
     }
   }
@@ -369,6 +385,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
       [this.ubiCentro.longitud,this.ubiCentro.latitud])
       .subscribe(res => {
         this.indicaciones = res.routes[0].legs[0];
+        this.borraRuta();
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -381,6 +398,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.marcadores[this.marcadores.length-1].getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
         this.indicaciones = res.routes[0].legs[0];
+        this.borraRuta();
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -394,6 +412,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.marcadores[this.marcadores.length-1].getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
         this.indicaciones = res.routes[0].legs[0];
+        this.borraRuta();
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -432,9 +451,17 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   receiveNuevaUbi($event: boolean){
     this.nuevaUbiActivo = $event;
-      this.borraRuta();
-      this.borraMarcadorClick();
-      this.indicaciones = new MapBoxLeg;
+    this.borraRuta();
+    this.borraMarcadorClick();
+    this.indicaciones = new MapBoxLeg;
+    this.eliminaParadaActivo = false;
     //console.log($event);
+  }
+  receiveEliminaParada($event: boolean){
+    this.eliminaParadaActivo = $event;
+    this.borraRuta();
+    this.borraMarcadorClick();
+    this.indicaciones = new MapBoxLeg;
+    this.nuevaUbiActivo = false;
   }
 }

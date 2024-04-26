@@ -1,8 +1,10 @@
+// Dependencies
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Routes
 import { AppRoutingModule } from './app-routing.module'
@@ -17,6 +19,17 @@ import { SolicitudCardComponent } from './components/solicitud-card/solicitud-ca
 import { TareaFormComponent } from './components/tarea-form/tarea-form.component';
 import { TareaDetailsComponent } from './components/tarea-details/tarea-details.component';
 import { EmpleadoLineaComponent } from './components/empleado-linea/empleado-linea.component';
+import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
+import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-detail.component';
+import { MapaComponent } from './components/mapa/mapa.component';
+import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
+import { SubtareaComponent } from './components/subtarea/subtarea.component';
+import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.component';
+import { TransportesFormComponent } from './components/transportes-form/transportes-form.component';
+import { GraficoPruebaComponent } from './components/grafico-prueba/grafico-prueba.component';
+import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-prueba2.component';
+import { TransporteCardComponent } from './components/transporte-card/transporte-card.component';
+import { UbicacionFormComponent } from './components/ubicacion-form/ubicacion-form.component';
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
@@ -27,19 +40,7 @@ import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component';
-import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
-import { EmpleadoDetailComponent } from './components/empleado-detail/empleado-detail.component';
-import { MapaComponent } from './components/mapa/mapa.component';
-import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
-import { SubtareaComponent } from './components/subtarea/subtarea.component';
-import { MapaMenuComponent } from './components/mapa/mapa-menu/mapa-menu.component';
-import { TransportesFormComponent } from './components/transportes-form/transportes-form.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
-import { GraficoPruebaComponent } from './components/grafico-prueba/grafico-prueba.component';
-import { GraficoPrueba2Component } from './components/grafico-prueba2/grafico-prueba2.component';
-import { TransporteCardComponent } from './components/transporte-card/transporte-card.component';
-import { UbicacionFormComponent } from './components/ubicacion-form/ubicacion-form.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

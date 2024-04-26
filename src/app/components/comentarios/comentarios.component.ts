@@ -6,6 +6,7 @@ import { ApiResponseService } from 'src/app/services/api-response.service';
 import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth.service';
 import { ComentarioService } from 'src/app/services/comentario.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 
 @Component({
   selector: 'app-comentarios',
@@ -20,7 +21,8 @@ export class ComentariosComponent implements OnInit {
   constructor(
     private resApi: ApiResponseService,
     private actRoute:ActivatedRoute,
-    private commServ:ComentarioService) { 
+    private commServ:ComentarioService,
+    private localizationService: LocalizationService) { 
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
         this.idTarea = params['id'];
@@ -47,7 +49,7 @@ export class ComentariosComponent implements OnInit {
     this.comentario.idTarea = this.idTarea;
     this.comentario.idAutor = "000";
     console.log(this.comentario);
-    this.commServ.postComentarioByIdTarea(localStorage.getItem("token")!, this.comentario!).subscribe(res => {
+    this.commServ.postComentarioByIdTarea(localStorage.getItem("token")!, this.comentario!).subscribe({next:(res) => {
       switch(res.status) { 
         case 201: { 
           
@@ -61,7 +63,9 @@ export class ComentariosComponent implements OnInit {
            break; 
         }
         case 0: { 
-          this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+          
+          this.localizationService.getString("mensajesError.desconocido").subscribe(val => 
+          this.resApi.resMensajeWrnBtn(val));
            break; 
         } 
         default: { 
@@ -69,7 +73,7 @@ export class ComentariosComponent implements OnInit {
            break; 
         } 
       } 
-    },(err)=>{
+    },error:(err)=>{
       switch(err.error.status) { 
         case 400: { 
           Swal.fire({
@@ -125,6 +129,6 @@ export class ComentariosComponent implements OnInit {
            break; 
         } 
       } 
-    });
+    }});
   }
 }

@@ -14,7 +14,8 @@ export class UbicacionService {
 
   private baseUrl = 'http://localhost:4300/api/ubicacion/';
   private urlUbiByIdTarea = this.baseUrl+"tarea/";
-  private urlUbiParadasDisp = this.baseUrl+"paradas/";
+  private urlUbiParadas = this.baseUrl+"paradas/";
+  private urlUbiById = this.baseUrl+"byid/";
 
   private baseUrlMapBox = 'https://api.mapbox.com/';
   private urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
@@ -85,7 +86,7 @@ export class UbicacionService {
     idSuper : string,
     pageSize = 1,
     pageNum = 1) : Observable<[UbicacionModel]> {
-    return this.http.get<[UbicacionModel]>(this.urlUbiParadasDisp+idSuper, {
+    return this.http.get<[UbicacionModel]>(this.urlUbiParadas+idSuper, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -113,18 +114,51 @@ export class UbicacionService {
     });
   }
   postUbiParada(token:string,
-    ubi:UbicacionModel,
-    pageSize = 1,
-    pageNum = 1) : Observable<ApiResponse> {
+    ubi:UbicacionModel) : Observable<ApiResponse> {
     const {titulo,descripcion,longitud,latitud,fechasRecogida} = ubi;
-    return this.http.post<ApiResponse>(this.urlUbiParadasDisp, {titulo,descripcion,longitud,latitud,fechasRecogida}, {
+    return this.http.post<ApiResponse>(this.urlUbiParadas, {titulo,descripcion,longitud,latitud,fechasRecogida}, {
       headers: new HttpHeaders({
         Authorization: token
-      }),
-      params: {
-        pageSize,
-        pageNum
+      })
+    });
+  }
+  /*patchUbi(token:string,
+    ubi:UbicacionModel,
+    idUbi:string =""){
+    const {titulo,descripcion,longitud,latitud,fechasRecogida} = ubi;
+    if(idUbi == ""){
+      if(ubi._id){
+        idUbi = ubi._id;
       }
+    }
+    return this.http.patch<ApiResponse>(this.urlUbiById+idUbi, {titulo,descripcion,longitud,latitud,fechasRecogida}, {
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }*/
+  patchParada(token:string,
+    fechasRecogida:{
+      fechaInicio: Date;
+      fechaFin: Date;
+      vehiculo: string;
+    },idUbi:string){
+    return this.http.patch<ApiResponse>(this.urlUbiParadas+idUbi, fechasRecogida, {
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  deleteParada(token:string,
+    fechasRecogida:{
+      fechaInicio: Date;
+      fechaFin: Date;
+      vehiculo: string;
+    },idUbi:string){
+    return this.http.patch<ApiResponse>(this.urlUbiParadas+idUbi, fechasRecogida, {
+      headers: new HttpHeaders({
+        Authorization: token
+      })
     });
   }
 }

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class TransportesFormComponent implements OnInit {
   constructor( 
     private resApi:ApiResponseService, 
     private actRoute:ActivatedRoute, 
-    private vehiServ:VehiculoService ) {
+    private vehiServ:VehiculoService,
+    private localizationService:LocalizationService ) {
     this.actRoute.params.subscribe(params=>{
       //console.log(params['id']);
       /*if(params['id']){
@@ -37,8 +39,8 @@ export class TransportesFormComponent implements OnInit {
           //console.log("contructor route params=>\n"+res);
         });
       }else{*/
-        this.titulo = "Nuevo vehiculo";
-        this.textBtn = "Registrar vehiculo"
+      this.localizationService.getString("encabezados.guardaVehiculo").subscribe(val=>this.titulo = val);
+      this.localizationService.getString("botones.nuevoVehiculo").subscribe(val=>this.textBtn = val);
         /*vehiServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
           this.supers.push(res);
           //console.log("contructor route params=>\n"+res);
@@ -81,7 +83,7 @@ export class TransportesFormComponent implements OnInit {
     }else*/
 
     console.log("vehiculo nuevo: " + this.vehiculo.matricula);
-    this.vehiServ.postVehiculo(localStorage.getItem('token')!, this.vehiculo ,).subscribe(res => {
+    this.vehiServ.postVehiculo(localStorage.getItem('token')!, this.vehiculo ,).subscribe({next:(res) => {
       switch(res.status) { 
         case 201: { 
           this.resApi.resMensajeSucBtn('Vehículo creado con éxito');
@@ -96,9 +98,9 @@ export class TransportesFormComponent implements OnInit {
             break; 
         } 
       } 
-    },(err)=>{
+    },error:(err)=>{
       this.resApi.resMensajeErrBtn(err.error.message);
-    });
+    }});
     
     this.emiteCierraVentana();
   }

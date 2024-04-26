@@ -6,6 +6,7 @@ import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ComponentMessageService } from 'src/app/services/component-message.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
 import Swal from 'sweetalert2';
 
@@ -38,7 +39,8 @@ export class TareaFormComponent implements OnInit {
   constructor(
     private resApi:ApiResponseService, 
     private tarServ:TareaService, 
-    private actRoute:ActivatedRoute) {
+    private actRoute:ActivatedRoute,
+    private localizationService:LocalizationService) {
     
    }
 
@@ -48,8 +50,8 @@ export class TareaFormComponent implements OnInit {
       if(params['id']){
         this.paramId = params['id'];
         if(this.flag){
-          this.titulo = "Edita tarea";
-          this.textBtn = "Guardar cambios"
+          this.localizationService.getString("encabezados.editarTarea").subscribe(val=>this.titulo = val);
+          this.localizationService.getString("botones.guardarCambios").subscribe(val=>this.textBtn = val);
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
             this.tarea=res;
@@ -65,8 +67,8 @@ export class TareaFormComponent implements OnInit {
             elemento.style.display = 'none';
           }*/
           document.getElementById('organizacion')!.style.display = 'none';
-          this.titulo = "Crea subtarea";
-          this.textBtn = "Guardar tarea"
+          this.localizationService.getString("encabezados.guardaSubTarea").subscribe(val=>this.titulo = val);
+          this.localizationService.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
           this.idSuper = this.paramId;
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
@@ -75,8 +77,8 @@ export class TareaFormComponent implements OnInit {
           });
         }
       }else{
-        this.titulo = "Nueva tarea";
-        this.textBtn = "Crear tarea"
+        this.localizationService.getString("encabezados.guardaTarea").subscribe(val=>this.titulo = val);
+        this.localizationService.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
         this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
           this.supers[0] = res;
           //console.log("contructor route params=>\n"+res);
@@ -95,27 +97,27 @@ export class TareaFormComponent implements OnInit {
     }
     this.resApi.resCargando('Espere...');
     if(this.flag){
-      this.tarServ.patchTarea(localStorage.getItem('token')!, this.tarea!).subscribe(res => {
+      this.tarServ.patchTarea(localStorage.getItem('token')!, this.tarea!).subscribe({next:(res) => {
         switch(res.status) { 
           case 201: { 
-            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
+            this.localizationService.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
              break; 
           }
           case 202: { 
-            this.resApi.resMensajeSucBtn('Tarea modificada con éxito');
+            this.localizationService.getString("mensajesInformacion.202PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
              break; 
           }
-          case 0: { 
-            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+          case 400: { 
+            this.localizationService.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
              break; 
           } 
           default: { 
              break; 
           } 
         }
-      },(err)=>{
+      },error:(err)=>{
         this.resApi.resMensajeErrBtn(err.error.message);
-      });
+      }});
       
     }else{
 /*
@@ -125,45 +127,45 @@ export class TareaFormComponent implements OnInit {
       console.log(this.idSuper);
 */
       if(this.paramId){
-        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe(res => {
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
-              this.resApi.resMensajeSucBtn('Tarea creada con éxito');
-              this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
+              this.localizationService.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
+              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tarea/"+res.id));
                break; 
             }
             case 400: { 
-              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+              this.localizationService.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
                break; 
             } 
             default: { 
-              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+              this.localizationService.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
                break; 
             } 
           } 
-        },(err)=>{
+        },error:(err)=>{
           this.resApi.resMensajeErrBtn(err.error.message);
-        });
+        }});
       }else{
-        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe(res => {
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
-              this.resApi.resMensajeSucBtn('Tarea creada con éxito');
-              this.resApi.resMensajeWrnBtnRedir('¿Desea especificar una ubicación para esta tarea?',"/tarea/"+res.id);
+              this.localizationService.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
+              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tarea/"+res.id));
                break; 
             }
             case 400: { 
-              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+              this.localizationService.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
                break; 
             } 
             default: { 
-              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+              this.localizationService.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
                break; 
             } 
           } 
-        },(err)=>{
+        },error:(err)=>{
           this.resApi.resMensajeErrBtn(err.error.message);
-        });
+        }});
       }
     }
     

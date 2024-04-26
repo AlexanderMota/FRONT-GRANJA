@@ -1,0 +1,60 @@
+{
+    "welcomeMessage": "¡Bienvenido a nuestra aplicación!",
+    "botones": {
+        "enviar": "Enviar",
+        "aceptar": "Aceptar",
+        "confirmar": "Confirmar",
+        "guardar":"Guardar",
+        "guardarCambios":"Guardar cambios",
+        "reservar": "Reservar",
+        "editar": "Editar",
+        "cancelar": "Cancelar",
+        "borrar": "Borrar",
+        "eliminar": "Eliminar",
+        "guardaTarea":"Guardar tarea",
+        "nuevaSubtarea": "Nueva subtarea",
+        "nuevoEmpleado":"Nuevo empleado",
+        "nuevoVehiculo":"Registrar vehiculo",
+        "nuevaParada":"Añadir parada",
+        "navegacion":"Navegación",
+        "nav1":"Tareas",
+        "nav2":"Empleados",
+        "nav3":"Solicitudes",
+        "nav4":"Gráficos",
+        "nav5":"Mapas",
+        "nav6":"Transporte"
+    },
+    "mensajesError": {
+        "requiredField": "Este campo es obligatorio.",
+        "invalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
+        "errorIdTareaPath":"Ha habido un error en la carga del identificador de la tarea.",
+        "errTareaNoEliminada":"La tarea no se eliminó correctamente.",
+        "nombreEmpleadoNoExiste":"No hay usuarios con ese nombre.",
+        "desconocido":"Algo ha ido mal."
+    },
+    "mensajesInformacion": {
+        "espere":"Espere...",
+        "requiredField": "Este campo es obligatorio.",
+        "invalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
+        "tareaEliminadaCorrecto":"Tarea eliminada correctamente.",
+        "infoUbiNuevaTarea":"¿Desea especificar una ubicación para esta tarea?",
+        "infoGuardarUbi":"¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.",
+        "infoGuardaNuevaParada":"¿Seguro que desea guardar esta ubicación? Tenga en cuenta que se compromete a acudir los días y horas que indique.",
+        "infoReservaPlaza":"¿Seguro que desea reservar plaza en esta parada? Tenga en cuenta que se compromete a acudir los días y horas que indique.",
+        "sesionExpirada":"La sesión ha expirado. Vuelva a iniciar sesion.",
+        "201PatchTarea":"Tarea creada con éxito.",
+        "202PatchTarea":"Tarea modificada con éxito."
+    },
+    "encabezados":{
+        "atencionTitulo": "ATENCIÓN",
+        "guardaTarea":"Nueva tarea",
+        "editarTarea":"Editar tarea",
+        "guardaSubTarea":"Crea subtarea",
+        "nuevaUbicacion":"Nueva ubicación",
+        "editaUbicacion":"Edita ubicación",
+        "guardaVehiculo":"Nuevo vehículo"
+    },
+    "colecciones":{
+        "rangoImportancia":["Crítica","Alta","Media","Baja"]
+    }
+}

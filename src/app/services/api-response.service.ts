@@ -31,7 +31,7 @@ export class ApiResponseService {
       }
     });
   }
-  resMensajeSucBtnCancBtn(titulo:string,
+  resMensajeQuesBtnCancBtn(titulo:string,
     msn:string,btnAccTxt:string,
     btnCancel:boolean,btnCancTxt:string):Promise<SweetAlertResult<any>>{
     return Swal.fire({
@@ -85,7 +85,7 @@ export class ApiResponseService {
       confirmButtonText: btnAccTxt,
       cancelButtonText: btnCancTxt,
       inputOptions:opciones,
-      inputLabel: "Vehículo: ",
+      inputLabel: "Vehículo: "
        
       //didOpen: () => {
         //const today = (new Date());

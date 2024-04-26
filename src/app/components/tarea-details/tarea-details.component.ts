@@ -12,6 +12,8 @@ import { TareaService } from 'src/app/services/tarea.service';
 import { Location } from '@angular/common';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
+//import {  } from '../../../assets/textos/strings.json';
+import { LocalizationService } from '../../services/localization.service';
 
 @Component({
   selector: 'app-tarea-details',
@@ -30,23 +32,34 @@ export class TareaDetailsComponent implements OnInit {
   showP3 : boolean= false;
   flag : boolean= false;
   showPEmpD : boolean= false;
+  showParadas: boolean= false;
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
   paramId : string = "";
   ubi:UbicacionModel=new UbicacionModel();
+  paradas:{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}={idUbicacion:"",fechasRecogida:[]};
 
   //@Input() oculto:boolean = false;
+  botonAnadirSubtarea = "";//this.localizationService.getString("welcomeMessage");
+  botonBorrar = "";//this.localizationService.getString('botones.editar');
+  botonEditar = "";//this.localizationService.getString('botones.borrar');
+  botonNuevoEmp = "";
+
+
 
   constructor(
     private tarServ:TareaService,
     private empServ: EmpleadoService,
+    private ubiServ: UbicacionService,
     private actRoute:ActivatedRoute,
-    private resPop:ApiResponseService) {
-    
+    private resPop:ApiResponseService,
+    private localizationService: LocalizationService) {
+
+
     this.actRoute.params.subscribe(async params=>{
       if(params['id']){
         this.paramId = params['id'];
-        console.log(this.paramId);
+        //console.log(this.paramId);
         await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
         .subscribe(res1=>{
           this.tarea=res1;
@@ -57,7 +70,7 @@ export class TareaDetailsComponent implements OnInit {
           //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
         });
       }else{
-        console.log("algo ha ido mal al cargar la tarea");
+        this.localizationService.getString("errorIdTareaPath").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
       }
     });
     //console.log("---idTarea: " + this.tarea.nombre + "\n---ubi: " + this.ubi._id );
@@ -69,6 +82,11 @@ export class TareaDetailsComponent implements OnInit {
 
   ngOnInit(): void { 
     //this.resaltarRango();
+
+    this.localizationService.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
+    this.localizationService.getString('botones.editar').subscribe(val => this.botonEditar = val);
+    this.localizationService.getString('botones.eliminar').subscribe(val => this.botonBorrar = val);
+    this.localizationService.getString('botones.nuevoEmpleado').subscribe(val => this.botonNuevoEmp = val);
   }
 
   async borraTarea(){
@@ -76,9 +94,9 @@ export class TareaDetailsComponent implements OnInit {
     await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id).subscribe(res=>{
       const flag = res;
       if(flag){
-        this.resPop.resMensajeSucBtnRedir("Tarea eliminada correctamente.","tareas")
+        this.localizationService.getString("tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
       }else{
-        this.resPop.resMensajeErrBtn("La tarea no se eliminó correctamente.")
+        this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
       }
     })
   }
@@ -86,7 +104,7 @@ export class TareaDetailsComponent implements OnInit {
   abreFormTarea(flag:boolean){
     this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
       this.departamentos = res;
-      this.imps = ["Crítica","Alta","Media","Baja"];
+      this.localizationService.getArray("colecciones.rangoImportancia").subscribe(val=>{this.imps = val});
       //console.log(res);
     });
     this.flag = flag;
@@ -118,12 +136,15 @@ export class TareaDetailsComponent implements OnInit {
     
     location.reload();
   }
+  emiteCierraVentana2(){
+    this.showParadas = false;
+  }
   async agregaTrabajadorATarea(idEmpleado:string){
     const flag = await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
       if(flag){
-        this.resPop.resMensajeSucBtnRedir("Tarea eliminada correctamente.","tareas")
+        this.localizationService.getString("mensajesInformacion.tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
       }else{
-        this.resPop.resMensajeErrBtn("La tarea no se eliminó correctamente.")
+        this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
       };});
     this.showPEmpD = false;
   }
@@ -140,7 +161,36 @@ export class TareaDetailsComponent implements OnInit {
   receiveMessageFormUbi($event: boolean){
     this.showP3 = $event;
   }
+  receiveMessageEliminaParada($event:{idUbicacion:string, fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}){
+    this.paradas = $event;
+    this.showParadas = true;
+  }
+  eliminaParada(fechaRecogida: {
+    fechaInicio: Date,
+    fechaFin: Date,
+    vehiculo: string}){
+    this.ubiServ.deleteParada(localStorage.getItem("token")!,fechaRecogida,this.paradas.idUbicacion).subscribe(val => {
+      if(val.status == 200){
+        this.paradas.fechasRecogida = this.paradas.fechasRecogida.filter((elemento) => {
+          // Compara cada propiedad del elemento con las propiedades del elemento a eliminar
+          return elemento.fechaInicio !== fechaRecogida.fechaInicio ||
+                 elemento.fechaFin !== fechaRecogida.fechaFin ||
+                 elemento.vehiculo !== fechaRecogida.vehiculo;
+        });
+
+      }
+    });
+  }
   
+  receiveMessageEditaParada($event: { idUbicacion: string; titulo: string; descripcion: string; longitud: number; latitud: number; }) {
+    this.ubi._id = $event.idUbicacion;
+    this.ubi.titulo = $event.titulo;
+    this.ubi.descripcion = $event.descripcion;
+    this.ubi.longitud = $event.longitud;
+    this.ubi.latitud = $event.latitud;
+    console.log("idUbi antes de enviar: "+this.ubi._id);
+    this.receiveMessageFormUbi(true);
+  }
   // pruebas calendario parada
   /*resaltarRango(): void {
     // Obtener la fecha de inicio y fin del rango deseado

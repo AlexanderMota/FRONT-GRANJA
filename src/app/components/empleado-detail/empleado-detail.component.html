@@ -1,12 +1,4 @@
 
-<style>
-    
-    .detailEmpleado{
-        max-width: 540px; 
-        margin-top: 20px; 
-        align-self: center;
-    }
-</style>
 <div  [routerLink]="['/empleado',empleado._id]"  class="detailEmpleado card mb-3">
     <div class="row g-0">
         <!--<div class="col-md-4">
@@ -14,9 +6,9 @@
         </div>-->
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">{{empleado.nombre}}</h5>
-                <p class="card-text">{{empleado.apellidos}}</p>
-                <p class="card-text"><small class="text-muted">{{empleado.email}} - {{empleado.telefono}}</small></p>
+                <h4 class="card-title">{{empleado.nombre }} {{empleado.apellidos}}</h4>
+                <p class="card-text"><small class="text-muted">{{empleado.email}} // {{empleado.telefono}}</small></p>
+                <p class="card-text">{{empleado.rol}}</p>
                 <div>
                     <img  class="img-logo" src="../../../assets/img/batman.png" width="300px" alt="Marvel">
                 </div>

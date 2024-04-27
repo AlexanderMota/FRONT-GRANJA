@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-app-menu-mapa {
+/*app-menu-mapa {
     position: fixed;
     top: 20px;
     left: 20px;
     z-index: 999;
-}
+}*/
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

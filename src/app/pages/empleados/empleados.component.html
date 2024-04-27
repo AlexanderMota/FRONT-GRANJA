@@ -3,7 +3,11 @@
   <h2 class="container"> 
     <small class="text-muted">{{posttitulo}}</small>
   </h2>
-  <button type="button" class="btn btn-primary" (click)="abreVentana()">Nuevo empleado</button>
+  <div>
+    <button type="button" class="btn btn-primary" (click)="abreVentana()">Nuevo empleado</button>
+    <button (click)="cambiaPaginaEmpleado(-1)"><img #botonIzq class="btnIzqNav" src="../../../assets/images/icons/arrow-circle.png" alt=""></button>
+    <button (click)="cambiaPaginaEmpleado(1)"><img #botonDer class="btnDerNav" src="../../../assets/images/icons/arrow-circle.png" alt=""></button>
+  </div>
 
 </div>
 <hr>

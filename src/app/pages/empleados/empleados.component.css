@@ -1,0 +1,9 @@
+.btnIzqNav, .btnDerNav{
+    width: 40px;
+    background-color: #0d6efd;
+    border-radius: 25px;
+    margin: 0px 0px 0px 10px;
+}
+.btnDerNav{
+    rotate: 180deg;
+}

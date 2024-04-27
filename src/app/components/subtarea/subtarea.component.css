@@ -5,24 +5,11 @@
     flex-direction: row;
 }
 .subtarea{
-    min-width: 300px;
+    min-width: 400px;
+    width: 400px;
     margin: 0 10px 0 0;
-    height: 330px;
+    height: 300px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

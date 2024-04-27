@@ -5,7 +5,7 @@ export class EmpleadoModel{
   centroTrabajo: string="";
   nombre: string ="";
   apellidos: string ="";
-  rol: { nombre: string} ={ nombre: ""};
+  rol: string="";
   telefono: string ="";
   email: string ="";
   password: string ="";

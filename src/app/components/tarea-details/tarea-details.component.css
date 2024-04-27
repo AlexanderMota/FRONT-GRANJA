@@ -1,32 +1,178 @@
-
-.contenedor{
+.container {
     width: 100%;
     padding-bottom: 30px;
 }
-.cuerpoTarj{
-    display: flex;
-    flex-direction: row;
-    margin: 20px;
-    padding: 0px;
+
+.card-body {
+    padding: 20px;
 }
-.detalles{
+
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.inputs {
     width: 100%;
-    padding-right: 0px;
 }
-.topTarea{
+
+.info-section {
+    margin-top: 20px;
+}
+
+.infoPlantilla {
+    font-size: 18px;
+}
+
+.description {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.button-group {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    margin-top: 20px;
 }
-.empleados{
+
+.employees {
     display: flex;
     flex-direction: column;
     margin: 20px;
     width: 400px;
 }
-.btnNuevoEmp{
+
+.newEmpButton {
+    margin-top: 20px;
+}
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 100px 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    z-index: 99;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+}
+
+.employeesDisp {
+    padding: 10px;
+    margin: 10px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.subtitle {
+    color: white;
+    margin: 0;
+    padding: 10px;
+    background-color: #343a40;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.contenedor {
+    width: 100%;
+    padding-bottom: 30px;
+}
+
+.cuerpoTarj {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    padding: 0px;
+}
+
+.detalles {
+    width: 100%;
+    padding-right: 0px;
+}
+
+.topTarea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.empleados {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    width: 400px;
+}
+
+.btnNuevoEmp {
     text-align: center;
 }
+
 .modalcEmp {
     position: fixed;
     top: 0;
@@ -40,20 +186,24 @@
     overflow-y: auto;
     z-index: 99;
 }
-.empleadosDisp{
+
+.empleadosDisp {
     padding: 10px;
     margin: 10px;
     max-height: 500px;
     overflow: auto;
 }
+
 .modalcEmp-content {
     width: 100%;
     max-width: 400px;
 }
+
 .modalcEmp-container {
     background-color: white;
     border-radius: 10px;
 }
+
 .botonCerrar {
     margin-left: 361px;
     width: 40px;
@@ -62,23 +212,28 @@
     color: white;
     border-radius: 0 9px 0 0;
 }
-.subtareas{
+
+.subtareas {
     margin: 20px;
     padding: 0px;
 }
-.comentarios{
+
+.comentarios {
     margin: 20px;
     padding: 0px;
 }
-.cuadroTxt{
+
+.cuadroTxt {
     height: 250px;
     padding: 3px;
 }
-.mapa{
+
+.mapa {
     height: 500px;
     margin: 10px 20px 0 20px;
     border-radius: 5px;
 }
-.h5letrero{
-    color:white;
+
+.h5letrero {
+    color: white;
 }

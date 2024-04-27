@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
   { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
 
-  { path: 'registro', component: RegistroComponent },
+  { path: 'registro', component: RegistroComponent, canActivate: [ AuthGuard ] },
   { path: 'login', component: LoginComponent },
   
   { path: 'mapas', component:MapasComponent, loadChildren: () => import('./mapas/mapas.module').then(m => m.MapasModule ), canActivate: [ AuthGuard ] },

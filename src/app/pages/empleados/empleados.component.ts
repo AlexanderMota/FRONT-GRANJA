@@ -13,6 +13,10 @@ export class EmpleadosComponent implements OnInit {
   titulo="Empleados";
   posttitulo="Lista de todos los empleados en plantilla";
   nuevo="Nuevo empleado";
+  pagina = 1;
+  tamañoPag = 20;
+  botonIzq: HTMLButtonElement = document.getElementById("botonIzq")as HTMLButtonElement;
+  botonDer: HTMLButtonElement = document.getElementById("botonDer")as HTMLButtonElement;
 
   empleados : EmpleadoModel[] = [];
   roles : { nombre:string }[] = [];
@@ -20,12 +24,16 @@ export class EmpleadosComponent implements OnInit {
   constructor(private empServ:EmpleadoService) { }
 
   ngOnInit(): void {
-    
-    this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe(res=>{
+    /*if (this.pagina <= 1) {
+      this.botonIzq!.disabled = true;
+    } else {
+      this.botonIzq!.disabled = false;
+    }*/
+    this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe({next:res=>{
       this.empleados = res;
       this.ordenaEmpleadosNombre();
       //console.log(this.empleados);
-    });
+    },error:err=>{}});
   }
   
   abreVentana(): void{
@@ -54,8 +62,8 @@ export class EmpleadosComponent implements OnInit {
   }
   ordenaEmpleadosRol(){
     this.empleados.sort((a, b) => {
-      const nameA = a.rol.nombre.toLowerCase();
-      const nameB = b.rol.nombre.toLowerCase();
+      const nameA = a.rol.toLowerCase();
+      const nameB = b.rol.toLowerCase();
       if (nameA < nameB) {
         return -1;
       }
@@ -64,5 +72,32 @@ export class EmpleadosComponent implements OnInit {
       }
       return 0;
     });
+  }
+  cambiaPaginaEmpleado(move:number){
+    //console.log(move);
+    if(move < 0){
+      if(this.pagina > 1){
+        this.pagina += move;
+        //console.log(this.tamañoPag," - ",this.pagina);
+        this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
+          this.empleados = res;
+          this.ordenaEmpleadosNombre();
+          //console.log(this.empleados);
+        },error:err=>{console.log(err)}});
+      }
+    }else if(move > 0){
+      this.pagina += move;
+      //console.log(this.tamañoPag," - ",this.pagina);
+      this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
+        if(res.length < 1){
+          this.pagina -= move;
+        }else{
+          this.empleados = res;
+          this.ordenaEmpleadosNombre();
+          //console.log(this.empleados);
+        }
+        //console.log(this.empleados);
+      },error:err=>{console.log(err)}});
+    }
   }
 }

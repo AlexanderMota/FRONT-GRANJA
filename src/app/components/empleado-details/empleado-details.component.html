@@ -6,13 +6,15 @@
     flex-wrap: wrap;
   }
 </style>
-<div class="container container-fluid card">
+<div class="container card contPrincipal">
     
-  <app-empleado-detail [empleado]="empleado">
-    </app-empleado-detail> 
-    <div class="container-lg  card">
-        <app-tarea-card  
-          [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
-        </app-tarea-card>  
-    </div>
+  <app-empleado-detail [empleado]="empleado"></app-empleado-detail> 
+  <div class="container-lg  card" *ngIf="tareas && tareas.length > 0;  else sinTars">
+      <app-tarea-card  
+        [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
+      </app-tarea-card>  
+  </div> 
+  <ng-template class="container-lg  card" #sinTars >
+      <p>Empleado sin tareas</p>
+  </ng-template>
 </div>

@@ -12,11 +12,12 @@ export class EmpleadoCardComponent implements OnInit {
   @Input() index:number = 0;
   
   constructor() { 
-    //console.log(this.index + "-" + this.empleado);
+    //console.log(this.empleado);
   }
 
   ngOnInit(): void {
     //this.empleado = this.empleado;
+    console.log(this.empleado);
   }
 
 }

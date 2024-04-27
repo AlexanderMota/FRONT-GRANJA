@@ -4,7 +4,7 @@
         <h5 class="card-title">{{ empleado.nombre }}</h5>
         <h5 class="card-text">{{ empleado.apellidos }}</h5>
         <h5 class="card-text">{{ empleado.email }}</h5>
-        <h5 class="card-text">{{ empleado.rol.nombre }}</h5>
+        <h5 class="card-text">{{ empleado.rol }}</h5>
             
         <!-- linkear botones registrando la ruta en routes -->
         <a  [routerLink]="['/empleado',empleado._id]" class="btn btn-primary bg-dark">Ver mas...</a>

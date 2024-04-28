@@ -16,7 +16,10 @@ import { TareaService } from 'src/app/services/tarea.service';
   styleUrls: ['./tareas.component.css']
 })
 export class TareasComponent implements OnInit {
+  private rol="";
+  private permisos = ["ADMIN", "Director", "RRHH","Gerente"];
 
+  visible = false;
   showP : boolean= false;
   titulo="Tareas";
   posttitulo="Lista de todas las tareas disponibles";
@@ -35,7 +38,9 @@ export class TareasComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    console.log(localStorage.getItem('centroActual'));
+    this.rol = localStorage.getItem('rol')!;
+    this.visible = this.permisos.includes(this.rol);
+    //console.log(localStorage.getItem('centroActual'));
       if(localStorage.getItem('centroActual')){
         this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
           if(res instanceof ApiResponse){
@@ -76,7 +81,7 @@ export class TareasComponent implements OnInit {
         }});
         
       }else{
-        
+        console.log("No aparece registrado como empleado de ningún centro.");
       };
     /*await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{

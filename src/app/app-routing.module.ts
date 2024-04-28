@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { EmpleadosComponent } from './pages/empleados/empleados.component';
-import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
-import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
+import { HomeComponent } from './pages/home/home.component';
+import { EmpleadosComponent } from './pages/empleados/empleados.component';
+import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
+import { TareaComponent } from './pages/tarea/tarea.component';
 import { TareasComponent } from './pages/tareas/tareas.component';
 import { SolicitudComponent } from './pages/solicitud/solicitud.component'
-import { TareaComponent } from './pages/tarea/tarea.component';
+import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { GraficasComponent } from './graficos/graficas.component'
 import { MapasComponent } from './mapas/mapas.component'
-import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
 
 const routes: Routes = [

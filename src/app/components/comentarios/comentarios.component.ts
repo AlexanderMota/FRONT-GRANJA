@@ -29,10 +29,10 @@ export class ComentariosComponent implements OnInit {
         this.idTarea = params['id'];
         await this.commServ.getAllComentariosByIdTarea(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{
-          if (res instanceof ApiResponse){
-            console.log(res.message);
+          if ((res as ApiResponse).status){
+            console.log((res as ApiResponse).message);
           }else{
-            this.comentarios=res as [ComentarioModel];
+            this.comentarios=res as ComentarioModel[];
           }
           //console.log("comentarios paramID: " + this.comentarios[0].descripcion);
         });
@@ -52,7 +52,7 @@ export class ComentariosComponent implements OnInit {
     this.resApi.resCargando('Espere...');
 
     this.comentario.idTarea = this.idTarea;
-    this.comentario.idAutor = "000";
+    this.comentario.idAutor = localStorage.getItem("miid")!;
     console.log(this.comentario);
     this.commServ.postComentarioByIdTarea(localStorage.getItem("token")!, this.comentario!).subscribe({next:(res) => {
       switch(res.status) { 

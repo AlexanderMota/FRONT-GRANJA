@@ -22,6 +22,7 @@
 
 .infoPlantilla {
     font-size: 18px;
+    margin: 0px 20px 20px 0px;
 }
 
 .description {
@@ -165,7 +166,7 @@
 .empleados {
     display: flex;
     flex-direction: column;
-    margin: 20px;
+    margin: 20px 20px 20px 0px;
     width: 400px;
 }
 
@@ -226,6 +227,7 @@
 .cuadroTxt {
     height: 250px;
     padding: 3px;
+    margin: 0px 20px 15px 0px;
 }
 
 .mapa {

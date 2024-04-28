@@ -3,7 +3,7 @@
   <h2 class="container"> 
     <small class="text-muted">{{posttitulo}}</small>
   </h2>
-  <div>
+  <div *ngIf="visible">
     <button type="button" class="btn btn-primary" (click)="abreVentana()">Nuevo empleado</button>
     <button (click)="cambiaPaginaEmpleado(-1)"><img #botonIzq class="btnIzqNav" src="../../../assets/images/icons/arrow-circle.png" alt=""></button>
     <button (click)="cambiaPaginaEmpleado(1)"><img #botonDer class="btnDerNav" src="../../../assets/images/icons/arrow-circle.png" alt=""></button>

@@ -30,8 +30,8 @@ export class MapaMenuComponent {
   eventoEmiteReiniciaMapa = new EventEmitter<boolean>();
   @Output() 
   eventoEmiteVerTransportes = new EventEmitter<boolean>();
-  @Output() 
-  eventoEmiteEliminaParada = new EventEmitter<boolean>();
+  //@Output() 
+  //eventoEmiteEliminaParada = new EventEmitter<boolean>();
   
   @Input() 
   inputSearchValue: string = '';
@@ -48,18 +48,20 @@ export class MapaMenuComponent {
   muestraMenu = false;
   muestraMenuEstilos = false;
   muestraBarraBusca = false;
-  muestraRuta = true;
+  muestraParadas= false;
+  //muestraRuta = true;
   //muestraIndicaciones = false;
   estilosMapa = EstilosMapBoxEnum.getArray();
   estiloSelect = this.estilosMapa[5].url;
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
   medioSelect = this.mediosMapa[1].clave;
-  muestraParadas= true;
   nuevaUbiCadena = "";
+  paradaCadena = "";
 
   constructor(private ubiServ : UbicacionService,
     private localizationService: LocalizationService) { 
       this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
+      this.localizationService.getString("botones.verParadas").subscribe(val => this.paradaCadena = val);
     }
 
   ngOnInit(): void {
@@ -96,7 +98,7 @@ export class MapaMenuComponent {
     this.muestraMenu = false;
     this.muestraMenuEstilos = false;
     this.muestraBarraBusca = true;
-    this.indicaciones = new MapBoxLeg;
+    //this.indicaciones = new MapBoxLeg;
   }
   buscaUbicacion(str:string){
 
@@ -127,18 +129,28 @@ export class MapaMenuComponent {
   }
   sendVerTransportes(){
     this.muestraParadas = !this.muestraParadas;
+    if(this.muestraParadas){
+      this.localizationService.getString("botones.ocultaParadas").subscribe(val => this.paradaCadena = val);
+      //if(!this.nuevaUbi){this.activaNuevaUbi(); this.nuevaUbi = false;}
+    }else{
+      this.localizationService.getString("botones.verParadas").subscribe(val => this.paradaCadena = val);
+    }
     this.eventoEmiteVerTransportes.emit(this.muestraParadas);
   }
   activaNuevaUbi(){
-    this.muestraOcultaMenu();
+    //this.muestraOcultaMenu();
     this.nuevaUbi = !this.nuevaUbi;
     if(this.nuevaUbi){
+      //console.log(this.nuevaUbi);
       this.localizationService.getString("botones.navegacion").subscribe(val => this.nuevaUbiCadena = val);
+      //this.muestraParadas = false;
     }else{
+      //console.log(this.nuevaUbi);
       this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
+      //if(this.muestraParadas){this.sendVerTransportes()}
     }
     this.eventoEmiteFormUbi.emit(this.nuevaUbi);
-    this.eliminaParada = false;
+    //this.eliminaParada = false;
   }
   activaEliminaParada(){
     this.muestraOcultaMenu();
@@ -148,7 +160,7 @@ export class MapaMenuComponent {
     }else{
       //this.localizationService.getString("botones.eliminar").subscribe(val => this.nuevaUbiCadena = val);
     }
-    this.eventoEmiteEliminaParada.emit(this.eliminaParada);
+    //this.eventoEmiteEliminaParada.emit(this.eliminaParada);
     this.nuevaUbi = false;
   }
   /*ocultaIndicaciones(){

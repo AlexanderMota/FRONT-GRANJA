@@ -16,6 +16,8 @@
         "nuevoEmpleado":"Nuevo empleado",
         "nuevoVehiculo":"Registrar vehiculo",
         "nuevaParada":"Añadir parada",
+        "verParadas":"Ver paradas",
+        "ocultaParadas":"Oculta paradas",
         "navegacion":"Navegación",
         "nav1":"Tareas",
         "nav2":"Empleados",

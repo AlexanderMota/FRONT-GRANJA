@@ -35,6 +35,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   private eventoEmiteEditaParada = new EventEmitter<{idUbicacion:string,titulo:string,descripcion:string, longitud:number, latitud:number}>();
   
   nuevaUbiActivo = false;
+  verParadasActivo = false;
   eliminaParadaActivo = false;
   
   @Input() 
@@ -45,6 +46,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
   mapa!:mapboxgl.Map;
   private ubiCentro:UbicacionModel = new UbicacionModel();
   private medio : string = MediosTransporteMapBoxEnum.conduccion;
+  private paradas : UbicacionModel[] = [];
+  private clickHandlerVerRuta!: ((event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => void);
+  private clickHandlerNuevaUbi!: ((event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => void);
+
   marcadores:mapboxgl.Marker[] = [];
   nombrePuntoPartida:string="";
   indicaciones: MapBoxLeg = new MapBoxLeg;
@@ -63,7 +68,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.iniciaMapa();
     this.muestraCentroTrabajo();
-    this.clickMapaActivo();
+    this.clickMapaVerRutaActivo();
   }
 
   private iniciaMapa(){
@@ -73,34 +78,47 @@ export class MapaComponent implements OnInit, AfterViewInit {
       style: EstilosMapBoxEnum.Satélite,
       center: [-0.4904,38.3464], // starting position
       zoom: 10
-    });
+    }); 
     // Agregar barra de navegación
     this.mapa.addControl(new mapboxgl.NavigationControl());
   }
   
-  clickMapaActivo(){
-    this.mapa.on('click', event => {
+  clickMapaVerRutaActivo(){
+    this.mapa.on('click',this.clickHandlerVerRuta = event => {
       //console.log(event.lngLat);
       this.agregarMarcador(event.lngLat, true);
-      if(!this.nuevaUbiActivo){
-        this.ubiServ.getMapBoxRoute(this.medio, 
-          [event.lngLat.lng,event.lngLat.lat],
-          [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-          this.indicaciones = res.routes[0].legs[0];
-          this.borraRuta();
-          this.pintaRuta(res.routes[0].geometry.coordinates);
-        });
-      }else{ 
-        this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
-        this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
-        this.localizationService.getString("mensajesInformacion.infoGuardarUbi").subscribe(msg => {
-        this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
-        this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg,btnAcc,true,btnCan).then(value => {
-        if(value.isConfirmed){
-          this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
-        }})})})})});
-      }
+      this.ubiServ.getMapBoxRoute(this.medio, 
+        [event.lngLat.lng,event.lngLat.lat],
+        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
+        this.borraRuta();
+        this.indicaciones = res.routes[0].legs[0];
+        //console.log(this.indicaciones);
+        this.pintaRuta(res.routes[0].geometry.coordinates);
+      });
     });
+  }
+  clickMapaNuevaUbiActivo(){
+    this.mapa.on('click',this.clickHandlerNuevaUbi = event => {
+      //console.log(event.lngLat);
+      this.agregarMarcador(event.lngLat, true);
+      this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
+      this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
+      this.localizationService.getString("mensajesInformacion.infoGuardarUbi").subscribe(msg => {
+      this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+      this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg,btnAcc,true,btnCan).then(value => {
+      if(value.isConfirmed){
+        this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+      }})})})})});
+    });
+  }
+  clickMapaEliminaUbiActivo(){
+    this.mapa.on('click',/*this.clickHandler = */event => {
+      console.log("elimina ubi por implementar: ");
+      console.log(event);
+    });
+  }
+  clickMapaInactivo(cli:((event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => void)){
+    this.mapa.off('click',cli);
   }
   muestraCentroTrabajo(){
     this.actRoute.params.subscribe(async params=>{
@@ -163,8 +181,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
           [this.marcadores[this.marcadores.length-1].getLngLat().lng,
           this.marcadores[this.marcadores.length-1].getLngLat().lat],
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-          this.indicaciones = res.routes[0].legs[0];
           this.borraRuta();
+          this.indicaciones = res.routes[0].legs[0];
           this.pintaRuta(res.routes[0].geometry.coordinates);
         });
         this.ubiServ.getMapBoxUbicacionByCoordenadas(
@@ -197,11 +215,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
 
             this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
             this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
-            this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
             this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+            this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
             this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg, btnAcc, true, btnCan).then(value => {
               if(value.isConfirmed){
-                this.receiveNuevaUbi(false);
+                //this.receiveNuevaUbi(false);
                 this.sendMessageFormUbi(
                   {
                     nombre:this.nombrePuntoPartida,
@@ -233,6 +251,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
     if (this.mapa.getSource('route')) {
       this.mapa.removeLayer('route');
       this.mapa.removeSource('route');
+    }
+  }
+  borraIndicaciones(){
+    if (this.indicaciones.steps.length > 0) {
+      this.indicaciones = new MapBoxLeg();
     }
   }
 
@@ -269,7 +292,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.mapa.removeSource('parada'+i.toString());
     }
   }
-  pintaParadas(dat : [UbicacionModel]){
+  pintaParadas(dat : UbicacionModel[]){
     for( let i = 0; i < dat.length; i++ ){
       this.mapa.addLayer({
         id: 'parada'+i.toString(),
@@ -297,12 +320,12 @@ export class MapaComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  clickParada(dat:[UbicacionModel]){
+  clickParada(dat:UbicacionModel[]){
     for( let i = 0; i < dat.length; i++ ){
       this.mapa.on('click', 'parada'+i.toString(), (e) => {
         // Aquí puedes ejecutar la función que desees cuando se haga clic en la capa
         //console.log(e);
-        this.receiveNuevaUbi(this.nuevaUbiActivo);
+        //this.receiveNuevaUbi(this.nuevaUbiActivo);
         let btnResCad = "";
         let btnEliCad = "";
         let btnEdiCad = "";
@@ -313,7 +336,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
           //console.log(res);
         const popup = new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat([dat[i].longitud,dat[i].latitud]).setHTML(
-          `<h3 style="margin: 5px 0px 0px 0px;">${dat[i].titulo}</h3>
+          `<h3 style="margin: 5px 0px 0px 0px; font-weith:bold;">${dat[i].titulo}</h3>
           <hr class="dropdown-divider" style="margin: 5px 0px;">
           <p style="margin: 5px 0px 15px 0px;">${dat[i].descripcion}</p>
           <div style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -389,8 +412,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
       [$event.center[0],$event.center[1]],
       [this.ubiCentro.longitud,this.ubiCentro.latitud])
       .subscribe(res => {
-        this.indicaciones = res.routes[0].legs[0];
         this.borraRuta();
+        this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -402,8 +425,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
         [this.marcadores[this.marcadores.length-1].getLngLat().lng,
         this.marcadores[this.marcadores.length-1].getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-        this.indicaciones = res.routes[0].legs[0];
         this.borraRuta();
+        this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -416,8 +439,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
         [this.marcadores[this.marcadores.length-1].getLngLat().lng,
         this.marcadores[this.marcadores.length-1].getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-        this.indicaciones = res.routes[0].legs[0];
         this.borraRuta();
+        this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
     }
@@ -432,38 +455,55 @@ export class MapaComponent implements OnInit, AfterViewInit {
       [-0.4243583587732189,38.42475742385676],
       [-0.4306459479518594,38.41862525328767],
       [-0.43286969841986433,38.398432379976356]
-    ]*/
-    
-    //644d82e1c7ea3f680d292941 6450bc74fb1155458be8b170
-    this.ubiServ.getUbiParadasDisp(
-      localStorage.getItem('token')!, 
-      localStorage.getItem('centroActual')!).subscribe(res=>{
+    ]
+    //644d82e1c7ea3f680d292941 6450bc74fb1155458be8b170*/
 
-      if(res instanceof ApiResponse){
-        console.log(res.message);
-      }else{
-        if($event){
-          this.ocultaParadas(res.length);
-        }else{
-          this.pintaParadas(res);
-          this.clickParada(res);
+    if($event){
+      //this.clickMapaVerRutaActivo();
+      this.ubiServ.getUbiParadasDisp(
+        localStorage.getItem('token')!, 
+        localStorage.getItem('centroActual')!).subscribe(res=>{
+
+        if((res as ApiResponse).status){
+          console.log((res as ApiResponse).message);
+          this.borraMarcadorClick();
+          this.borraRuta();
+          //this.clickMapaVerRutaActivo();
+        }else{ 
+          this.borraMarcadorClick();
+          this.clickMapaInactivo(this.clickHandlerVerRuta);
+          this.clickMapaInactivo(this.clickHandlerNuevaUbi);
+          this.paradas = res as UbicacionModel[];
+          this.pintaParadas(this.paradas);
+          this.clickParada(this.paradas);
+          this.borraRuta();
         }
-      }
-    });
+      });
+    }else{
+      this.ocultaParadas(this.paradas.length);
+    }
   }
   receiveNuevaUbi($event: boolean){
     this.nuevaUbiActivo = $event;
     this.borraRuta();
     this.borraMarcadorClick();
-    this.indicaciones = new MapBoxLeg;
-    this.eliminaParadaActivo = false;
+    if($event){
+      this.clickMapaInactivo(this.clickHandlerVerRuta);
+      this.clickMapaNuevaUbiActivo();
+    }else{
+      this.clickMapaInactivo(this.clickHandlerNuevaUbi);
+      this.clickMapaVerRutaActivo(); 
+    }
+    //this.indicaciones = new MapBoxLeg;
+    //this.eliminaParadaActivo = false;
     //console.log($event);
   }
-  receiveEliminaParada($event: boolean){
+  /*receiveEliminaParada($event: boolean){
     this.eliminaParadaActivo = $event;
     this.borraRuta();
     this.borraMarcadorClick();
-    this.indicaciones = new MapBoxLeg;
+    //this.clickMapaInactivo();
+    this.clickMapaEliminaUbiActivo();
     this.nuevaUbiActivo = false;
-  }
+  }*/
 }

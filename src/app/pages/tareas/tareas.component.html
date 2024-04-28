@@ -4,7 +4,7 @@
   <h2 class="container"> 
     <small class="text-muted">{{posttitulo}}</small>
   </h2>
-  <button type="button" class="btn btn-primary" (click)="abreVentana()">Nueva tarea</button>
+  <button *ngIf="visible" type="button" class="btn btn-primary" (click)="abreVentana()">Nueva tarea</button>
 </div>
 <hr>
 <div class="container">

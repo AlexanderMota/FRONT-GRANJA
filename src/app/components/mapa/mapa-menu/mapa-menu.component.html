@@ -3,18 +3,18 @@
     <li class="list-group-item" (click)="muestraOcultaBarraBusca()">Buscar</li>
     <li class="list-group-item" (click)="muestraOcultaMenuEstilos()">Estilo mapa</li>
 
-    <li><hr class="dropdown-divider"></li>
+    <!--<li><hr class="dropdown-divider"></li>-->
 
     <li *ngFor="let item of menuItems" [routerLink]="[item.ruta]" 
         class="list-group-item" routerLinkActive="active">
         {{ item.nombre }}
     </li>
-    <li class="list-group-item" (click)="sendVerTransportes()">Transportes</li>
+    <li class="list-group-item" (click)="sendVerTransportes()">{{paradaCadena}}</li>
     <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte</li>
     <li class="list-group-item" (click)="activaNuevaUbi()">{{nuevaUbiCadena}}</li>
-    <li class="list-group-item" (click)="activaEliminaParada()">Elimina Parada</li>
+    <!--<li class="list-group-item" (click)="activaEliminaParada()">Elimina Parada</li>-->
 
-    <li><hr class="dropdown-divider"></li>
+    <!--<li><hr class="dropdown-divider"></li>-->
     
     <li class="list-group-item" (click)="reiniciaMapa()">Reinicia</li>
     <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
@@ -70,8 +70,8 @@
         </li>
     </ul>
 </div>
-<div class="direcciones fadeOutRight"
-    *ngIf='indicaciones.steps.length > 0 && muestraRuta == true'>
+
+<div class="direcciones fadeOutRight" *ngIf="indicaciones.steps.length > 0">
     <ul class="animated fadeInDown">
         <li class="list-group-item"
             *ngFor="let step of indicaciones.steps">

@@ -9,7 +9,10 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
   styleUrls: ['./empleados.component.css']
 })
 export class EmpleadosComponent implements OnInit {
+  private rol="";
+  private permisos = ["ADMIN", "Director", "RRHH","Gerente"];
 
+  visible = false;
   showP : boolean= false;
   titulo="Empleados";
   posttitulo="Lista de todos los empleados en plantilla";
@@ -25,6 +28,8 @@ export class EmpleadosComponent implements OnInit {
   constructor(private empServ:EmpleadoService) { }
 
   ngOnInit(): void {
+    this.rol = localStorage.getItem('rol')!;
+    this.visible = this.permisos.includes(this.rol);
     /*if (this.pagina <= 1) {
       this.botonIzq!.disabled = true;
     } else {

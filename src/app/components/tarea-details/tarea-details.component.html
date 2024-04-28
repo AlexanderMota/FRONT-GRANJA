@@ -101,19 +101,19 @@
             <p class="cuadroTxt card"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
                 
             <!-- linkear botones registrando la ruta en routes -->
-            <button (click)="abreFormTarea(true)" >
+            <button *ngIf='visible' (click)="abreFormTarea(true)" >
                 <a class="btn btn-outline-secondary" >{{botonEditar}}</a>
             </button>
-            <button (click)="abreFormTarea(false)" >
+            <button *ngIf='visible' (click)="abreFormTarea(false)" >
                 <a class="btn btn-outline-info" >{{botonAnadirSubtarea}}</a>
             </button>
-            <button (click)="borraTarea()" >
+            <button *ngIf='visible' (click)="borraTarea()" >
                 <a class="btn btn-outline-warning">{{botonBorrar}}</a>
             </button>
 
         </div>
         
-        <div class="empleados">
+        <div *ngIf='visible' class="empleados">
             <app-empleado-linea class="card " [routerLink]="['/empleado',empleado._id]"
                 [emp]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
             </app-empleado-linea>

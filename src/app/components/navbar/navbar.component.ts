@@ -12,6 +12,7 @@ import { TareaService } from 'src/app/services/tarea.service';
   providers:[AuthService]
 })
 export class NavbarComponent implements OnInit {
+  visible = false;
   autenticado = false;
   supertareas: TareaModel[] = [];
 
@@ -21,6 +22,9 @@ export class NavbarComponent implements OnInit {
   val4 ="";
   val5 ="";
   val6 ="";
+
+  private rol="";
+  private permisos = ["ADMIN", "Director", "RRHH","Gerente"];
 
   constructor(private autServ:AuthService, 
     private route:Router, 
@@ -39,6 +43,8 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.rol = localStorage.getItem('rol')!;
+    this.visible = this.permisos.includes(this.rol);
     this.autenticado = this.autServ.esAutenticado();
     if(this.autenticado){
       this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {

@@ -37,7 +37,7 @@
 
     <div class="btn-group">
       <a class="marca navbar-brand" routerLink="/home">Home</a>
-      <li class="">
+      <li class="" *ngIf="visible">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="#">Action</a></li>
@@ -64,21 +64,21 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/solicitudes">Solicitudes</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="visible">
           <a class="nav-link" routerLink="/graficos">Gráficos</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="visible">
           <a class="nav-link" routerLink="/mapas">Mapas</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="visible">
           <a class="nav-link" routerLink="/transporte">Transporte</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="visible">
           <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
       </ul>
       <div class="d-flex" role="search">
-        <input 
+        <!--<input 
           class="form-control me-2" 
           #txtBuscar 
           (keyup.enter)="busca( txtBuscar.value )"
@@ -87,7 +87,7 @@
           aria-label="Search"/>
         <button class="btn btn-outline-success" type="submit"
           (click)="busca( txtBuscar.value )"
-          style="margin: 0,0,0,20;">Search</button>
+          style="margin: 0,0,0,20;">Search</button>-->
         <button class="btn btn-outline-danger" (click)="logout()">Salir</button>
       </div>
     </div>

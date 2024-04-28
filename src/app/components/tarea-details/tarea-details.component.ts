@@ -33,11 +33,16 @@ export class TareaDetailsComponent implements OnInit {
   flag : boolean= false;
   showPEmpD : boolean= false;
   showParadas: boolean= false;
+  visible: boolean= false;
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
   paramId : string = "";
   ubi:UbicacionModel=new UbicacionModel();
   paradas:{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}={idUbicacion:"",fechasRecogida:[]};
+  private rol = "";
+  private permisos = ["ADMIN","Director","RRHH","Gerente","Comercial","Supervisor","Gestor","Capataz","Coordinador"];
+
+
 
   //@Input() oculto:boolean = false;
   botonAnadirSubtarea = "";//this.localizationService.getString("welcomeMessage");
@@ -89,12 +94,15 @@ export class TareaDetailsComponent implements OnInit {
   }*/
 
   ngOnInit(): void { 
+    this.rol = localStorage.getItem('rol')!;
+    this.visible = this.permisos.includes(this.rol);
     //this.resaltarRango();
-
-    this.localizationService.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
-    this.localizationService.getString('botones.editar').subscribe(val => this.botonEditar = val);
-    this.localizationService.getString('botones.eliminar').subscribe(val => this.botonBorrar = val);
-    this.localizationService.getString('botones.nuevoEmpleado').subscribe(val => this.botonNuevoEmp = val);
+    if(this.visible){
+      this.localizationService.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
+      this.localizationService.getString('botones.editar').subscribe(val => this.botonEditar = val);
+      this.localizationService.getString('botones.eliminar').subscribe(val => this.botonBorrar = val);
+      this.localizationService.getString('botones.nuevoEmpleado').subscribe(val => this.botonNuevoEmp = val);
+    }
   }
 
   async borraTarea(){

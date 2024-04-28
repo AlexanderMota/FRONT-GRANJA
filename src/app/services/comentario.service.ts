@@ -15,8 +15,8 @@ export class ComentarioService {
 
   constructor(private http: HttpClient) { }
 
-  getAllComentariosByIdTarea(token:string, idTarea:string,pageSize = 20,pageNum = 1):Observable<[ComentarioModel] | ApiResponse> {
-    return this.http.get<[ComentarioModel] | ApiResponse>(this.urlComentariosByIdTarea+idTarea, {
+  getAllComentariosByIdTarea(token:string, idTarea:string,pageSize = 20,pageNum = 1):Observable<ComentarioModel[] | ApiResponse> {
+    return this.http.get<ComentarioModel[] | ApiResponse>(this.urlComentariosByIdTarea+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
       }),

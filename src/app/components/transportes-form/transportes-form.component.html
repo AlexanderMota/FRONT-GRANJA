@@ -14,17 +14,19 @@
                                 {{titulo}}
                             </span>
                             
-                            <span *ngIf="registroForm.submitted && registroForm.controls['propietario'].errors"
-                                class="text-danger animated fadeIn">El propietario es obligatorio</span>
-                            <div class="wrap-input100 m-b-16">
-                                <input class="input100" 
-                                    type="text" 
-                                    name="propietario" 
-                                    [(ngModel)]="vehiculo!.propietario"
-                                    required
-                                    placeholder="Propietario">
-            
-                                <span class="focus-input100"></span>
+                            <div *ngIf="visible">
+                                <span *ngIf="registroForm.submitted && registroForm.controls['propietario'].errors"
+                                    class="text-danger animated fadeIn">El propietario es obligatorio</span>
+                                <div class="wrap-input100 m-b-16">
+                                    <input class="input100" 
+                                        type="text" 
+                                        name="propietario" 
+                                        [(ngModel)]="vehiculo!.propietario"
+                                        required
+                                        placeholder="Propietario">
+                
+                                    <span class="focus-input100"></span>
+                                </div>
                             </div>
 
                             <span *ngIf="registroForm.submitted && registroForm.controls['matricula'].errors"

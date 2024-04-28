@@ -10,6 +10,7 @@ import { MapaMenuComponent } from './mapa-menu/mapa-menu.component';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import { LocalizationService } from 'src/app/services/localization.service';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 
 
 @Component({
@@ -107,12 +108,16 @@ export class MapaComponent implements OnInit, AfterViewInit {
         await this.ubiServ.getUbiByIdTarea(
           localStorage.getItem('token')!,params['id'])
         .subscribe(async res=>{
-          this.ubiCentro=res[res.length - 1];
-          if(this.ubiCentro){
-            this.agregarMarcador({lng: this.ubiCentro.longitud,
-              lat: this.ubiCentro.latitud}, false);
-            this.vuelaUbi({lng:this.ubiCentro.longitud,
-              lat:this.ubiCentro.latitud}, 17);
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.ubiCentro=res[res.length - 1];
+            if(this.ubiCentro){
+              this.agregarMarcador({lng: this.ubiCentro.longitud,
+                lat: this.ubiCentro.latitud}, false);
+              this.vuelaUbi({lng:this.ubiCentro.longitud,
+                lat:this.ubiCentro.latitud}, 17);
+            }
           }
         });
       }
@@ -430,24 +435,21 @@ export class MapaComponent implements OnInit, AfterViewInit {
     ]*/
     
     //644d82e1c7ea3f680d292941 6450bc74fb1155458be8b170
-    this.ubiServ.getUbiParadasDisp(localStorage.getItem('token')!, localStorage.getItem('centroActual')!).subscribe(res=>{
-      /*res.forEach(res =>{
-        console.log(res.titulo);
-        console.log(res.longitud);
-        console.log(res.latitud);
-        dat.push([res.longitud,res.latitud])
-      });
-      console.log(dat.length);*/
+    this.ubiServ.getUbiParadasDisp(
+      localStorage.getItem('token')!, 
+      localStorage.getItem('centroActual')!).subscribe(res=>{
 
-      if($event){
-        this.ocultaParadas(res.length);
+      if(res instanceof ApiResponse){
+        console.log(res.message);
       }else{
-        this.pintaParadas(res);
-        this.clickParada(res);
+        if($event){
+          this.ocultaParadas(res.length);
+        }else{
+          this.pintaParadas(res);
+          this.clickParada(res);
+        }
       }
     });
-
-    
   }
   receiveNuevaUbi($event: boolean){
     this.nuevaUbiActivo = $event;

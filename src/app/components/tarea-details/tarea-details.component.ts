@@ -6,7 +6,6 @@ import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ComentarioService } from 'src/app/services/comentario.service';
-import { ComponentMessageService } from 'src/app/services/component-message.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { TareaService } from 'src/app/services/tarea.service';
 import { Location } from '@angular/common';
@@ -14,6 +13,7 @@ import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
 //import {  } from '../../../assets/textos/strings.json';
 import { LocalizationService } from '../../services/localization.service';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 
 @Component({
   selector: 'app-tarea-details',
@@ -61,14 +61,22 @@ export class TareaDetailsComponent implements OnInit {
         this.paramId = params['id'];
         //console.log(this.paramId);
         await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
-        .subscribe(res1=>{
-          this.tarea=res1;
-        });
+        .subscribe({next:res1=>{
+          if((res1 as ApiResponse).status){
+            console.log((res1 as ApiResponse).message);
+          }else{
+            this.tarea=res1 as TareaModel;
+          }
+        },error:err=>console.log(err)});
         await this.empServ.getEmpleadosByTarea(localStorage.getItem('token')!,this.paramId)
-        .subscribe(res2=>{
-          this.empleados=res2;
+        .subscribe({next:res2=>{
+          if ((res2 as ApiResponse).status){
+            console.log((res2 as ApiResponse).message);
+          }else{
+            this.empleados=res2 as [EmpleadoModel];
+          }
           //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
-        });
+        },error:err=>console.log(err)});
       }else{
         this.localizationService.getString("errorIdTareaPath").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
       }
@@ -91,19 +99,23 @@ export class TareaDetailsComponent implements OnInit {
 
   async borraTarea(){
     this.resPop.resCargando('Espere...');
-    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id).subscribe(res=>{
+    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id).subscribe({next:res=>{
       const flag = res;
       if(flag){
         this.localizationService.getString("tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
       }else{
         this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
       }
-    })
+    },error:err=>console.log(err)})
   }
 
   abreFormTarea(flag:boolean){
     this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
-      this.departamentos = res;
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.departamentos = res;
+      }
       this.localizationService.getArray("colecciones.rangoImportancia").subscribe(val=>{this.imps = val});
       //console.log(res);
     });
@@ -140,19 +152,24 @@ export class TareaDetailsComponent implements OnInit {
     this.showParadas = false;
   }
   async agregaTrabajadorATarea(idEmpleado:string){
-    const flag = await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
-      if(flag){
+    await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
+      if(res.status < 220){
         this.localizationService.getString("mensajesInformacion.tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
       }else{
         this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
-      };});
+      };
+    });
     this.showPEmpD = false;
   }
   async muestraEmpleadosDisponibles(){
     if(this.empleadosDisp.length < 1){
       await this.empServ.getEmpleadosByTareaDist(localStorage.getItem('token')!,
         this.paramId).subscribe(res2=>{
-        this.empleadosDisp=res2;
+          if((res2 as ApiResponse).status){
+            console.log((res2 as ApiResponse).message);
+          }else{
+            this.empleadosDisp=res2 as EmpleadoModel[];
+          }
       });
     }
     this.showPEmpD = true;

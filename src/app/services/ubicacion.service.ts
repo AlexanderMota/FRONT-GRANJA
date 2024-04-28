@@ -15,7 +15,7 @@ export class UbicacionService {
   private baseUrl = 'http://localhost:4300/api/ubicacion/';
   private urlUbiByIdTarea = this.baseUrl+"tarea/";
   private urlUbiParadas = this.baseUrl+"paradas/";
-  private urlUbiById = this.baseUrl+"byid/";
+  //private urlUbiById = this.baseUrl+"byid/";
 
   private baseUrlMapBox = 'https://api.mapbox.com/';
   private urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
@@ -57,8 +57,8 @@ export class UbicacionService {
   }
   getAllUbicaciones(token:string,
     pageSize = 20,
-    pageNum = 1) : Observable<[UbicacionModel]> {
-    return this.http.get<[UbicacionModel]>(this.baseUrl, {
+    pageNum = 1) : Observable<[UbicacionModel] | ApiResponse> {
+    return this.http.get<[UbicacionModel] | ApiResponse>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -71,8 +71,8 @@ export class UbicacionService {
   getUbiByIdTarea(token:string, 
     idTarea : string,
     pageSize = 1,
-    pageNum = 1) : Observable<[UbicacionModel]> {
-    return this.http.get<[UbicacionModel]>(this.urlUbiByIdTarea+idTarea, {
+    pageNum = 1) : Observable<[UbicacionModel] | ApiResponse> {
+    return this.http.get<[UbicacionModel] | ApiResponse>(this.urlUbiByIdTarea+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -85,8 +85,8 @@ export class UbicacionService {
   getUbiParadasDisp(token:string, 
     idSuper : string,
     pageSize = 1,
-    pageNum = 1) : Observable<[UbicacionModel]> {
-    return this.http.get<[UbicacionModel]>(this.urlUbiParadas+idSuper, {
+    pageNum = 1) : Observable<[UbicacionModel] | ApiResponse> {
+    return this.http.get<[UbicacionModel] | ApiResponse>(this.urlUbiParadas+idSuper, {
       headers: new HttpHeaders({
         Authorization: token
       }),

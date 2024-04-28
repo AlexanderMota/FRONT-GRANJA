@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { ComentarioModel } from 'src/app/models/comentario.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
@@ -29,7 +30,11 @@ export class SubtareaComponent implements OnInit {
         this.idTarea = params['id'];
         await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{
-          this.subtareas=res;
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.subtareas=res;
+          }
           console.log("comentarios paramID: " + this.subtareas[0]);
         });
       }else{

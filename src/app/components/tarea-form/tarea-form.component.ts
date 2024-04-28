@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, Renderer2, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { ComponentMessageService } from 'src/app/services/component-message.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
@@ -54,11 +54,19 @@ export class TareaFormComponent implements OnInit {
           this.localizationService.getString("botones.guardarCambios").subscribe(val=>this.textBtn = val);
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
-            this.tarea=res;
+            if(res instanceof ApiResponse){
+              console.log(res.message);
+            }else{
+              this.tarea=res;
+            }
             //console.log("contructor route params=>\n"+res);
           });
           this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
-            this.supers[0] = res;
+            if(res instanceof ApiResponse){
+              console.log(res.message);
+            }else{
+              this.supers[0] = res;
+            }
             //console.log("contructor route params=>\n"+res);
           });
         }else{
@@ -72,7 +80,11 @@ export class TareaFormComponent implements OnInit {
           this.idSuper = this.paramId;
           //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
-            this.supers[0] =res;
+            if(res instanceof ApiResponse){
+              console.log(res.message);
+            }else{
+              this.supers[0] =res;
+            }
             //console.log("contructor route params=>\n"+res);
           });
         }
@@ -80,7 +92,11 @@ export class TareaFormComponent implements OnInit {
         this.localizationService.getString("encabezados.guardaTarea").subscribe(val=>this.titulo = val);
         this.localizationService.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
         this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
           this.supers[0] = res;
+          }
           //console.log("contructor route params=>\n"+res);
         });
         this.flag = false;
@@ -131,7 +147,7 @@ export class TareaFormComponent implements OnInit {
           switch(res.status) { 
             case 201: { 
               this.localizationService.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
-              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tarea/"+res.id));
+              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tareas/"));
                break; 
             }
             case 400: { 
@@ -151,7 +167,7 @@ export class TareaFormComponent implements OnInit {
           switch(res.status) { 
             case 201: { 
               this.localizationService.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
-              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tarea/"+res.id));
+              this.localizationService.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tareas/"));
                break; 
             }
             case 400: { 

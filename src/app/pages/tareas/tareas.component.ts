@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LocalizationOptions } from 'lightweight-charts';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
 //import Swal from 'sweetalert2';
 
@@ -28,18 +31,27 @@ export class TareasComponent implements OnInit {
     private empServ:EmpleadoService,
     private auth:AuthService,
     private resPop:ApiResponseService,
-    private actRoute:ActivatedRoute) {
+    private locServ:LocalizationService) {
      }
 
   ngOnInit(): void {
+    console.log(localStorage.getItem('centroActual'));
       if(localStorage.getItem('centroActual')){
-        this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
-          this.titulo += " del centro " + res.nombre;
-        });
-        this.tarServ.getSubtareas(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
-          this.subtareas = res.sort();
+        this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.titulo += " del centro " + res.nombre;
+          }
+        },error:err => console.log(err)});
+        this.tarServ.getSubtareas(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.subtareas = res.sort();
+          }
           //console.log(this.solicitudes);
-        },(err)=>{
+        },error:(err)=>{
           switch(err.error.status) { 
             case 401: { 
               this.auth.logout();
@@ -61,7 +73,7 @@ export class TareasComponent implements OnInit {
                 break; 
             } 
           } 
-        });
+        }});
         
       }else{
         
@@ -105,8 +117,12 @@ export class TareasComponent implements OnInit {
   } 
   abreVentana(): void{
     this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
-      this.departamentos = res;
-      this.imps = ["Crítica","Alta","Media","Baja"];
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.departamentos = res;
+      }
+      this.locServ.getArray("colecciones.rangoImportancia").subscribe(res => this.imps = res);
       //console.log(res);
     });
     this.showP = true;

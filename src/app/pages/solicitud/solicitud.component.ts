@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { SolicitudModel } from 'src/app/models/solicitud.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { SolicitudService } from 'src/app/services/solicitud.service';
@@ -17,7 +18,11 @@ export class SolicitudComponent /*implements OnInit*/ {
     this.actRoute.params.subscribe(params=>{
       console.log(params);
       solServ.getSolicitudById(localStorage.getItem('token')!,params['id']).subscribe(res=>{
-        this.solicitud=res;
+        if(res instanceof ApiResponse){
+          console.log(res.message);
+        }else{
+          this.solicitud=res;
+        }
         this.solId=params['id'];
       console.log(this.solicitud);
       });

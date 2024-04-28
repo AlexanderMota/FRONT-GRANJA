@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth.service';
 import { ComentarioService } from 'src/app/services/comentario.service';
 import { LocalizationService } from 'src/app/services/localization.service';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 
 @Component({
   selector: 'app-comentarios',
@@ -28,7 +29,11 @@ export class ComentariosComponent implements OnInit {
         this.idTarea = params['id'];
         await this.commServ.getAllComentariosByIdTarea(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{
-          this.comentarios=res;
+          if (res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.comentarios=res as [ComentarioModel];
+          }
           //console.log("comentarios paramID: " + this.comentarios[0].descripcion);
         });
       }else{

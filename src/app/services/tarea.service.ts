@@ -21,8 +21,8 @@ export class TareaService {
 
   constructor(private http: HttpClient) { }
 
-  getAllTareas(token:string,pageSize = 20,pageNum = 1):Observable<[TareaModel]> {
-    return this.http.get<[TareaModel]>(this.baseUrl, {
+  getAllTareas(token:string,pageSize = 20,pageNum = 1):Observable<[TareaModel] | ApiResponse> {
+    return this.http.get<[TareaModel] | ApiResponse>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -32,31 +32,31 @@ export class TareaService {
       }
     });
   }
-  getTareaById(token:string,id:string):Observable<TareaModel> {
+  getTareaById(token:string,id:string):Observable<TareaModel | ApiResponse> {
     //console.log(id);
-    return this.http.get<TareaModel>(this.urlTareasByIdTarea+id ,{
+    return this.http.get<TareaModel | ApiResponse>(this.urlTareasByIdTarea+id ,{
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getTareaByIdEmpleado(token:string,idEmpleado:string):Observable<[TareaModel]> {
-    return this.http.get<[TareaModel]>(this.urlTareasByIdEmpleado+idEmpleado ,{
+  getTareaByIdEmpleado(token:string,idEmpleado:string):Observable<[TareaModel] | ApiResponse> {
+    return this.http.get<[TareaModel] | ApiResponse>(this.urlTareasByIdEmpleado+idEmpleado ,{
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getSuperTareas(token:string):Observable<[TareaModel]> {
-    return this.http.get<[TareaModel]>(this.urlSuperTareas ,{
+  getSuperTareas(token:string):Observable<[TareaModel] | ApiResponse> {
+    return this.http.get<[TareaModel] | ApiResponse>(this.urlSuperTareas ,{
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
   getSubtareas(token:string,idTarea:string, pageSize=20,
-    pageNum=1):Observable<[TareaModel]> {
-    return this.http.get<[TareaModel]>(this.urlSubtareas+idTarea ,{
+    pageNum=1):Observable<[TareaModel] | ApiResponse> {
+    return this.http.get<[TareaModel] | ApiResponse>(this.urlSubtareas+idTarea ,{
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -94,8 +94,8 @@ export class TareaService {
       })
     });
   }
-  deleteTarea(token:string,idTar:string):Observable<boolean>{
-    return this.http.delete<boolean>(this.baseUrl+idTar,{
+  deleteTarea(token:string,idTar:string):Observable< ApiResponse>{
+    return this.http.delete<ApiResponse>(this.baseUrl+idTar,{
       headers: new HttpHeaders({
         Authorization: token
       })

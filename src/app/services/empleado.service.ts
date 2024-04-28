@@ -23,8 +23,8 @@ export class EmpleadoService {
 
   constructor(private http: HttpClient) { }
 
-  getAllEmpleados(token:string,pageSize = 20, pageNum = 1):Observable<[EmpleadoModel]> {
-    return this.http.get<[EmpleadoModel]>(this.baseUrl, {
+  getAllEmpleados(token:string,pageSize = 20, pageNum = 1):Observable<[EmpleadoModel] | ApiResponse> {
+    return this.http.get<[EmpleadoModel] | ApiResponse>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -34,41 +34,41 @@ export class EmpleadoService {
       }
     });
   }
-  getEmpleadoById(token:string,id:string):Observable<EmpleadoModel> {
+  getEmpleadoById(token:string,id:string):Observable<EmpleadoModel | ApiResponse> {
     //console.log(id);
-    return this.http.get<EmpleadoModel>(this.urlEmpleadoPorIdEmpleado+id, {
+    return this.http.get<EmpleadoModel | ApiResponse>(this.urlEmpleadoPorIdEmpleado+id, {
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getRoles(token:string):Observable<[{ nombre: string; }]> {
+  getRoles(token:string):Observable<[{ nombre: string; }] | ApiResponse> {
     //console.log(id);
-    return this.http.get<[{ nombre: string; }]>(this.urlRoles, {
+    return this.http.get<[{ nombre: string; }] | ApiResponse>(this.urlRoles, {
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getDepartamentos(token:string):Observable<[{ nombre: string; }]> {
+  getDepartamentos(token:string):Observable<[{ nombre: string; }] | ApiResponse> {
     //console.log(id);
-    return this.http.get<[{ nombre: string; }]>(this.urlDepartamentos, {
+    return this.http.get<[{ nombre: string; }] | ApiResponse>(this.urlDepartamentos, {
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getEmpleadosByTarea(token:string,idTarea:string):Observable<[EmpleadoModel]> {
+  getEmpleadosByTarea(token:string,idTarea:string):Observable<[EmpleadoModel] | ApiResponse> {
     //console.log("idTarea: "+idTarea);
-    return this.http.get<[EmpleadoModel]>(this.urlEmpleadosPorTarea+idTarea, {
+    return this.http.get<[EmpleadoModel] | ApiResponse>(this.urlEmpleadosPorTarea+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getEmpleadosByTareaDist(token:string,idTarea:string):Observable<[EmpleadoModel]> {
+  getEmpleadosByTareaDist(token:string,idTarea:string):Observable<[EmpleadoModel] | ApiResponse> {
     //console.log("idTarea: "+idTarea);
-    return this.http.get<[EmpleadoModel]>(this.urlEmpleadosPorTareaDist+idTarea, {
+    return this.http.get<[EmpleadoModel] | ApiResponse>(this.urlEmpleadosPorTareaDist+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
       })

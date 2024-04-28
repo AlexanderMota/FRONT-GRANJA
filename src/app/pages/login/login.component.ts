@@ -7,9 +7,9 @@ import { UsuarioModel } from '../../models/usuario.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ApiResponseService } from 'src/app/services/api-response.service';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
+import { EmpleadoModel } from 'src/app/models/empleado.model';
 //import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
-
-
 
 @Component({
   selector: 'app-login',
@@ -19,6 +19,7 @@ import { ApiResponseService } from 'src/app/services/api-response.service';
 export class LoginComponent implements OnInit {
 
   usuario : UsuarioModel = new UsuarioModel();
+  private miperfil : EmpleadoModel = new EmpleadoModel();
   recuerdame : boolean = false;
 
   constructor(private auth: AuthService,
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
 
     this.resPop.resCargando('Espere...');
 
-    this.auth.login(this.usuario).subscribe(res => {
+    this.auth.login(this.usuario).subscribe({next:res => {
       switch(res.status) {
         case 201: {
           /*console.log(res.message);
@@ -58,14 +59,24 @@ export class LoginComponent implements OnInit {
           console.log(localStorage.getItem("rol"));*/
           
           localStorage.setItem('token',res.message);
-          this.auth.getMiId(this.usuario.email).subscribe(res => {
-            switch(res.status) {
-              case 201: {
-                console.log('miid: '+res.message);
-                localStorage.setItem('miid',res.message);
+          this.auth.getMyUser(this.usuario.email).subscribe({next:res => {
+            if((res as ApiResponse).status){
+              switch((res as ApiResponse).status) {
+                case 201: {
+                  console.log((res as ApiResponse).message);
+                }
               }
+            }else{
+              this.miperfil = (res as EmpleadoModel);
+              
+              localStorage.setItem('myuser',JSON.stringify(this.miperfil));
+              localStorage.setItem('miid',this.miperfil._id);
+              localStorage.setItem('centroActual',this.miperfil.centroTrabajo);
+              localStorage.setItem('rol',this.miperfil.rol);
+              //const objString = localStorage.getItem('myuser');
+              //this.miperfil = (objString ? JSON.parse(objString) : null);
             }
-          });
+          },error:err=>{}});
            Swal.close();
 
            if(this.recuerdame){
@@ -87,7 +98,7 @@ export class LoginComponent implements OnInit {
            break;
         }
       }
-    },(err)=>{
+    },error:(err)=>{
       switch(err.error.status) {
         case 400: {
           this.resPop.resMensajeErrBtn('Uno de los parametros es erroneo.');
@@ -106,6 +117,6 @@ export class LoginComponent implements OnInit {
            break; 
         } 
       } 
-    });
+    }});
   }
 }

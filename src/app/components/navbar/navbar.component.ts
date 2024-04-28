@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalizationService } from 'src/app/services/localization.service';
@@ -41,7 +42,11 @@ export class NavbarComponent implements OnInit {
     this.autenticado = this.autServ.esAutenticado();
     if(this.autenticado){
       this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {
-        this.supertareas = res;
+        if(res as ApiResponse){
+          console.log((res as ApiResponse).message);
+        }else{
+          this.supertareas = res as [TareaModel];
+        }
         //console.log(this.supertareas);
       });
     }

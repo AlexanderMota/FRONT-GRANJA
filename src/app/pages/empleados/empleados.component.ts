@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 
@@ -30,16 +31,24 @@ export class EmpleadosComponent implements OnInit {
       this.botonIzq!.disabled = false;
     }*/
     this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe({next:res=>{
-      this.empleados = res;
-      this.ordenaEmpleadosNombre();
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else if(res.length > 0){
+        this.empleados = res;
+        this.ordenaEmpleadosNombre();
+      }
       //console.log(this.empleados);
     },error:err=>{}});
   }
   
   abreVentana(): void{
     this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
-      this.roles = res;
-      //console.log(res);
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.roles = res;
+      }
+      //console.log(res); 
     });
     this.showP = true;
   }
@@ -80,7 +89,11 @@ export class EmpleadosComponent implements OnInit {
         this.pagina += move;
         //console.log(this.tamañoPag," - ",this.pagina);
         this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
-          this.empleados = res;
+          if(res instanceof ApiResponse){
+            console.log(res.message);
+          }else{
+            this.empleados = res;
+          }
           this.ordenaEmpleadosNombre();
           //console.log(this.empleados);
         },error:err=>{console.log(err)}});
@@ -89,12 +102,17 @@ export class EmpleadosComponent implements OnInit {
       this.pagina += move;
       //console.log(this.tamañoPag," - ",this.pagina);
       this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
-        if(res.length < 1){
-          this.pagina -= move;
+        
+        if(res instanceof ApiResponse){
+          console.log(res.message);
         }else{
-          this.empleados = res;
-          this.ordenaEmpleadosNombre();
-          //console.log(this.empleados);
+          if(res.length < 1){
+            this.pagina -= move;
+          }else{
+            this.empleados = res;
+            this.ordenaEmpleadosNombre();
+            //console.log(this.empleados);
+          }
         }
         //console.log(this.empleados);
       },error:err=>{console.log(err)}});

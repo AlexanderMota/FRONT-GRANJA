@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
+import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
@@ -28,7 +30,6 @@ export class UbicacionFormComponent implements OnInit {
 
   constructor( 
     private resApi:ApiResponseService, 
-    private actRoute:ActivatedRoute, 
     private ubiServ:UbicacionService,
     private vehiServ:VehiculoService,
     private localizationService: LocalizationService) {
@@ -36,12 +37,16 @@ export class UbicacionFormComponent implements OnInit {
         localStorage.getItem("token")!,
         localStorage.getItem("miid")!).subscribe(res => {
         
-          //console.log(res);
-          res.forEach(dat =>{
-            if((dat.plazas-(dat.ocupantes.length + 1)) > 0){
+          if((res as ApiResponse).status){
+            console.log((res as ApiResponse).message);
+          }else{
+            (res as [VehiculoModel]).forEach(dat =>{
+              //if((dat.plazas-(dat.ocupantes.length + 1)) > 0){
               this.coches[this.coches.length] = {matricula:dat.matricula,plazas:dat.plazas-(dat.ocupantes.length + 1)};
-            }
-          });
+              //}
+            });
+          }
+          //console.log(res);
       });
     /*this.actRoute.params.subscribe(params=>{
       

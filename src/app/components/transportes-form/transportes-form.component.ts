@@ -16,11 +16,13 @@ export class TransportesFormComponent implements OnInit {
   @Output() 
   eventoEmiteCierraFormVehi = new EventEmitter<boolean>();
 
-  //showP2:boolean = false;
+  private rol="";
+  private permisos = ["ADMIN", "Director", "RRHH","Gerente"];
+  visible = false;
   vehiculo: VehiculoModel = new VehiculoModel();
   titulo:string = "";
   textBtn:string = "";
-  private paramId : string = "";
+  //private paramId : string = "";
 
   constructor( 
     private resApi:ApiResponseService, 
@@ -51,8 +53,14 @@ export class TransportesFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.rol = localStorage.getItem('rol')!;
+    this.visible = this.permisos.includes(this.rol);
   }
   onSubmit(form:NgForm){
+    if(!this.visible){
+      this.vehiculo.propietario = localStorage.getItem("miid")!;
+      console.log(this.vehiculo.propietario);
+    }
     if(!form.valid || this.vehiculo.matricula == "-" || this.vehiculo.propietario == "" || this.vehiculo.descripcion== "-"){
       return;
     }
@@ -81,8 +89,7 @@ export class TransportesFormComponent implements OnInit {
       });
       
     }else*/
-
-    console.log("vehiculo nuevo: " + this.vehiculo.matricula);
+    console.log(this.vehiculo);
     this.vehiServ.postVehiculo(localStorage.getItem('token')!, this.vehiculo ,).subscribe({next:(res) => {
       switch(res.status) { 
         case 201: { 

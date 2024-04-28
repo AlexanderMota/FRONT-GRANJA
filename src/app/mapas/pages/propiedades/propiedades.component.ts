@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,9 +22,13 @@ export class PropiedadesComponent implements OnInit {
     private resPop:ApiResponseService ) { }
    
   ngOnInit(): void {
-    this.ubiServ.getAllUbicaciones(localStorage.getItem('token')!).subscribe(res=>{
-      this.ubis = res.sort();
-    },(err)=>{
+    this.ubiServ.getAllUbicaciones(localStorage.getItem('token')!).subscribe({next:res=>{
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.ubis = res.sort();
+      }
+    },error:(err)=>{
       switch(err.error.status) { 
         case 401: { this.auth.logout();
           
@@ -44,6 +49,6 @@ export class PropiedadesComponent implements OnInit {
            break; 
         } 
       } 
-    });
+    }});
   }
 }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { TareaModel } from 'src/app/models/tarea.model';
+import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { LocalizationService } from 'src/app/services/localization.service';
@@ -17,6 +19,7 @@ export class EmpleadoDetailsComponent implements OnInit {
 
   empleado: EmpleadoModel = new EmpleadoModel();
   tareas:TareaModel[]=[];
+  vehiculos:VehiculoModel[]=[];
   constructor(private empServ:EmpleadoService, 
     private tarServ:TareaService, 
     private vehiServ:VehiculoService, 
@@ -27,13 +30,21 @@ export class EmpleadoDetailsComponent implements OnInit {
       //console.log(params);
         if(params['id']){
           this.empServ.getEmpleadoById(localStorage.getItem('token')!, params['id']).subscribe({next:res2 => {
-            console.log(res2);
-            this.empleado = res2;
+            //console.log(res2);
+            if((res2 as ApiResponse).status){
+              console.log((res2 as ApiResponse).message);
+            }else{
+              this.empleado = res2 as EmpleadoModel;
+            }
           },error: err =>console.log(err)});
 
           this.tarServ.getTareaByIdEmpleado(localStorage.getItem('token')!, params['id']).subscribe({next:(res) => {
+            if(res instanceof ApiResponse){
+              console.log(res.message);
+            }else{
+              this.tareas = res;
+            }
 
-            this.tareas = res;
             //console.log(this.solicitudes);
           }, error:(err) => {
             switch (err.error.status) {
@@ -58,7 +69,12 @@ export class EmpleadoDetailsComponent implements OnInit {
           }});
 
           this.vehiServ.getVehiculosByPropietario(localStorage.getItem("token")!,params['id']).subscribe({next:val=>{
-            console.log(val);
+            if(val instanceof ApiResponse){
+              console.log(val.message);
+            }else{
+              console.log(val);
+              this.vehiculos = val;
+            }
           },error:err=>{
             console.log(err);
           }});

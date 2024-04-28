@@ -23,16 +23,16 @@ export class SolicitudService {
 
   constructor(private http: HttpClient) { }
 
-  getAllSolicitudes(token:string):Observable<[SolicitudModel]> {
-    return this.http.get<[SolicitudModel]>(this.urlGetAllSolicitudes, {
+  getAllSolicitudes(token:string):Observable<[SolicitudModel] | ApiResponse> {
+    return this.http.get<[SolicitudModel] | ApiResponse>(this.urlGetAllSolicitudes, {
       headers: new HttpHeaders({
         Authorization: token
       })
     });
   }
-  getSolicitudById(token:string,id:string):Observable<SolicitudModel> {
+  getSolicitudById(token:string,id:string):Observable<SolicitudModel | ApiResponse> {
     console.log(id);
-    return this.http.get<SolicitudModel>(this.urlGetSolicitudById+id, {
+    return this.http.get<SolicitudModel | ApiResponse>(this.urlGetSolicitudById+id, {
       headers: new HttpHeaders({
         Authorization: token
       })

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { SolicitudModel } from 'src/app/models/solicitud.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -26,7 +27,11 @@ export class SolicitudesComponent implements OnInit {
     //console.log(this.auth.token);
 
     this.solServ.getAllSolicitudes(localStorage.getItem('token')!).subscribe(res=>{
-      this.solicitudes = res;
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.solicitudes = res;
+      }
       //console.log(this.solicitudes);
     });
 

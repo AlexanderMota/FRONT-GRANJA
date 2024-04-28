@@ -18,3 +18,11 @@
       <p>Empleado sin tareas</p>
   </ng-template>
 </div>
+<div class="container-lg  card" *ngIf="vehiculos && vehiculos.length > 0;  else sinVehis">
+  <app-transporte-card  
+    [index]="i" [vehi]="vehiculo" *ngFor="let vehiculo of vehiculos; let i = index;">
+  </app-transporte-card>  
+</div> 
+<ng-template class="container-sm  card" #sinVehis >
+  <p>Empleado sin vehiculos</p>
+</ng-template>

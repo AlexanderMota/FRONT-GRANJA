@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 
@@ -17,7 +18,11 @@ export class TransporteComponent implements OnInit {
 
   ngOnInit(): void {
       this.vehiServ.getAllVehiculos(localStorage.getItem('token')!).subscribe(res=>{
-      this.vehiculos = res;
+      if(res instanceof ApiResponse){
+        console.log(res.message);
+      }else{
+        this.vehiculos = res;
+      }
       //console.log(this.empleados);
     });
   }

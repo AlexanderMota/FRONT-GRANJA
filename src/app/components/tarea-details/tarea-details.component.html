@@ -2,9 +2,9 @@
     <div class="card-body details">
         <h3 class="card-title">{{ tarea.nombre }}</h3>
         <input id="inputFecha" class="inputs input100" disabled type="datetime-local" name="fechainicio"
-            [(ngModel)]="tarea!.fechainicio" style="padding: 0px;">
+            [(ngModel)]="fechaIni" style="padding: 0px;">
         <div class="info-section">
-            <p class="infoPlantilla">Plantilla: {{ empleados.length }} / {{ tarea.numeroTrabajadores }}</p>
+            <p class="infoPlantilla">Plantilla: {{ empleados.length }} / {{ numeroTrabajadores }}</p>
             <p class="description">{{ tarea.descripcion }}</p>
         </div>
         <div class="button-group">
@@ -14,14 +14,14 @@
         </div>
     </div>
     <div class="employees">
-        <app-empleado-linea class="card" [routerLink]="['/empleado',empleado._id]" [emp]="empleado" [index]="i"
+        <app-empleado-linea class="card" [routerLink]="['/empleado',empleado.id]" [emp]="empleado" [index]="i"
             *ngFor="let empleado of empleados; let i = index;"></app-empleado-linea>
         <button class="card newEmpButton" (click)="muestraEmpleadosDisponibles()">{{ botonNuevoEmp }}</button>
     </div>
 </div>
 
 <div>
-    <app-tarea-form *ngIf='showP1' [imps]="imps" [departamentos]="departamentos" [flag]="flag"
+    <app-tarea-form *ngIf='showP1' [editaTar]="editaTar"
         (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>
 
@@ -38,7 +38,7 @@
     <div class="modal-content animated fadeInDown">
         <button class="closeButton" (click)="emiteCierraVentana()">X</button>
         <div class="employeesDisp">
-            <app-empleado-linea class="card" (click)="agregaTrabajadorATarea(empleado._id)" [emp]="empleado"
+            <app-empleado-linea class="card" (click)="agregaTrabajadorATarea(empleado.id)" [emp]="empleado"
                 [index]="i" *ngFor="let empleado of empleadosDisp; let i = index;"></app-empleado-linea>
             <div class="card" *ngFor="let parada of paradas.fechasRecogida; let i = index;">
                 <a class="btn btn-dark stretched-link" (click)="eliminaParada(parada)">
@@ -91,11 +91,14 @@
                         disabled
                         type="datetime-local" 
                         name="fechainicio" 
-                        [(ngModel)]="tarea!.fechainicio"
+                        [(ngModel)]="fechaIni"
                         style="padding: 0px;">
                 </div>
-                <div>
-                    <h4 class="infoPlantilla">Plantilla: {{ empleados.length }} / {{ tarea.numeroTrabajadores }}</h4>
+                <div class="infoPlantilla">
+                    <h4>Plantilla: {{ numEmp }} / {{ numeroTrabajadores }}</h4>
+                    <button (click)="solicitarTarea()" style="float: right;">
+                        <a class="btn btn-outline-info" >Solicitar</a>
+                    </button>
                 </div>
             </div>
             <p class="cuadroTxt card"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
@@ -114,7 +117,7 @@
         </div>
         
         <div *ngIf='visible' class="empleados">
-            <app-empleado-linea class="card " [routerLink]="['/empleado',empleado._id]"
+            <app-empleado-linea class="card " [routerLink]="['/empleado',empleado.id]"
                 [emp]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
             </app-empleado-linea>
             <button class="card btnNuevoEmp" (click)="muestraEmpleadosDisponibles()">
@@ -135,7 +138,7 @@
 </div>
 
 <div>
-    <app-tarea-form *ngIf='showP1' [imps]="imps" [departamentos]="departamentos" [flag]="flag" 
+    <app-tarea-form *ngIf='showP1' [editaTar]="editaTar" 
         (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>
 <div>
@@ -152,7 +155,7 @@
             <div class="modalcEmp-container">
                 <button class="botonCerrar " (click)="emiteCierraVentana()">X</button>
                 <div class="empleadosDisp ">
-                    <app-empleado-linea class="card " (click)="agregaTrabajadorATarea(empleado._id)"
+                    <app-empleado-linea class="card " (click)="agregaTrabajadorATarea(empleado.id)"
                         [emp]="empleado" [index]="i" *ngFor="let empleado of empleadosDisp; let i = index;">
                     </app-empleado-linea>
                 </div>

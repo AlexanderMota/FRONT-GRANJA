@@ -27,5 +27,5 @@
   </div>
 </div>
 <div>
-  <app-registro *ngIf="showP" [roles]="roles" (eventoEmiteCierraNuevaPersona)='receiveMessage($event)'></app-registro>
+  <app-registro *ngIf="showP" (eventoEmiteCierraNuevaPersona)='receiveMessage($event)'></app-registro>
 </div>

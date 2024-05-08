@@ -45,7 +45,7 @@
             
                         
             
-                            <!-- <span class="text-danger">El correo es obligatorio</span> -->
+                            <!-- <span class="text-danger">El correo es obligatorio</span> 
                             <span *ngIf="registroForm.submitted && tarea!.numeroTrabajadores < 1"
                                 class="text-danger animated fadeIn">Hace falta algún trabajador</span>
                             <div class="inputComp wrap-input100 m-b-16">
@@ -61,6 +61,48 @@
                                 required>
             
                                 <span class="focus-input100"></span>
+                            </div>  -->
+
+                            
+                            <span *ngIf="registroForm.submitted && tarea!.plantilla.length < 1"
+                                class="text-danger animated fadeIn">Hace falta algún trabajador</span>
+                            <div class="plantilla inputComp wrap-input100 m-b-16">
+                                <div class="cabplantilla">
+                                    <label for="inputNum" class="labelcab labels input100">
+                                        Plantilla
+                                    </label>
+                                    <div class="botones">
+                                        <button type="button" (click)="agregaRol()" class="boton">+</button>
+                                    </div>
+                                </div>
+                                <div class="inputplantilla" *ngFor="let plantilla of tarea!.plantilla; let i = index">
+                                    
+                                    <select [(ngModel)]="plantilla.rol"
+                                        id="inputRol" class="inputs form-select" name="inputrol">
+                                        <option  selected>-</option>
+                                        <option *ngFor="let rol of roles;">
+                                            {{ rol }}
+                                        </option>
+                                    </select>
+
+                                    <!--<input id="inputNum" class="inputs input100"
+                                    style="padding: 0;"
+                                    type="text" 
+                                    name="numtrabaj" 
+                                    [(ngModel)]="plantilla.rol"
+                                    required>-->
+                                    
+                                    <input id="inputNum" class="inputcant inputs input100"
+                                    style="padding: 0;"
+                                    type="number" 
+                                    name="numtrabaj" 
+                                    [(ngModel)]="plantilla.cantidad"
+                                    required>
+
+                                    <button type="button" (click)="quitaRol(i)" class="boton">-</button>
+                                </div>
+            
+                                <span class="focus-input100"></span>
                             </div>  
                             
                             <!-- <span class="text-danger">La contraseña debe de ser más de 6 letras</span> -->
@@ -74,7 +116,7 @@
                                 <input id="inputFecha" class="inputs input100"
                                     type="datetime-local" 
                                     name="fechainicio" 
-                                    [(ngModel)]="tarea!.fechainicio"
+                                    [(ngModel)]="fechaIni"
                                     required
                                     style="padding: 0px;">
                                 <span class="focus-input100"></span>
@@ -86,7 +128,7 @@
                                 <input id="inputFin" class="inputs input100"
                                     type="datetime-local" 
                                     name="fechafin" 
-                                    [(ngModel)]="tarea!.fechafin"
+                                    [(ngModel)]="fechaFin"
                                     required
                                     style="padding: 0px;">
                                 <span class="focus-input100"></span>
@@ -101,49 +143,37 @@
                             
                                 <select [(ngModel)]="tarea!.importancia" 
                                     id="inputimp" class="inputs form-select" name="inputgrupo">
-                                    <option *ngIf="imps.length > 1" selected>-</option>
+                                    <option selected>-</option>
                                     <option *ngFor="let imp of imps;">{{ imp }}</option>
                                 </select>
                             </div>
 
-                            <span *ngIf="registroForm.submitted && tarea!.importancia == '-'"
+                            <!--<span *ngIf="registroForm.submitted && tarea!.importancia == '-'"
                                 class="text-danger animated fadeIn">Debe indicar a qué grupo pertenece esta tarea</span>
                             <div class="inputComp wrap-input100 m-b-16" #organizacion id="organizacion" >
                                 <label for="inputimp2" class="labels input100">
-                                    Organización
+                                    {{orga}}
                                 </label>
                             
                                 <select [(ngModel)]="idSuper"
                                     id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
                                     <option *ngIf="supers.length > 1">-</option>
                                     <option *ngFor="let super of supers; let i = index;" [value]="super._id">
-                                        <!--<span class="idOculto">id: {{super._id}} - </span>-->
+                                        //<span class="idOculto">id: {{super._id}} - </span>
                                         {{ super.nombre }}
                                     </option>
                                 </select>
-                            </div>
+                            </div>-->
 
                             <span *ngIf="registroForm.submitted && tarea!.departamento == '-'"
                                 class="text-danger animated fadeIn">Debe indicar a qué departamento pertenece esta tarea</span>
-                            <!--<div class="inputComp wrap-input100 m-b-16">
-                                <label for="inputimp3" class="labels input100">
-                                    Departamento
-                                </label>
-                            
-                                <select [(ngModel)]="tarea!.departamento" 
-                                    id="inputimp" class="inputs form-select" name="inputgrupo">
-                                    <option selected>-</option>
-                                    <option *ngFor="let departamento of departamentos; let i = index;">{{ departamento.nombre }}</option>
-                                </select>
-                            </div>-->
                             <div class="inputComp wrap-input100 m-b-16">
                                 <label for="inputimp2" class="labels input100">
                                     Departamento
                                 </label>
-                            
                                 <select [(ngModel)]="tarea!.departamento"
                                     id="inputimp" class="inputs form-select" name="inputdepart">
-                                    <option *ngIf="departamentos.length > 1" selected>-</option>
+                                    <option  selected>-</option>
                                     <option *ngFor="let departamento of departamentos;">
                                         {{ departamento.nombre }}
                                     </option>

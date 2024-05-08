@@ -8,7 +8,7 @@ import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { EmpleadoDetailsComponent } from './components/empleado-details/empleado-details.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
 import { TareasComponent } from './pages/tareas/tareas.component';
-import { SolicitudComponent } from './pages/solicitud/solicitud.component'
+//import { SolicitudComponent } from './pages/solicitud/solicitud.component'
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { GraficasComponent } from './graficos/graficas.component'
 import { MapasComponent } from './mapas/mapas.component'
@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'transporte', component: TransporteComponent , canActivate: [ AuthGuard ]},
 
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
-  { path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
+  //{ path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
 
   { path: 'registro', component: RegistroComponent, canActivate: [ AuthGuard ] },
   { path: 'login', component: LoginComponent },

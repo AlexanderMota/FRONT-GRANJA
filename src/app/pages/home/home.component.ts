@@ -11,7 +11,12 @@ import { VehiculoService } from 'src/app/services/vehiculo.service';
 })
 export class HomeComponent{
 
-  constructor() { }
-
-  
+  constructor(private authServ: AuthService,
+    private respServ:ApiResponseService ) {
+    if(!this.authServ.esAutenticado()){
+      this.authServ.logout();
+      this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+      this.authServ.logout();
+    }
+  }
 }

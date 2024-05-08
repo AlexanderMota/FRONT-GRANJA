@@ -6,9 +6,11 @@
         "confirmar": "Confirmar",
         "guardar":"Guardar",
         "guardarCambios":"Guardar cambios",
+        "aprobar":"Aprobar",
         "reservar": "Reservar",
         "editar": "Editar",
         "cancelar": "Cancelar",
+        "rechazar": "Rechazar",
         "borrar": "Borrar",
         "eliminar": "Eliminar",
         "guardaTarea":"Guardar tarea",
@@ -32,7 +34,8 @@
         "errorIdTareaPath":"Ha habido un error en la carga del identificador de la tarea.",
         "errTareaNoEliminada":"La tarea no se eliminó correctamente.",
         "nombreEmpleadoNoExiste":"No hay usuarios con ese nombre.",
-        "desconocido":"Algo ha ido mal."
+        "desconocido":"Algo ha ido mal.",
+        "402solicitaTarea":"El empleado ya está registrado como trabajor de esta tarea o la tarea ya ha sido solicitada y está a la espera de aprobación."
     },
     "mensajesInformacion": {
         "espere":"Espere...",
@@ -45,7 +48,10 @@
         "infoReservaPlaza":"¿Seguro que desea reservar plaza en esta parada? Tenga en cuenta que se compromete a acudir los días y horas que indique.",
         "sesionExpirada":"La sesión ha expirado. Vuelva a iniciar sesion.",
         "201PatchTarea":"Tarea creada con éxito.",
-        "202PatchTarea":"Tarea modificada con éxito."
+        "202PatchTarea":"Tarea modificada con éxito.",
+        "202solicitaTarea":"Tarea solicitada con éxito.",
+        "202deleteSolicitud":"Solicitud eliminada.",
+        "202rechazaSolicitud":"Solicitud rechazada."
     },
     "encabezados":{
         "atencionTitulo": "ATENCIÓN",

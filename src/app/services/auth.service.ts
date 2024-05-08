@@ -12,12 +12,12 @@ import { UsuarioModel } from '../models/usuario.model';
 })
 export class AuthService {
 
-  vis = "novisible";
+  //vis = "visible";
   private horaCon : Date = new Date();
 
   constructor(private http: HttpClient/*, private nav : NavbarComponent*/) { }
-
-  //Token valido
+  //Token caducado pruebas: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsZWFkbyI6eyJub21icmUiOiJhZG1pbiIsInJvbCI6IkFETUlOIn0sImlhdCI6MTcxMzUxODAyNiwiZXhwIjoxNzEzNTIxNjI2fQ.VNvX_1HwMNkMnPL8prqO7VytdvOofxYXJfQkiNUNkk8
+  
   //private urlTokenValido = 'https://api-granja.azurewebsites.net/api/auth';
   private urlTokenValido = 'http://localhost:4300/api/auth';
 
@@ -35,10 +35,11 @@ export class AuthService {
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('fintoken');
-    this.vis = "collapse";
+    //this.vis = "collapse";
   }
 
   login(usuario : UsuarioModel) : Observable<ApiResponse>{
+    //this.vis = "visible";
     this.horaCon = new Date(Date.now());
     localStorage.setItem("fintoken",this.horaCon.getTime().toString());
     //onsole.log(this.horaCon);

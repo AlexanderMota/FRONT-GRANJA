@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
+import { ApiResponseService } from 'src/app/services/api-response.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 
 @Component({
@@ -18,14 +20,16 @@ export class EmpleadosComponent implements OnInit {
   posttitulo="Lista de todos los empleados en plantilla";
   nuevo="Nuevo empleado";
   pagina = 1;
-  tamañoPag = 20;
+  tamañoPag = 10;
   botonIzq: HTMLButtonElement = document.getElementById("botonIzq")as HTMLButtonElement;
   botonDer: HTMLButtonElement = document.getElementById("botonDer")as HTMLButtonElement;
 
   empleados : EmpleadoModel[] = [];
-  roles : { nombre:string }[] = [];
+  //roles:string[] = [];
 
-  constructor(private empServ:EmpleadoService) { }
+  constructor(private empServ:EmpleadoService,
+    private authServ:AuthService,
+    private respServ : ApiResponseService ) { }
 
   ngOnInit(): void {
     this.rol = localStorage.getItem('rol')!;
@@ -35,26 +39,41 @@ export class EmpleadosComponent implements OnInit {
     } else {
       this.botonIzq!.disabled = false;
     }*/
-    this.empServ.getAllEmpleados(localStorage.getItem('token')!).subscribe({next:res=>{
-      if(res instanceof ApiResponse){
-        console.log(res.message);
-      }else if(res.length > 0){
-        this.empleados = res;
+    this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+        if((res as ApiResponse).status == 420){
+          this.authServ.logout();
+          this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+          this.authServ.logout();
+        }
+      }else if((res as EmpleadoModel[]).length > 0){
+        this.empleados = res as EmpleadoModel[];
         this.ordenaEmpleadosNombre();
       }
       //console.log(this.empleados);
-    },error:err=>{}});
+    },error:err=>{
+      switch(err.error.status) { 
+        case 420: { 
+          this.authServ.logout();
+          this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+          this.authServ.logout();
+          break; 
+        } 
+        /*case 404: { 
+          this.respServ.resMensajeErrBtn("No hay tareas en este centro.");
+            break; 
+        } */
+        default: { 
+          this.respServ.resMensajeWrnBtn("Algo ha ido mal.");
+            //statements; 
+            break; 
+        } 
+      }
+    }});
   }
   
   abreVentana(): void{
-    this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
-      if(res instanceof ApiResponse){
-        console.log(res.message);
-      }else{
-        this.roles = res;
-      }
-      //console.log(res); 
-    });
     this.showP = true;
   }
   
@@ -94,10 +113,10 @@ export class EmpleadosComponent implements OnInit {
         this.pagina += move;
         //console.log(this.tamañoPag," - ",this.pagina);
         this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
-          if(res instanceof ApiResponse){
-            console.log(res.message);
+          if((res as ApiResponse).status){
+            console.log((res as ApiResponse).message);
           }else{
-            this.empleados = res;
+            this.empleados = res as EmpleadoModel[];
           }
           this.ordenaEmpleadosNombre();
           //console.log(this.empleados);
@@ -108,13 +127,13 @@ export class EmpleadosComponent implements OnInit {
       //console.log(this.tamañoPag," - ",this.pagina);
       this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
         
-        if(res instanceof ApiResponse){
-          console.log(res.message);
+        if((res as ApiResponse).status){
+          console.log((res as ApiResponse).message);
         }else{
-          if(res.length < 1){
+          if((res as EmpleadoModel[]).length < 1){
             this.pagina -= move;
           }else{
-            this.empleados = res;
+            this.empleados = res as EmpleadoModel[];
             this.ordenaEmpleadosNombre();
             //console.log(this.empleados);
           }

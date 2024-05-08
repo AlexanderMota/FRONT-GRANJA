@@ -8,7 +8,7 @@ import { EmpleadoModel } from 'src/app/models/empleado.model';
 })
 export class EmpleadoLineaComponent implements OnInit {
   @Input() 
-  emp: EmpleadoModel = new EmpleadoModel();
+  emp: { nombre: string; id: string; } = {nombre:"",id:""};
   @Input() 
   index:number = 0;
   constructor() {

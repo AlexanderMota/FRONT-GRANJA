@@ -68,8 +68,8 @@ export class TareaService {
   }
   patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
     tar.idTarea = 0;
-    const {idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
-    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
+    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
+    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,plantilla,precioHora,terminada},{
       headers: new HttpHeaders({
         Authorization: token
       })
@@ -77,8 +77,8 @@ export class TareaService {
   }
   postTarea(token:string,tar:TareaModel,idSuper:string ="0b"):Observable<ApiResponse>{
     tar.idTarea = 0;
-    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,numeroTrabajadores,terminada} = tar;
-    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,numeroTrabajadores,terminada},{
+    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
+    return this.http.post<ApiResponse>(this.baseUrl, {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,plantilla,precioHora,terminada},{
       headers: new HttpHeaders({
         Authorization: token
       }),

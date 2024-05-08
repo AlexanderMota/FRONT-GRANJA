@@ -81,6 +81,14 @@ export class MapaComponent implements OnInit, AfterViewInit {
     }); 
     // Agregar barra de navegación
     this.mapa.addControl(new mapboxgl.NavigationControl());
+
+    this.mapa.on('load', () => {
+      // Load an image from an external URL.
+      this.mapa.loadImage('../../../assets/images/icons/parada.png', (error, image) => {
+        if (error) console.log(error);
+        this.mapa.addImage('parada', image!);
+      });
+    });
   }
   
   clickMapaVerRutaActivo(){
@@ -294,7 +302,32 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   pintaParadas(dat : UbicacionModel[]){
     for( let i = 0; i < dat.length; i++ ){
+      // Add a layer to use the image to represent the data.
       this.mapa.addLayer({
+        id: 'parada'+i.toString(),
+        type: 'symbol',
+        layout: {
+            'icon-image': 'parada', // reference the image
+            'icon-size': 0.085
+        },
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [dat[i].longitud,dat[i].latitud]
+                },
+                properties: null
+              }
+            ]
+          }
+        }
+      });
+     /* this.mapa.addLayer({
         id: 'parada'+i.toString(),
         type: 'circle',
         paint:{
@@ -317,10 +350,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
             ]
           }
         }
-      });
+      });*/
     }
   }
-  clickParada(dat:UbicacionModel[]){
+  clickParadas(dat:UbicacionModel[]){
     for( let i = 0; i < dat.length; i++ ){
       this.mapa.on('click', 'parada'+i.toString(), (e) => {
         // Aquí puedes ejecutar la función que desees cuando se haga clic en la capa
@@ -475,7 +508,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
           this.clickMapaInactivo(this.clickHandlerNuevaUbi);
           this.paradas = res as UbicacionModel[];
           this.pintaParadas(this.paradas);
-          this.clickParada(this.paradas);
+          this.clickParadas(this.paradas);
           this.borraRuta();
         }
       });

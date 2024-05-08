@@ -5,15 +5,15 @@
   </h2>
 </div>
 <hr>
-<div class="container card-columns">
-  <div class="row animated fadeIn fast"  *ngIf="solicitudes.length < 1">
-    <div class="col-md-12">
-      <div class="alert alert-info" role="alert">
-        No existen resultados con el término {{posttitulo}}
-      </div>
-    </div>
-  </div>
+<div *ngIf="solicitudes.length > 0 else sinSolis" class="container card-columns">
   <app-solicitud-card class="card container animated fadeIn fast"  style="width: 18rem; margin:20px;" 
     [solicitud]="solicitud" [index]="i" *ngFor="let solicitud of solicitudes; let i = index;">
   </app-solicitud-card>  
 </div>
+<ng-template #sinSolis class="row animated fadeIn fast" >
+  <div class="col-md-12">
+    <div class="alert alert-info" role="alert">
+      No existen resultados con el término {{titulo}}
+    </div>
+  </div>
+</ng-template>

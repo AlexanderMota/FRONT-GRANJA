@@ -14,6 +14,7 @@ import { UbicacionModel } from 'src/app/models/ubicacion.model';
 //import {  } from '../../../assets/textos/strings.json';
 import { LocalizationService } from '../../services/localization.service';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
+import { SolicitudService } from 'src/app/services/solicitud.service';
 
 @Component({
   selector: 'app-tarea-details',
@@ -24,18 +25,20 @@ export class TareaDetailsComponent implements OnInit {
 
   tarea: TareaModel = new TareaModel();
   comentarios: ComentarioModel[] = [];
-  empleados: EmpleadoModel[] = [];
-  empleadosDisp: EmpleadoModel[] = [];
+  empleados: {nombre:string, id:string}[] = [];
+  empleadosDisp: {nombre:string, id:string}[] = [];
   //empleadoNuevo: EmpleadoModel = {_id: 'Empleados', idEmpleado : 0, nombre : "", apellidos:"",telefono:"", email:"", password:""};
   showP1 : boolean= false;
   showP2 : boolean= false;
   showP3 : boolean= false;
-  flag : boolean= false;
+  editaTar : boolean= false;
   showPEmpD : boolean= false;
   showParadas: boolean= false;
   visible: boolean= false;
-  imps:string[] = [];
-  departamentos:{nombre:string}[] = [];
+  numEmp=0;
+  numeroTrabajadores=0;
+  //imps:string[] = [];
+  //departamentos:{nombre:string}[] = [];
   paramId : string = "";
   ubi:UbicacionModel=new UbicacionModel();
   paradas:{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}={idUbicacion:"",fechasRecogida:[]};
@@ -49,44 +52,19 @@ export class TareaDetailsComponent implements OnInit {
   botonBorrar = "";//this.localizationService.getString('botones.editar');
   botonEditar = "";//this.localizationService.getString('botones.borrar');
   botonNuevoEmp = "";
+  fechaIni = "";
 
 
 
   constructor(
     private tarServ:TareaService,
+    private solServ: SolicitudService,
     private empServ: EmpleadoService,
     private ubiServ: UbicacionService,
     private actRoute:ActivatedRoute,
     private resPop:ApiResponseService,
-    private localizationService: LocalizationService) {
-
-
-    this.actRoute.params.subscribe(async params=>{
-      if(params['id']){
-        this.paramId = params['id'];
-        //console.log(this.paramId);
-        await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
-        .subscribe({next:res1=>{
-          if((res1 as ApiResponse).status){
-            console.log((res1 as ApiResponse).message);
-          }else{
-            this.tarea=res1 as TareaModel;
-          }
-        },error:err=>console.log(err)});
-        await this.empServ.getEmpleadosByTarea(localStorage.getItem('token')!,this.paramId)
-        .subscribe({next:res2=>{
-          if ((res2 as ApiResponse).status){
-            console.log((res2 as ApiResponse).message);
-          }else{
-            this.empleados=res2 as [EmpleadoModel];
-          }
-          //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
-        },error:err=>console.log(err)});
-      }else{
-        this.localizationService.getString("errorIdTareaPath").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
-      }
-    });
-    //console.log("---idTarea: " + this.tarea.nombre + "\n---ubi: " + this.ubi._id );
+    private locServ: LocalizationService) {
+    this.inicia();
   }
   /*oculta(){
     this.oculto = !this.oculto;
@@ -98,36 +76,71 @@ export class TareaDetailsComponent implements OnInit {
     this.visible = this.permisos.includes(this.rol);
     //this.resaltarRango();
     if(this.visible){
-      this.localizationService.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
-      this.localizationService.getString('botones.editar').subscribe(val => this.botonEditar = val);
-      this.localizationService.getString('botones.eliminar').subscribe(val => this.botonBorrar = val);
-      this.localizationService.getString('botones.nuevoEmpleado').subscribe(val => this.botonNuevoEmp = val);
+      this.locServ.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
+      this.locServ.getString('botones.editar').subscribe(val => this.botonEditar = val);
+      this.locServ.getString('botones.eliminar').subscribe(val => this.botonBorrar = val);
+      this.locServ.getString('botones.nuevoEmpleado').subscribe(val => this.botonNuevoEmp = val);
     }
   }
-
-  async borraTarea(){
+  private inicia(){
+    this.actRoute.params.subscribe(async params=>{
+      if(params['id']){
+        this.paramId = params['id'];
+        //console.log(this.paramId);
+        await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
+        .subscribe({next:res1=>{
+          if((res1 as ApiResponse).status){
+            console.log((res1 as ApiResponse).message);
+          }else{
+            this.tarea=res1 as TareaModel;
+            this.tarea.plantilla.forEach(val => {
+              this.numeroTrabajadores += val.cantidad;
+            });
+            
+            let fech = this.tarea.fechainicio.toString();
+            this.tarea.fechainicio = new Date(fech.slice(0,19));
+            this.fechaIni = fech.slice(0,19);
+          }
+        },error:err=>console.log(err)});
+        await this.empServ.getEmpleadosByTarea(localStorage.getItem('token')!,this.paramId)
+        .subscribe({next:res2=>{
+          if ((res2 as ApiResponse).status){
+            if((res2 as ApiResponse).status == 201){
+              this.numEmp = parseInt( (res2 as ApiResponse).message);
+              console.log((res2 as ApiResponse).message);
+            }else{
+              console.log((res2 as ApiResponse).message);
+            }
+          }else{
+            this.numEmp = (res2 as EmpleadoModel[]).length;
+            (res2 as EmpleadoModel[]).forEach(val => this.empleados.push({nombre:val.nombre + " " + val.apellidos,id:val._id.toString()}));
+          }
+          //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
+        },error:err=>console.log(err)});
+      }else{
+        this.locServ.getString("errorIdTareaPath").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
+      }
+    });
+  }
+  borraTarea(){
+    this.borraTareaPri();
+  }
+  private async borraTareaPri(){
     this.resPop.resCargando('Espere...');
     await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id).subscribe({next:res=>{
       const flag = res;
       if(flag){
-        this.localizationService.getString("tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
+        this.locServ.getString("tareaEliminadaCorrecto").subscribe(val =>this.resPop.resMensajeSucBtnRedir(val,"tareas"));
       }else{
-        this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
+        this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
       }
     },error:err=>console.log(err)})
   }
-
   abreFormTarea(flag:boolean){
-    this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
-      if(res instanceof ApiResponse){
-        console.log(res.message);
-      }else{
-        this.departamentos = res;
-      }
-      this.localizationService.getArray("colecciones.rangoImportancia").subscribe(val=>{this.imps = val});
-      //console.log(res);
-    });
-    this.flag = flag;
+    this.abreFormTareaPri(flag);
+  }
+  private abreFormTareaPri(flag:boolean){
+    this.editaTar = flag;
     this.showP1 = true;
   }
   /*abreFormTransporte(){
@@ -159,24 +172,32 @@ export class TareaDetailsComponent implements OnInit {
   emiteCierraVentana2(){
     this.showParadas = false;
   }
-  async agregaTrabajadorATarea(idEmpleado:string){
+  agregaTrabajadorATarea(idEmpleado:string){
+    this.agregaTrabajadorATareaPri(idEmpleado);
+  }
+  private async agregaTrabajadorATareaPri(idEmpleado:string){
     await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
       if(res.status < 220){
-        this.localizationService.getString("mensajesInformacion.tareaEliminadaCorrecto").subscribe(val => {this.resPop.resMensajeSucBtnRedir(val,"tareas")});
+        console.log(res.message);
+        this.locServ.getString("mensajesInformacion.tareaEliminadaCorrecto").subscribe(val => this.resPop.resMensajeSucBtnRedir(val,"tareas"));
       }else{
-        this.localizationService.getString("errTareaNoEliminada").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
+        console.log(res.message);
+        this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
       };
     });
     this.showPEmpD = false;
   }
-  async muestraEmpleadosDisponibles(){
+  muestraEmpleadosDisponibles(){
+    this.muestraEmpleadosDisponiblesPri();
+  }
+  private async muestraEmpleadosDisponiblesPri(){
     if(this.empleadosDisp.length < 1){
       await this.empServ.getEmpleadosByTareaDist(localStorage.getItem('token')!,
         this.paramId).subscribe(res2=>{
           if((res2 as ApiResponse).status){
             console.log((res2 as ApiResponse).message);
           }else{
-            this.empleadosDisp=res2 as EmpleadoModel[];
+            (res2 as EmpleadoModel[]).forEach(val => this.empleadosDisp.push({nombre:val.nombre + " " + val.apellidos,id:val._id.toString()}));
           }
       });
     }
@@ -194,6 +215,12 @@ export class TareaDetailsComponent implements OnInit {
     fechaInicio: Date,
     fechaFin: Date,
     vehiculo: string}){
+      this.eliminaParadaPri(fechaRecogida);
+  }
+  private eliminaParadaPri(fechaRecogida: {
+    fechaInicio: Date,
+    fechaFin: Date,
+    vehiculo: string}){
     this.ubiServ.deleteParada(localStorage.getItem("token")!,fechaRecogida,this.paradas.idUbicacion).subscribe(val => {
       if(val.status == 200){
         this.paradas.fechasRecogida = this.paradas.fechasRecogida.filter((elemento) => {
@@ -206,15 +233,32 @@ export class TareaDetailsComponent implements OnInit {
       }
     });
   }
-  
   receiveMessageEditaParada($event: { idUbicacion: string; titulo: string; descripcion: string; longitud: number; latitud: number; }) {
     this.ubi._id = $event.idUbicacion;
     this.ubi.titulo = $event.titulo;
     this.ubi.descripcion = $event.descripcion;
     this.ubi.longitud = $event.longitud;
     this.ubi.latitud = $event.latitud;
-    console.log("idUbi antes de enviar: "+this.ubi._id);
+    //console.log("idUbi antes de enviar: "+this.ubi._id);
     this.receiveMessageFormUbi(true);
+  }
+  solicitarTarea(){
+    this.solicitarTareaPri();
+    //console.log("solicitar: ");
+  }
+  private solicitarTareaPri(){
+
+    this.solServ.postSolicitud(localStorage.getItem("token")!,
+    this.tarea._id,localStorage.getItem("miid")!).subscribe({next:res=>{
+      //console.log(res);
+      if(res.status < 220){
+        console.log(res.message);
+        this.locServ.getString("mensajesInformacion.202solicitaTarea").subscribe(val => this.resPop.resMensajeSucBtn(val));
+      }else{
+        console.log(res.message);
+        this.locServ.getString("mensajesError.402solicitaTarea").subscribe(val => this.resPop.resMensajeErrBtn(val));
+      }
+    },error:err=>console.log(err)});
   }
   // pruebas calendario parada
   /*resaltarRango(): void {

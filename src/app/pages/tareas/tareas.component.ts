@@ -26,8 +26,8 @@ export class TareasComponent implements OnInit {
   subtareas:TareaModel[] = [];
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
-  supers:TareaModel[] = [];
-  paramIdSuper = "";
+  //supers:TareaModel[] = [];
+  //paramIdSuper = "";
 
   constructor(
     private tarServ:TareaService,
@@ -43,37 +43,33 @@ export class TareasComponent implements OnInit {
     //console.log(localStorage.getItem('centroActual'));
       if(localStorage.getItem('centroActual')){
         this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
-          if(res instanceof ApiResponse){
-            console.log(res.message);
+          if((res as ApiResponse).status){
+            console.log((res as ApiResponse).message);
           }else{
-            this.titulo += " del centro " + res.nombre;
+            this.titulo += " del centro " + (res as TareaModel).nombre;
           }
         },error:err => console.log(err)});
         this.tarServ.getSubtareas(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
-          if(res instanceof ApiResponse){
-            console.log(res.message);
+          if((res as ApiResponse).status){
+            console.log((res as ApiResponse).message);
           }else{
-            this.subtareas = res.sort();
+            this.subtareas = (res as TareaModel[]).sort();
           }
           //console.log(this.solicitudes);
         },error:(err)=>{
           switch(err.error.status) { 
-            case 401: { 
+            case 420: { 
               this.auth.logout();
               this.resPop.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
               this.auth.logout();
-              
               break; 
             } 
             case 404: { 
               this.resPop.resMensajeErrBtn("No hay tareas en este centro.");
                 break; 
             } 
-            case 0: { 
-              this.resPop.resMensajeWrnBtn("Algo ha ido mal.");
-                break; 
-            } 
             default: { 
+              this.resPop.resMensajeWrnBtn("Algo ha ido mal.");
                 //statements; 
                 break; 
             } 
@@ -122,10 +118,12 @@ export class TareasComponent implements OnInit {
   } 
   abreVentana(): void{
     this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
-      if(res instanceof ApiResponse){
-        console.log(res.message);
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
       }else{
-        this.departamentos = res;
+        this.departamentos = res as {
+          nombre: string;
+      }[];
       }
       this.locServ.getArray("colecciones.rangoImportancia").subscribe(res => this.imps = res);
       //console.log(res);

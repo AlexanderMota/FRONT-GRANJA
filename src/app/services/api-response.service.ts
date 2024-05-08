@@ -13,12 +13,12 @@ export class ApiResponseService {
   ]
   constructor(private router:Router) { }
 
-  resMensajeSucBtn(msn:string){
+  resMensajeSucBtn(msn:string, recarga = false){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
       icon:'success'
-    });
+    }).then(() => {if(recarga){location.reload()}});
   }
   resMensajeSucBtnRedir(msn:string,redir:string){
     Swal.fire({
@@ -101,12 +101,12 @@ export class ApiResponseService {
   }
 
 
-  resMensajeErrBtn(msn:string){
+  resMensajeErrBtn(msn:string, recarga = false){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
       icon:'error'
-    });
+    }).then(() => {if(recarga){location.reload()}});
   }
   resMensajeWrnBtn(msn:string){
     Swal.fire({

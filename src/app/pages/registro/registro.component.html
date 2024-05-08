@@ -56,7 +56,7 @@
         
                             <!-- <span class="text-danger">El correo es obligatorio</span> -->
                             <span *ngIf="registroForm.submitted && registroForm.controls['tlf'].errors"
-                                class="text-danger animated fadeIn">El email es obligatorio</span>
+                                class="text-danger animated fadeIn">El teléfono es obligatorio</span>
                             <div class="wrap-input100 m-b-16">
                                 <input class="input100" 
                                        type="text" 
@@ -83,7 +83,7 @@
                                     id="inputimp" class="inputs form-select" name="inputdepart">
                                     <option selected>-</option>
                                     <option *ngFor="let rol of roles;">
-                                        {{ rol.nombre }}
+                                        {{ rol }}
                                     </option>
                                 </select>
                             </div>

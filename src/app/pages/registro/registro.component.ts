@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { EmpleadoModel } from '../../models/empleado.model';
 import { AuthService } from '../../services/auth.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 
 @Component({
   selector: 'app-registro',
@@ -16,13 +17,23 @@ export class RegistroComponent implements OnInit {
   @Output() eventoEmiteCierraNuevaPersona = new EventEmitter<boolean>();
   empleado: EmpleadoModel = new EmpleadoModel();
   //recuerdame : boolean = false;
-  @Input() roles:{nombre:string}[] = [];
+  roles:string[] = [];
 
   constructor(
     private auth:AuthService, 
+    private empServ:EmpleadoService,
     private resApi: ApiResponseService) { }
 
-  ngOnInit() { } 
+  ngOnInit() { 
+    this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+      }else{
+        this.roles = res as string[];
+      }
+      //console.log(res); 
+    });
+  } 
   onSubmit(form: NgForm){
     if(!form.valid){
       return;

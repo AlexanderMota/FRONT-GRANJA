@@ -1,0 +1,36 @@
+.resSi, .resNo{
+    position: absolute;
+    right: 15px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    z-index: 10;
+}
+.resSi{
+    background-color: green;}
+.resNo{
+    background-color: red;}
+.card-title{
+    margin: 10px 20px 10px 0px;
+    font-weight: bold;
+    white-space: nowrap; 
+    overflow: hidden;
+}
+.card-body{
+    padding: 0px 0px 15px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+.fecham{
+    font-weight: normal;
+    font-size: medium;
+    margin-bottom: 15px;
+}
+.btns{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}

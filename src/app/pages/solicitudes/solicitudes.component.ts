@@ -19,23 +19,42 @@ export class SolicitudesComponent implements OnInit {
   solicitudes:SolicitudModel[] = [];
 
   constructor(private solServ:SolicitudService,
-          private router:Router,
-          private auth:AuthService,
-          private apiPop:ApiResponseService) { }
+          private authServ:AuthService,
+          private respServ:ApiResponseService
+          /*private router:Router,*/) { }
 
   ngOnInit(): void {
     //console.log(this.auth.token);
-
-    this.solServ.getAllSolicitudes(localStorage.getItem('token')!).subscribe(res=>{
-      if(res instanceof ApiResponse){
-        console.log(res.message);
-      }else{
-        this.solicitudes = res;
+    this.solServ.getAllSolicitudes(localStorage.getItem('token')!).subscribe({next:res=>{
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+        if((res as ApiResponse).status == 420){
+          this.authServ.logout();
+          this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+          this.authServ.logout();
+        }
+      }else if((res as SolicitudModel[]).length > 0){
+        this.solicitudes = res as SolicitudModel[];
       }
-      //console.log(this.solicitudes);
-    });
-
+      //console.log(this.empleados);
+    },error:err=>{
+      switch(err.error.status) { 
+        case 420: { 
+          this.authServ.logout();
+          this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+          this.authServ.logout();
+          break; 
+        } 
+        /*case 404: { 
+          this.respServ.resMensajeErrBtn("No hay tareas en este centro.");
+            break; 
+        } */
+        default: { 
+          this.respServ.resMensajeWrnBtn("Algo ha ido mal.");
+            //statements; 
+            break; 
+        } 
+      } 
+    }});
   }
-  
-
 }

@@ -12,6 +12,7 @@ export class TareaCardComponent implements OnInit {
   @Input() index:number = 0;
   title : string = "";
   descRes : string = "";
+  fechaIni ="";
   fechamostrar : string = this.tarea.fechainicio.toLocaleDateString();;
   fechainiciolocal:string = this.tarea.fechainicio.getDate() +"/"+(this.tarea.fechainicio.getMonth() + 1) +"/"+this.tarea.fechainicio.getFullYear() ;
   constructor() {
@@ -29,5 +30,9 @@ export class TareaCardComponent implements OnInit {
     if(this.descRes.length < 1){
       this.descRes = "Tarea sin descripción."
     }
+    
+    let fech = this.tarea.fechainicio.toString();
+    this.tarea.fechainicio = new Date(fech.slice(0,19));
+    this.fechaIni = fech.slice(0,19);
   }
 }

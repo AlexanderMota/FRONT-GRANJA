@@ -69,7 +69,7 @@ export class MapaMenuComponent {
   // ///////////////////////////////////////////////////
   menuItems: MenuItem[] = [
     {
-      ruta: '/mapas/fullscreen',
+      ruta: '/transporte',
       nombre: 'Transportes'
     }/*, {
       ruta: '/mapas/zoom-range',

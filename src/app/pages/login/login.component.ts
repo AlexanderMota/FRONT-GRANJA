@@ -71,12 +71,14 @@ export class LoginComponent implements OnInit {
               
               localStorage.setItem('myuser',JSON.stringify(this.miperfil));
               localStorage.setItem('miid',this.miperfil._id);
-              localStorage.setItem('centroActual',this.miperfil.centroTrabajo);
               localStorage.setItem('rol',this.miperfil.rol);
+              if(this.miperfil.centroTrabajo){
+                localStorage.setItem('centroActual',this.miperfil.centroTrabajo);
+              }
               //const objString = localStorage.getItem('myuser');
               //this.miperfil = (objString ? JSON.parse(objString) : null);
             }
-          },error:err=>{}});
+          },error:err=>console.log(err)});
            Swal.close();
 
            if(this.recuerdame){

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiResponse } from 'src/app/models/apiResponse.model';
+/*import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { SolicitudModel } from 'src/app/models/solicitud.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
-import { SolicitudService } from 'src/app/services/solicitud.service';
+import { SolicitudService } from 'src/app/services/solicitud.service';*/
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class SolicitudComponent /*implements OnInit*/ {
 
-  solicitud:SolicitudModel=new SolicitudModel();
+  /*solicitud:SolicitudModel=new SolicitudModel();
   private solId:string ="";
   constructor(private solServ:SolicitudService, private actRoute:ActivatedRoute, private resPop: ApiResponseService) { 
     this.actRoute.params.subscribe(params=>{
@@ -27,12 +27,12 @@ export class SolicitudComponent /*implements OnInit*/ {
       console.log(this.solicitud);
       });
     });
-  }
+  }*/
 
   /*ngOnInit(): void {
   }*/
   agregaEmpleadoaTarea(){
-    this.resPop.resCargando('Espere...');
+    /*this.resPop.resCargando('Espere...');
     this.solServ.postEmpleadoATarea(
       localStorage.getItem('token')!,
       this.solicitud.empleado._id,
@@ -54,7 +54,7 @@ export class SolicitudComponent /*implements OnInit*/ {
           }
         }
       },(err)=>{
-        this.resPop.resMensajeErrBtn(err.error.status+': '+err.error.message);
+        this.resPop.resMensajeErrBtn(err.error.status+': '+err.error.message);*/
       /*switch(err.error.status) {
         case 400: {
           this.resPop.resMensajeErrBtn('Uno de los parametros es erroneo.');
@@ -77,14 +77,14 @@ export class SolicitudComponent /*implements OnInit*/ {
            break; 
         }
       } */ 
-    });
+    //});
   }
   rechazarSolicitud(){
-    console.log("idSolicitud > "+this.solicitud.idSolicitud)
+   /* console.log("idSolicitud > "+this.solicitud._id)
     this.resPop.resCargando('Espere...');
     this.solServ.deleteSolicitud(
       localStorage.getItem('token')!,
-      this.solicitud.idSolicitud,
+      this.solicitud._id,
     ).subscribe(res=>{
         console.log("respuesta back: "+res);
         switch(res.status) {
@@ -103,6 +103,6 @@ export class SolicitudComponent /*implements OnInit*/ {
         }
       },(err)=>{
         this.resPop.resMensajeErrBtn(err.error.status+': '+err.error.message);
-    });
+    });*/
   }
 }

@@ -39,8 +39,9 @@ import { TareasComponent } from './pages/tareas/tareas.component';
 import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
-import { SolicitudComponent } from './pages/solicitud/solicitud.component';
+//import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
+import { CabeceraNavListaComponent } from './components/cabecera-nav-lista/cabecera-nav-lista.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { TransporteComponent } from './pages/transporte/transporte.component';
     EmpleadoCardComponent,
     SolicitudCardComponent,
     TareaComponent,
-    SolicitudComponent,
+    //SolicitudComponent,
     TareaFormComponent,
     TareaDetailsComponent,
     EmpleadoLineaComponent,
@@ -72,7 +73,8 @@ import { TransporteComponent } from './pages/transporte/transporte.component';
     GraficoPruebaComponent,
     GraficoPrueba2Component,
     TransporteCardComponent,
-    UbicacionFormComponent
+    UbicacionFormComponent,
+    CabeceraNavListaComponent
   ],
   imports: [
     BrowserModule,

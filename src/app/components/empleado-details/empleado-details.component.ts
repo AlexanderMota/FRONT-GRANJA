@@ -39,10 +39,10 @@ export class EmpleadoDetailsComponent implements OnInit {
           },error: err =>console.log(err)});
 
           this.tarServ.getTareaByIdEmpleado(localStorage.getItem('token')!, params['id']).subscribe({next:(res) => {
-            if(res instanceof ApiResponse){
-              console.log(res.message);
+            if((res as ApiResponse).status){
+              console.log((res as ApiResponse).message);
             }else{
-              this.tareas = res;
+              this.tareas = res as TareaModel[];
             }
 
             //console.log(this.solicitudes);
@@ -69,11 +69,11 @@ export class EmpleadoDetailsComponent implements OnInit {
           }});
 
           this.vehiServ.getVehiculosByPropietario(localStorage.getItem("token")!,params['id']).subscribe({next:val=>{
-            if(val instanceof ApiResponse){
-              console.log(val.message);
+            if((val as ApiResponse).status){
+              console.log((val as ApiResponse).message);
             }else{
-              console.log(val);
-              this.vehiculos = val;
+              //console.log(val);
+              this.vehiculos = val as VehiculoModel[];
             }
           },error:err=>{
             console.log(err);

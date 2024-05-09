@@ -17,8 +17,8 @@ export class VehiculoService {
   
   constructor(private http: HttpClient) { }
   
-  getAllVehiculos(token:string,pageSize = 20,pageNum = 1):Observable<[VehiculoModel] | ApiResponse> {
-    return this.http.get<[VehiculoModel] | ApiResponse>(this.baseUrl, {
+  getAllVehiculos(token:string,pageSize = 20,pageNum = 1):Observable<VehiculoModel[] | ApiResponse> {
+    return this.http.get<VehiculoModel[] | ApiResponse>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -28,8 +28,8 @@ export class VehiculoService {
       }
     });
   }
-  getVehiculosByPropietario( token:string, propietario:string, pageSize = 20, pageNum = 1 ):Observable<[VehiculoModel] | ApiResponse> {
-    return this.http.get<[VehiculoModel] | ApiResponse>(this.urlVehiByProp+propietario, {
+  getVehiculosByPropietario( token:string, propietario:string, pageSize = 20, pageNum = 1 ):Observable<VehiculoModel[] | ApiResponse> {
+    return this.http.get<VehiculoModel[] | ApiResponse>(this.urlVehiByProp+propietario, {
       headers: new HttpHeaders({
         Authorization: token
       }),
@@ -50,8 +50,8 @@ export class VehiculoService {
       }
     });
   }
-  getVehiculosByIdParada(token:string, idParada:string, pageSize = 20, pageNum = 1):Observable<[VehiculoModel] | ApiResponse> {
-    return this.http.get<[VehiculoModel] | ApiResponse>(this.urlVehiByPara+idParada, {
+  getVehiculosByIdParada(token:string, idParada:string, pageSize = 20, pageNum = 1):Observable<VehiculoModel[] | ApiResponse> {
+    return this.http.get<VehiculoModel[] | ApiResponse>(this.urlVehiByPara+idParada, {
       headers: new HttpHeaders({
         Authorization: token
       }),

@@ -17,7 +17,6 @@ export class EmpleadoCardComponent implements OnInit {
 
   ngOnInit(): void {
     //this.empleado = this.empleado;
-    console.log(this.empleado);
   }
 
 }

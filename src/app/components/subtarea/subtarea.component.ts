@@ -35,7 +35,7 @@ export class SubtareaComponent implements OnInit {
           }else{
             this.subtareas=res;
           }
-          console.log("comentarios paramID: " + this.subtareas[0]);
+          //console.log("comentarios paramID: " + this.subtareas[0]);
         });
       }else{
         

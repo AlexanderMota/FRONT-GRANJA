@@ -197,7 +197,7 @@ export class MediosTransporteMapBoxEnum {
     arr.push({nombre:"Conducción",clave:MediosTransporteMapBoxEnum.conduccion});
     arr.push({nombre:"Caminando",clave:MediosTransporteMapBoxEnum.caminando});
     arr.push({nombre:"Bicicleta",clave:MediosTransporteMapBoxEnum.bicicleta});
-    console.log(arr);
+    //console.log(arr);
     return arr;
   }
 }

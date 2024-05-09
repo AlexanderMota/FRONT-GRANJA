@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +15,7 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit(): void {
     let fla = this.authServ.esAutenticado();
-    console.log(fla);
+    //console.log(fla);
     if(!fla){
       this.authServ.logout();
       this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");

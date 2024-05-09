@@ -81,11 +81,8 @@
 }
 .inputplantilla{
     display: inline-flex;
-    padding: 0px 0px 0px 30px;
+    padding: 0px;
     margin: 0px 0px 10px 0px;
-}
-.botones{
-    padding: 10px 0px 0px 20px;
 }
 .boton{
     width: 30px;
@@ -93,5 +90,26 @@
     background-color: white;
     border-radius: 3px;
     border: 1px solid lightgray;
+}
+.botonmen{
     margin-right: 20px;
+
+}
+.botonmas{
+    margin-top: 10px;
+    margin-right: 17px;
+}
+.resval{
+    width: 30px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+.puntoval{
+    background-color: red;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+    /*margin: 10px 10px 0px 0px;*/
 }

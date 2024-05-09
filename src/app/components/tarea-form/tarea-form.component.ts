@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, Renderer2, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
@@ -23,17 +22,16 @@ export class TareaFormComponent implements OnInit {
   @Input() 
   editaTar : boolean = false;
   
-  //depart : { nombre: string } = {nombre : ""};
-  //@Input() 
-  departamentos : { nombre: string }[] = [];
   imps : string[] = [];
   supers : TareaModel[] = [];
+  departamentos : { nombre: string }[] = [];
   tarea: TareaModel = new TareaModel();
   titulo:string = "";
   textBtn:string = "";
   fechaIni:string = "";
   fechaFin:string = "";
   roles : string[] = [];
+
   private paramId : string = "";
   private idSuper : string = "";
 
@@ -79,13 +77,18 @@ export class TareaFormComponent implements OnInit {
               console.log((res as ApiResponse).message);
             }else{
               this.tarea=res as TareaModel;
-              let fech = this.tarea.fechafin.toString();
-              this.tarea.fechafin = new Date(fech.slice(0,19));
-              this.fechaFin = fech.slice(0,19);
-              fech = this.tarea.fechainicio.toString();
+              let fech = this.tarea.fechainicio.toString();
               this.tarea.fechainicio = new Date(fech.slice(0,19));
               this.fechaIni = fech.slice(0,19);
-              console.log(this.tarea.departamento);
+              if(this.tarea.fechafin){
+                fech = this.tarea.fechafin.toString();
+                this.tarea.fechafin = new Date(fech.slice(0,19));
+                this.fechaFin = fech.slice(0,19);
+              }
+              if(this.tarea.plantilla.length < 1){
+                this.tarea.plantilla[0] = {rol:"",cantidad:0};
+              }
+              //console.log(this.tarea.departamento);
             }
             //console.log("contructor route params=>\n"+res);
           });
@@ -135,9 +138,17 @@ export class TareaFormComponent implements OnInit {
     this.oculto=!dato.dato;})*/
   }
   onSubmit(form:NgForm){
-    if(!form.valid || this.tarea.importancia == "-" || this.tarea.nombre == "" || this.tarea.departamento== "-"){
+    if(!form.valid || this.tarea.importancia == "-" || 
+      this.tarea.nombre == "" || this.tarea.departamento== "-" || 
+      this.tarea.plantilla.length < 1){
       return;
     }
+    this.tarea.plantilla.forEach(val => {
+      if(val.cantidad < 1 || val.rol.length < 1){
+        console.log("salta val//////////////////////////////");
+        return;
+      }
+    });
     this.resApi.resCargando('Espere...');
     if(this.editaTar){
       this.tarea.fechainicio = new Date(this.fechaIni);
@@ -220,10 +231,12 @@ export class TareaFormComponent implements OnInit {
   emiteCierraVentana(){
     this.eventoEmiteCierraFormTarea.emit(false);
   }
-  agregaRol(){
-    this.tarea.plantilla.push({rol:"",cantidad:0});
+  agregaRol() {
+    this.tarea.plantilla.push({ rol: '', cantidad: 0 }); // Agrega un nuevo objeto a la plantilla
   }
   quitaRol(pos:number){
+    console.log(this.tarea);
     this.tarea.plantilla.splice(pos,1);
+    console.log(this.tarea);
   }
 }

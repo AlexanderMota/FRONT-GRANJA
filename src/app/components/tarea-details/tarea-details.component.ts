@@ -64,7 +64,7 @@ export class TareaDetailsComponent implements OnInit {
     private actRoute:ActivatedRoute,
     private resPop:ApiResponseService,
     private locServ: LocalizationService) {
-    this.inicia();
+      this.numeroTrabajadores = 0;
   }
   /*oculta(){
     this.oculto = !this.oculto;
@@ -72,6 +72,7 @@ export class TareaDetailsComponent implements OnInit {
   }*/
 
   ngOnInit(): void { 
+    this.inicia();
     this.rol = localStorage.getItem('rol')!;
     this.visible = this.permisos.includes(this.rol);
     //this.resaltarRango();
@@ -89,6 +90,8 @@ export class TareaDetailsComponent implements OnInit {
         //console.log(this.paramId);
         await this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId)
         .subscribe({next:res1=>{
+          this.numeroTrabajadores = 0;
+
           if((res1 as ApiResponse).status){
             console.log((res1 as ApiResponse).message);
           }else{
@@ -104,6 +107,7 @@ export class TareaDetailsComponent implements OnInit {
         },error:err=>console.log(err)});
         await this.empServ.getEmpleadosByTarea(localStorage.getItem('token')!,this.paramId)
         .subscribe({next:res2=>{
+          this.empleados = [];
           if ((res2 as ApiResponse).status){
             if((res2 as ApiResponse).status == 201){
               this.numEmp = parseInt( (res2 as ApiResponse).message);
@@ -221,17 +225,22 @@ export class TareaDetailsComponent implements OnInit {
     fechaInicio: Date,
     fechaFin: Date,
     vehiculo: string}){
-    this.ubiServ.deleteParada(localStorage.getItem("token")!,fechaRecogida,this.paradas.idUbicacion).subscribe(val => {
-      if(val.status == 200){
+    this.ubiServ.deleteParada(localStorage.getItem("token")!,fechaRecogida,this.paradas.idUbicacion).subscribe({next:val => {
+      if(val.status == 200 || val.status == 201 || val.status == 202){
+        console.log(val.message);
         this.paradas.fechasRecogida = this.paradas.fechasRecogida.filter((elemento) => {
           // Compara cada propiedad del elemento con las propiedades del elemento a eliminar
           return elemento.fechaInicio !== fechaRecogida.fechaInicio ||
                  elemento.fechaFin !== fechaRecogida.fechaFin ||
                  elemento.vehiculo !== fechaRecogida.vehiculo;
         });
-
+      }else{
+        console.log(val.status,": ",val.message);
+        this.resPop.resMensajeWrnBtn(val.message);
       }
-    });
+    },error:err=>{
+      this.resPop.resMensajeWrnBtn(err);
+    }});
   }
   receiveMessageEditaParada($event: { idUbicacion: string; titulo: string; descripcion: string; longitud: number; latitud: number; }) {
     this.ubi._id = $event.idUbicacion;

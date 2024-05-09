@@ -9,11 +9,16 @@ import { VehiculoService } from 'src/app/services/vehiculo.service';
   templateUrl: './home.component.html'/*,
   styleUrls: ['./home.component.css']*/
 })
-export class HomeComponent{
+export class HomeComponent implements OnInit {
 
   constructor(private authServ: AuthService,
     private respServ:ApiResponseService ) {
-    if(!this.authServ.esAutenticado()){
+
+  }
+  ngOnInit(): void {
+    let fla = this.authServ.esAutenticado();
+    console.log(fla);
+    if(!fla){
       this.authServ.logout();
       this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
       this.authServ.logout();

@@ -21,11 +21,9 @@ export class EmpleadosComponent implements OnInit {
   nuevo="Nuevo empleado";
   pagina = 1;
   tamañoPag = 10;
-  botonIzq: HTMLButtonElement = document.getElementById("botonIzq")as HTMLButtonElement;
-  botonDer: HTMLButtonElement = document.getElementById("botonDer")as HTMLButtonElement;
-
   empleados : EmpleadoModel[] = [];
-  //roles:string[] = [];
+  botonIzq : HTMLButtonElement = document.getElementById("botonIzq") as HTMLButtonElement;
+  botonDer : HTMLButtonElement = document.getElementById("botonDer") as HTMLButtonElement;
 
   constructor(private empServ:EmpleadoService,
     private authServ:AuthService,
@@ -34,11 +32,7 @@ export class EmpleadosComponent implements OnInit {
   ngOnInit(): void {
     this.rol = localStorage.getItem('rol')!;
     this.visible = this.permisos.includes(this.rol);
-    /*if (this.pagina <= 1) {
-      this.botonIzq!.disabled = true;
-    } else {
-      this.botonIzq!.disabled = false;
-    }*/
+    
     this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
@@ -51,7 +45,6 @@ export class EmpleadosComponent implements OnInit {
         this.empleados = res as EmpleadoModel[];
         this.ordenaEmpleadosNombre();
       }
-      //console.log(this.empleados);
     },error:err=>{
       switch(err.error.status) { 
         case 420: { 
@@ -60,10 +53,6 @@ export class EmpleadosComponent implements OnInit {
           this.authServ.logout();
           break; 
         } 
-        /*case 404: { 
-          this.respServ.resMensajeErrBtn("No hay tareas en este centro.");
-            break; 
-        } */
         default: { 
           this.respServ.resMensajeWrnBtn("Algo ha ido mal.");
             //statements; 
@@ -107,11 +96,9 @@ export class EmpleadosComponent implements OnInit {
     });
   }
   cambiaPaginaEmpleado(move:number){
-    //console.log(move);
     if(move < 0){
       if(this.pagina > 1){
         this.pagina += move;
-        //console.log(this.tamañoPag," - ",this.pagina);
         this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
           if((res as ApiResponse).status){
             console.log((res as ApiResponse).message);
@@ -119,12 +106,10 @@ export class EmpleadosComponent implements OnInit {
             this.empleados = res as EmpleadoModel[];
           }
           this.ordenaEmpleadosNombre();
-          //console.log(this.empleados);
         },error:err=>{console.log(err)}});
       }
     }else if(move > 0){
       this.pagina += move;
-      //console.log(this.tamañoPag," - ",this.pagina);
       this.empServ.getAllEmpleados(localStorage.getItem('token')!,this.tamañoPag,this.pagina).subscribe({next:res=>{
         
         if((res as ApiResponse).status){
@@ -135,10 +120,8 @@ export class EmpleadosComponent implements OnInit {
           }else{
             this.empleados = res as EmpleadoModel[];
             this.ordenaEmpleadosNombre();
-            //console.log(this.empleados);
           }
         }
-        //console.log(this.empleados);
       },error:err=>{console.log(err)}});
     }
   }

@@ -35,6 +35,8 @@ export class AuthService {
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('fintoken');
+    localStorage.removeItem('miid');
+    localStorage.removeItem('centroActual');
     //this.vis = "collapse";
   }
 

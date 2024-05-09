@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
+import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { SolicitudModel } from 'src/app/models/solicitud.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
+import { EmpleadoService } from 'src/app/services/empleado.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { SolicitudService } from 'src/app/services/solicitud.service';
 import { TareaService } from 'src/app/services/tarea.service';
@@ -19,6 +21,8 @@ export class SolicitudCardComponent implements OnInit {
 
   visible = false;
   tareaTit ="";
+  tareaId ="";
+  nombreEmp ="";
   botonAprobar="";
   botonRechazar="";
 
@@ -26,6 +30,7 @@ export class SolicitudCardComponent implements OnInit {
   
   constructor(private solServ:SolicitudService,
     private tarServ:TareaService, 
+    private empServ:EmpleadoService, 
     private apiRespServ:ApiResponseService,
     private locServ:LocalizationService) { 
 
@@ -45,14 +50,19 @@ export class SolicitudCardComponent implements OnInit {
   }
   private inicia(){console.log(this.solicitud);
     this.visible = this.permisos.includes(localStorage.getItem('rol')!);
-    //console.log(rol, this.visible);
+    
     this.tarServ.getTareaById(localStorage.getItem("token")!,this.solicitud.idTarea).subscribe({next:res=>{
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
 
       }else{
         this.tareaTit = (res as TareaModel).nombre;
+        this.tareaId = (res as TareaModel)._id;
       }
+    },error:err=>console.log(err)});
+
+    this.empServ.getEmpleadoById(localStorage.getItem("token")!,this.solicitud.idEmpleado).subscribe({next:res=>{
+      this.nombreEmp = (res as EmpleadoModel).nombre + " " + (res as EmpleadoModel).apellidos;
     },error:err=>console.log(err)});
   }
   eliminaSolicitud(){

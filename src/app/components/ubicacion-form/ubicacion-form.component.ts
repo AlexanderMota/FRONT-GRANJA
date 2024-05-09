@@ -87,13 +87,41 @@ export class UbicacionFormComponent implements OnInit {
       this.ubicacion.longitud == 0 || this.ubicacion.latitud == 0){
       return;
     }
+    this.ubicacion.fechasRecogida.forEach(val => {
+      if(val.vehiculo.length < 1 || !val.fechaInicio || !val.fechaFin){
+        console.log("salta validacion vehiculo en parada");
+        return;
+      }
+    });
     this.resApi.resCargando('Espere...');
 
     this.ubicacion.fechasRecogida.push(this.fechaRecogida[0]);
 
     if(this.ubicacion._id){
       console.log("entrando al patchUbi");
-      this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id).subscribe(val => console.log(val));
+      this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id).subscribe({next:res=>{
+        switch(res.status) { 
+          case 200: { 
+            this.emiteCierraVentana();
+            this.resApi.resMensajeSucBtn(res.message);
+              break; 
+          }
+          case 202: {
+            this.resApi.resMensajeWrnBtn(res.message);
+              break; 
+          } 
+          case 405: {
+            this.resApi.resMensajeErrBtn(res.message);
+              break; 
+          } 
+          default: { 
+              //statements; 
+              break; 
+          } 
+        } 
+      },error:err=>{
+        this.resApi.resMensajeErrBtn(err);
+      }});
     }else{
       this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
         switch(res.status) { 
@@ -115,8 +143,6 @@ export class UbicacionFormComponent implements OnInit {
         this.resApi.resMensajeErrBtn(err.error.message);
       }});
     }
-
-    this.ubicacion = new UbicacionModel();
   }
   emiteCierraVentana(){
     this.ubicacion = new UbicacionModel();

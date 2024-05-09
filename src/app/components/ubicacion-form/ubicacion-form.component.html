@@ -124,8 +124,8 @@
 
 
 
-                            <span *ngIf="registroForm.submitted &&  coches.length < 0"
-                                class="text-danger animated fadeIn">Debe indicar a qué grupo pertenece esta tarea</span>
+                            <span *ngIf="registroForm.submitted &&  fechaRecogida[0].vehiculo.length < 1"
+                                class="text-danger animated fadeIn">Debe indicar qué vehiculo cubrirá esta parada.</span>
                             <div class="inputComp wrap-input100 m-b-16" #organizacion id="organizacion" >
                                 <label for="inputimp2" class="labels input100">
                                     Vehículo
@@ -133,7 +133,6 @@
                             
                                 <select [(ngModel)]="fechaRecogida[0].vehiculo"
                                     id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
-                                    <option *ngIf="coches.length > 1">-</option>
                                     <option *ngFor="let coche of coches; let i = index;" [value]="coche.matricula">
                                     <!--<span class="idOculto">id: {{super._id}} - </span>-->
 

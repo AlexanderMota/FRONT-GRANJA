@@ -170,6 +170,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   agregarMarcador(coordenadas:{lng:number,lat:number},movil:boolean){
     if(this.marcadores[1]){ 
       this.borraMarcadorClick();
+      this.borraRuta();
     }else if(this.marcadores.length == 1){
       this.menu.clickNuevoMarcador();
     }
@@ -499,17 +500,19 @@ export class MapaComponent implements OnInit, AfterViewInit {
 
         if((res as ApiResponse).status){
           console.log((res as ApiResponse).message);
-          this.borraMarcadorClick();
           this.borraRuta();
+          this.borraIndicaciones();
+          this.borraMarcadorClick();
           //this.clickMapaVerRutaActivo();
         }else{ 
+          this.borraRuta();
+          this.borraIndicaciones();
           this.borraMarcadorClick();
           this.clickMapaInactivo(this.clickHandlerVerRuta);
           this.clickMapaInactivo(this.clickHandlerNuevaUbi);
           this.paradas = res as UbicacionModel[];
           this.pintaParadas(this.paradas);
           this.clickParadas(this.paradas);
-          this.borraRuta();
         }
       });
     }else{
@@ -519,8 +522,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
   receiveNuevaUbi($event: boolean){
     this.nuevaUbiActivo = $event;
     this.borraRuta();
+    this.borraIndicaciones();
     this.borraMarcadorClick();
     if($event){
+      this.borraIndicaciones();
       this.clickMapaInactivo(this.clickHandlerVerRuta);
       this.clickMapaNuevaUbiActivo();
     }else{

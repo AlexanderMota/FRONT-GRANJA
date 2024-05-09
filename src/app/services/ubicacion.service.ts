@@ -15,6 +15,7 @@ export class UbicacionService {
   private baseUrl = 'http://localhost:4300/api/ubicacion/';
   private urlUbiByIdTarea = this.baseUrl+"tarea/";
   private urlUbiParadas = this.baseUrl+"paradas/";
+  private urlUbiDeleteParada = this.urlUbiParadas+"delete/";
   //private urlUbiById = this.baseUrl+"byid/";
 
   private baseUrlMapBox = 'https://api.mapbox.com/';
@@ -155,7 +156,7 @@ export class UbicacionService {
       fechaFin: Date;
       vehiculo: string;
     },idUbi:string){
-    return this.http.patch<ApiResponse>(this.urlUbiParadas+idUbi, fechasRecogida, {
+    return this.http.patch<ApiResponse>(this.urlUbiDeleteParada+idUbi, fechasRecogida, {
       headers: new HttpHeaders({
         Authorization: token
       })

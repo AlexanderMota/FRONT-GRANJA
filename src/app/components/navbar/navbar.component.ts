@@ -14,6 +14,7 @@ import { TareaService } from 'src/app/services/tarea.service';
 })
 export class NavbarComponent implements OnInit {
   //@Input()
+  perfil = "";
   visible = false;
   autenticado = false;
   supertareas: TareaModel[] = [];
@@ -33,8 +34,6 @@ export class NavbarComponent implements OnInit {
     private tarServ:TareaService, 
     private respServ:ApiResponseService,
     private localizationService:LocalizationService) { 
-    
-    this.autenticado = this.authServ.esAutenticado();
 
     this.localizationService.getString("botones.nav1").subscribe(val => this.val1=val);
     this.localizationService.getString("botones.nav2").subscribe(val => this.val2=val);
@@ -42,14 +41,24 @@ export class NavbarComponent implements OnInit {
     this.localizationService.getString("botones.nav4").subscribe(val => this.val4=val);
     this.localizationService.getString("botones.nav5").subscribe(val => this.val5=val);
     this.localizationService.getString("botones.nav6").subscribe(val => this.val6=val);
+  }
 
+  ngOnInit(): void {   
+    this.autenticado = this.authServ.esAutenticado();
     this.rol = localStorage.getItem('rol')!;
     this.visible = this.permisos.includes(this.rol);
     this.autenticado = this.authServ.esAutenticado();
+    this.perfil = localStorage.getItem("miid")!;
     if(this.autenticado){
       this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe(async res => {
         if((res as ApiResponse).status){
-          console.log((res as ApiResponse).message);
+          if((res as ApiResponse).status == 420){
+            this.authServ.logout();
+            this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
+            this.authServ.logout();
+          }else{
+            console.log((res as ApiResponse).message);
+          }
         }else{
           this.supertareas = res as TareaModel[];
         }
@@ -60,9 +69,6 @@ export class NavbarComponent implements OnInit {
       this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
       this.authServ.logout();
     }
-  }
-
-  ngOnInit(): void {
   }
 
   /*navAuth(){

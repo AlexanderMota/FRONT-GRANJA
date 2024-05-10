@@ -28,35 +28,35 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 ***Se realizaron actualizacion a dia 01/05/2004 aprox:
-Run ng version
+ng version
 
-Run      _                      _                 ____ _     ___
-Run     / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
-Run    / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
-Run   / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
-Run  /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
                 |___/
     
 
-Run Angular CLI: 16.2.13
-Run Node: 20.8.1 (Unsupported)
-Run Package Manager: npm 8.5.5
-Run OS: win32 x64
+Angular CLI: 16.2.13
+Node: 20.8.1 (Unsupported)
+Package Manager: npm 8.5.5
+OS: win32 x64
 
-Run Angular: 17.3.2
-Run ... animations, common, compiler, compiler-cli, core, forms
-Run ... platform-browser, platform-browser-dynamic, router
+Angular: 17.3.2
+... animations, common, compiler, compiler-cli, core, forms
+... platform-browser, platform-browser-dynamic, router
 
 Package                         Version
 ---------------------------------------------------------
-Run @angular-devkit/architect       0.1703.2
-Run @angular-devkit/build-angular   17.3.2
-Run @angular-devkit/core            17.3.2
-Run @angular-devkit/schematics      16.2.13
-Run @angular/cdk                    16.2.14
-Run @angular/cli                    16.2.13
-Run @angular/material               16.2.14
-Run @schematics/angular             16.2.13
-Run rxjs                            7.5.5
-Run typescript                      5.4.3
-Run zone.js                         0.14.4
+@angular-devkit/architect       0.1703.2
+@angular-devkit/build-angular   17.3.2
+@angular-devkit/core            17.3.2
+@angular-devkit/schematics      16.2.13
+@angular/cdk                    16.2.14
+@angular/cli                    16.2.13
+@angular/material               16.2.14
+@schematics/angular             16.2.13
+rxjs                            7.5.5
+typescript                      5.4.3
+zone.js                         0.14.4

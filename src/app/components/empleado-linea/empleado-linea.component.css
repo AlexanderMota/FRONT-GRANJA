@@ -1,4 +1,11 @@
 .cuadroTxt {
-    color: white;
-    text-decoration-color: white;
+    padding: 15px;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.btn{
+    height: 30px;
 }

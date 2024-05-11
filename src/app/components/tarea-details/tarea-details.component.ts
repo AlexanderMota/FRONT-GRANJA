@@ -251,6 +251,15 @@ export class TareaDetailsComponent implements OnInit {
     //console.log("idUbi antes de enviar: "+this.ubi._id);
     this.receiveMessageFormUbi(true);
   }
+  receiveMessageEliminaEmpleadoTarea($event: string) {
+    this.eliminaEmpleadoTarea($event);
+  }
+  private eliminaEmpleadoTarea(emp: string){
+    this.tarServ.deleteEmpleadoTarea(localStorage.getItem('token')!,this.tarea._id,emp).subscribe({next:res=>{
+      if(res.status < 220) this.resPop.resMensajeSucBtn(res.message)
+      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message)
+    },error:err => this.resPop.resMensajeErrBtn(err)/*console.log(err)*/});
+  }
   solicitarTarea(){
     this.solicitarTareaPri();
     //console.log("solicitar: ");

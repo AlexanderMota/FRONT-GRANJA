@@ -118,8 +118,8 @@
         </div>
         
         <div *ngIf='visible' class="empleados">
-            <app-empleado-linea class="card " [routerLink]="['/empleado',empleado.id]"
-                [emp]="empleado" [index]="i" *ngFor="let empleado of empleados; let i = index;">
+            <app-empleado-linea class="card " [emp]="empleado" [index]="i" (eventoEmiteEliminaEmpleadoTarea)="receiveMessageEliminaEmpleadoTarea($event)"
+                *ngFor="let empleado of empleados; let i = index;">
             </app-empleado-linea>
             <button class="card btnNuevoEmp" (click)="muestraEmpleadosDisponibles()">
                 {{botonNuevoEmp}}

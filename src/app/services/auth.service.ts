@@ -33,6 +33,7 @@ export class AuthService {
 
 
   logout(){
+    localStorage.removeItem('rol');
     localStorage.removeItem('token');
     localStorage.removeItem('fintoken');
     localStorage.removeItem('miid');

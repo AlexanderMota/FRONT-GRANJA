@@ -91,7 +91,9 @@ export class SolicitudCardComponent implements OnInit {
   }
   private aprobarSolicitudPri(){
     this.tarServ.postEmpleadoATarea(localStorage.getItem("token")!,
-    this.solicitud.idTarea,this.solicitud.idEmpleado,this.solicitud._id)
-    .subscribe({next:res=>console.log(res.message),error:err=> console.log(err)});
+    this.solicitud.idTarea,this.solicitud.idEmpleado,this.solicitud._id).subscribe({next:res=>{
+      if(res.status < 220) this.apiRespServ.resMensajeSucBtn(res.message)
+      else if(res.status > 400) this.apiRespServ.resMensajeErrBtn(res.message)
+    },error:err=> this.apiRespServ.resMensajeErrBtn(err) });
   }
 }

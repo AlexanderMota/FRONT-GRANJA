@@ -25,6 +25,19 @@ export class MapaComponent implements OnInit, AfterViewInit {
   @ViewChild(MapaMenuComponent)
   menu!: MapaMenuComponent;
   
+  @Input() 
+  index:number = 0;
+  @Input() 
+  idTarea:string = "";
+
+  mapa!:mapboxgl.Map;
+  nuevaUbiActivo = false;
+  verParadasActivo = false;
+  eliminaParadaActivo = false;
+  nombrePuntoPartida:string="";
+  marcadores:mapboxgl.Marker[] = [];
+  indicaciones: MapBoxLeg = new MapBoxLeg;
+
   @Output() 
   private eventoEmiteFormVehi = new EventEmitter<boolean>();
   @Output() 
@@ -34,26 +47,12 @@ export class MapaComponent implements OnInit, AfterViewInit {
   @Output() 
   private eventoEmiteEditaParada = new EventEmitter<{idUbicacion:string,titulo:string,descripcion:string, longitud:number, latitud:number}>();
   
-  nuevaUbiActivo = false;
-  verParadasActivo = false;
-  eliminaParadaActivo = false;
-  
-  @Input() 
-  index:number = 0;
-  @Input() 
-  idTarea:string = "";
-
-  mapa!:mapboxgl.Map;
   private ubiCentro:UbicacionModel = new UbicacionModel();
   private medio : string = MediosTransporteMapBoxEnum.conduccion;
   private paradas : UbicacionModel[] = [];
   private clickHandlerVerRuta!: ((event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => void);
   private clickHandlerNuevaUbi!: ((event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => void);
-
-  marcadores:mapboxgl.Marker[] = [];
-  nombrePuntoPartida:string="";
-  indicaciones: MapBoxLeg = new MapBoxLeg;
-
+  
   constructor(
     private actRoute:ActivatedRoute,
     private ubiServ: UbicacionService,
@@ -401,30 +400,32 @@ export class MapaComponent implements OnInit, AfterViewInit {
 
             let index = 0;
             this.apiRespServ.resMensajeInputSelect(tit,msg,btnAcc, true, btnCan,da).then(value => {
-              index = parseInt(value);
-              
-              this.vehiServ.patchVehiculo(
-                localStorage.getItem('token')!,
-                dat[i].fechasRecogida[index].vehiculo,
-                localStorage.getItem('miid')!
-              ).subscribe(res => {
-                  console.log(res.status + " - " + res.message);
-                  if(res.status == 200){
-                    this.apiRespServ.resMensajeSucBtn(res.message);
-                  }else{
-                    this.apiRespServ.resMensajeErrBtn(res.message);
-                  };
-                }
-              );
-            });
+              if(value){
+                index = parseInt(value);
+                //console.log(value);
+                this.vehiServ.patchVehiculo(
+                  localStorage.getItem('token')!,
+                  dat[i].fechasRecogida[index].vehiculo,
+                  localStorage.getItem('miid')!
+                ).subscribe(res => {
+                    console.log(res.status + " - " + res.message);
+                    if(res.status == 200){
+                      this.apiRespServ.resMensajeSucBtn(res.message);
+                    }else{
+                      this.apiRespServ.resMensajeErrBtn(res.message);
+                    };
+                  }
+                );
+              }
+            }).catch(err=>console.log(err));
           })})})});
         });
         popup.getElement().querySelector(".boton2")!.addEventListener('click', () => {
-          console.log("idUbicacion: "+dat[i]._id);
+          //console.log("idUbicacion: "+dat[i]._id);
           this.eventoEmiteEditaParada.emit({idUbicacion:dat[i]._id,titulo:dat[i].titulo,descripcion: dat[i].descripcion, longitud:dat[i].longitud, latitud:dat[i].latitud});
         });
         popup.getElement().querySelector(".boton3")!.addEventListener('click', () => {
-          console.log("idUbicacion: "+dat[i]._id);
+          //console.log("idUbicacion: "+dat[i]._id);
           this.eventoEmiteEliminaParada.emit({idUbicacion:dat[i]._id,fechasRecogida:dat[i].fechasRecogida});
         });
       });

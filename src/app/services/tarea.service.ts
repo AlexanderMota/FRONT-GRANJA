@@ -66,15 +66,6 @@ export class TareaService {
       }
     });
   }
-  patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
-    tar.idTarea = 0;
-    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
-    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,plantilla,precioHora,terminada},{
-      headers: new HttpHeaders({
-        Authorization: token
-      })
-    });
-  }
   postTarea(token:string,tar:TareaModel,idSuper:string ="0b"):Observable<ApiResponse>{
     tar.idTarea = 0;
     const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
@@ -94,8 +85,24 @@ export class TareaService {
       })
     });
   }
+  patchTarea(token:string,tar:TareaModel):Observable<ApiResponse>{
+    tar.idTarea = 0;
+    const {idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
+    return this.http.patch<ApiResponse>(this.baseUrl+tar._id,{idTarea,nombre,descripcion,departamento,importancia,fechainicio,fechafin,plantilla,precioHora,terminada},{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
   deleteTarea(token:string,idTar:string):Observable< ApiResponse>{
     return this.http.delete<ApiResponse>(this.baseUrl+idTar,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
+  deleteEmpleadoTarea(token:string,idTar:string,idEmp:string):Observable< ApiResponse>{
+    return this.http.delete<ApiResponse>(this.urlTareasByIdEmpleado+idTar+"_"+idEmp,{
       headers: new HttpHeaders({
         Authorization: token
       })

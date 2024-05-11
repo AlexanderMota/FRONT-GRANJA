@@ -69,9 +69,10 @@ export class LoginComponent implements OnInit {
             }else{
               this.miperfil = (res as EmpleadoModel);
               
-              localStorage.setItem('myuser',JSON.stringify(this.miperfil));
+              //localStorage.setItem('myuser',JSON.stringify(this.miperfil));
               localStorage.setItem('miid',this.miperfil._id);
               localStorage.setItem('rol',this.miperfil.rol);
+              localStorage.setItem('email', this.usuario.email!);
               if(this.miperfil.centroTrabajo){
                 localStorage.setItem('centroActual',this.miperfil.centroTrabajo);
               }
@@ -82,10 +83,9 @@ export class LoginComponent implements OnInit {
            Swal.close();
 
            if(this.recuerdame){
-            localStorage.setItem('nombre', this.usuario.email!);
             localStorage.setItem('password', this.usuario.password!);
            }else{
-            localStorage.removeItem('nombre');
+            localStorage.removeItem('email');
             localStorage.removeItem('password');
            }
             this.router.navigateByUrl('/');

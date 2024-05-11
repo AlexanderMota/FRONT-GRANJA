@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 
 @Component({
@@ -7,6 +7,9 @@ import { EmpleadoModel } from 'src/app/models/empleado.model';
   styleUrls: ['./empleado-linea.component.css']
 })
 export class EmpleadoLineaComponent implements OnInit {
+  @Output()
+  private eventoEmiteEliminaEmpleadoTarea= new EventEmitter<string>();
+
   @Input() 
   emp: { nombre: string; id: string; } = {nombre:"",id:""};
   @Input() 
@@ -15,5 +18,10 @@ export class EmpleadoLineaComponent implements OnInit {
    }
 
   ngOnInit(): void {
+  }
+  eliminaEmpleadoTarea(){
+    /*console.log("this.emp.id: ");
+    console.log(this.emp.id);*/
+    this.eventoEmiteEliminaEmpleadoTarea.emit(this.emp.id);
   }
 }

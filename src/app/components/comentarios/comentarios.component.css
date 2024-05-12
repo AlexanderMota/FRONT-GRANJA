@@ -1,17 +1,3 @@
-.card{
-    margin-bottom: 10px;
-}
-.detalles{
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-.coment{
-    padding-left: 10px;
-}
-.fecha{
-    text-align: end;
-}
 .formCont{
     margin-top: 10px;
 }

@@ -1,0 +1,24 @@
+
+.card{
+    margin-bottom: 10px;
+    
+}
+.cab{
+    background-color: #827ffe;
+    height: 10px;
+    border-radius: 3px 3px 0px 0px;
+}
+.detalles{
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.coment{
+    padding-left: 10px;
+}
+.fecha{
+    padding-left: 10px;
+}
+.titulo{
+    font-weight: bold;
+}

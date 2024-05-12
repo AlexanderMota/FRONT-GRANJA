@@ -1,11 +1,5 @@
-<div class="card"
-    *ngFor="let comentario of comentarios;">
-    <div class="detalles">
-        <p>{{comentario.nombre}}</p>
-        <p class="fecha">{{comentario.fecha}}</p>
-    </div>
-    <p class="coment">{{comentario.descripcion}}</p>
-</div>  
+<app-comentario *ngFor="let comentario of comentarios;" [comentario]="comentario">
+</app-comentario>  
 <div class="formCont">
     <form #registroForm="ngForm" (ngSubmit)="onSubmit(registroForm)"
         class="formulario">

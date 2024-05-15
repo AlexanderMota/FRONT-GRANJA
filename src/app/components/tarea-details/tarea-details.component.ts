@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ComentarioModel } from 'src/app/models/comentario.model';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { ComentarioService } from 'src/app/services/comentario.service';
+//import { AuthService } from 'src/app/services/auth.service';
+//import { ComentarioService } from 'src/app/services/comentario.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { TareaService } from 'src/app/services/tarea.service';
-import { Location } from '@angular/common';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
-//import {  } from '../../../assets/textos/strings.json';
 import { LocalizationService } from '../../services/localization.service';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { SolicitudService } from 'src/app/services/solicitud.service';
+//import { MapaComponent } from 'src/app/components/mapa/mapa.component';
+
 
 @Component({
   selector: 'app-tarea-details',
@@ -22,12 +22,14 @@ import { SolicitudService } from 'src/app/services/solicitud.service';
   styleUrls: ['./tarea-details.component.css']
 })
 export class TareaDetailsComponent implements OnInit {
+  /*@ViewChild('app-mapa') 
+  mapComp!: MapaComponent;*/
 
   tarea: TareaModel = new TareaModel();
+  ubi:UbicacionModel=new UbicacionModel();
   comentarios: ComentarioModel[] = [];
   empleados: {nombre:string, id:string}[] = [];
   empleadosDisp: {nombre:string, id:string}[] = [];
-  //empleadoNuevo: EmpleadoModel = {_id: 'Empleados', idEmpleado : 0, nombre : "", apellidos:"",telefono:"", email:"", password:""};
   showP1 : boolean= false;
   showP2 : boolean= false;
   showP3 : boolean= false;
@@ -35,25 +37,20 @@ export class TareaDetailsComponent implements OnInit {
   showPEmpD : boolean= false;
   showParadas: boolean= false;
   visible: boolean= false;
+  nuevaTarUbi: boolean= false;
   numEmp=0;
   numeroTrabajadores=0;
-  //imps:string[] = [];
-  //departamentos:{nombre:string}[] = [];
   paramId : string = "";
-  ubi:UbicacionModel=new UbicacionModel();
   paradas:{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}={idUbicacion:"",fechasRecogida:[]};
-  private rol = "";
-  private permisos = ["ADMIN","Director","RRHH","Gerente","Comercial","Supervisor","Gestor","Capataz","Coordinador"];
-
-
-
-  //@Input() oculto:boolean = false;
+  
   botonAnadirSubtarea = "";//this.localizationService.getString("welcomeMessage");
   botonBorrar = "";//this.localizationService.getString('botones.editar');
   botonEditar = "";//this.localizationService.getString('botones.borrar');
   botonNuevoEmp = "";
   fechaIni = "";
-
+  
+  private rol = "";
+  private permisos = ["ADMIN","Director","RRHH","Gerente","Comercial","Supervisor","Gestor","Capataz","Coordinador"];
 
 
   constructor(
@@ -66,16 +63,11 @@ export class TareaDetailsComponent implements OnInit {
     private locServ: LocalizationService) {
       this.numeroTrabajadores = 0;
   }
-  /*oculta(){
-    this.oculto = !this.oculto;
-    this.compMess.emiteDato.emit({dato:this.oculto});
-  }*/
 
   ngOnInit(): void { 
     this.inicia();
     this.rol = localStorage.getItem('rol')!;
     this.visible = this.permisos.includes(this.rol);
-    //this.resaltarRango();
     if(this.visible){
       this.locServ.getString("botones.nuevaSubtarea").subscribe(val => {this.botonAnadirSubtarea = val});
       this.locServ.getString('botones.editar').subscribe(val => this.botonEditar = val);
@@ -126,59 +118,23 @@ export class TareaDetailsComponent implements OnInit {
       }
     });
   }
-  borraTarea(){
-    this.borraTareaPri();
-  }
+  borraTarea(){ this.borraTareaPri(); }
   private async borraTareaPri(){
     this.resPop.resCargando('Espere...');
-    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id).subscribe({next:res=>{
-      const flag = res;
-      if(flag){
-        this.locServ.getString("tareaEliminadaCorrecto").subscribe(val =>this.resPop.resMensajeSucBtnRedir(val,"tareas"));
-      }else{
-        this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
-      }
-    },error:err=>console.log(err)})
+    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id,0).subscribe({next:res=>{
+      console.log(res);
+      if(res.status < 220) this.resPop.resMensajeSucBtnRedir(res.message,"tareas") //this.locServ.getString("tareaEliminadaCorrecto").subscribe(val =>this.resPop.resMensajeSucBtnRedir(val,"tareas"));
+      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message) //this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
+      else this.resPop.resMensajeErrBtn(res.message)
+      
+    },error:err=>this.resPop.resMensajeErrBtn(err)})
   }
-  abreFormTarea(flag:boolean){
-    this.abreFormTareaPri(flag);
-  }
+  abreFormTarea(flag:boolean){ this.abreFormTareaPri(flag); }
   private abreFormTareaPri(flag:boolean){
     this.editaTar = flag;
     this.showP1 = true;
   }
-  /*abreFormTransporte(){
-    this.showP2 = true;
-  }*/
-  
-  receiveMessageFormTarea($event: boolean){
-    this.showP1 = $event;
-  }
-  receiveMessageFormVehi($event: boolean){
-    //console.log("receiveMessageFormVehi: "+$event);
-    this.showP2 = $event;
-  }
-  sendMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
-    //console.log($event);
-    this.ubi.titulo = $event.nombre;
-    this.ubi.longitud = $event.lng;
-    this.ubi.latitud = $event.lat;
-    this.showP3 = true;
-  }
-  /*receiveMessageFormUbi($event: boolean){
-    this.showP3 = $event;
-  }*/
-  emiteCierraVentana(){
-    this.showPEmpD = false;
-    
-    location.reload();
-  }
-  emiteCierraVentana2(){
-    this.showParadas = false;
-  }
-  agregaTrabajadorATarea(idEmpleado:string){
-    this.agregaTrabajadorATareaPri(idEmpleado);
-  }
+  agregaTrabajadorATarea(idEmpleado:string){ this.agregaTrabajadorATareaPri(idEmpleado); }
   private async agregaTrabajadorATareaPri(idEmpleado:string){
     await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
       if(res.status < 220){
@@ -191,9 +147,7 @@ export class TareaDetailsComponent implements OnInit {
     });
     this.showPEmpD = false;
   }
-  muestraEmpleadosDisponibles(){
-    this.muestraEmpleadosDisponiblesPri();
-  }
+  muestraEmpleadosDisponibles(){ this.muestraEmpleadosDisponiblesPri(); }
   private async muestraEmpleadosDisponiblesPri(){
     if(this.empleadosDisp.length < 1){
       await this.empServ.getEmpleadosByTareaDist(localStorage.getItem('token')!,
@@ -207,13 +161,48 @@ export class TareaDetailsComponent implements OnInit {
     }
     this.showPEmpD = true;
   }
-
-  receiveMessageFormUbi($event: boolean){
-    this.showP3 = $event;
+  /*abreFormTransporte(){
+    this.showP2 = true;
+  }*/
+  
+  emiteCierraVentana(){
+    this.showPEmpD = false;
+    location.reload();
   }
+  emiteCierraVentana2(){ this.showParadas = false; }
+  sendMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
+    this.ubi.titulo = $event.nombre;
+    this.ubi.longitud = $event.lng;
+    this.ubi.latitud = $event.lat;
+    this.nuevaTarUbi = false;
+    this.showP3 = true;
+  }
+  receiveMessageFormTarea($event: boolean){ this.showP1 = $event; }
+  receiveMessageFormVehi($event: boolean){ this.showP2 = $event; }
+  receiveMessageFormUbi($event: boolean){ this.showP3 = $event; }
   receiveMessageEliminaParada($event:{idUbicacion:string, fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}){
     this.paradas = $event;
     this.showParadas = true;
+  }
+  receiveMessageEditaParada($event: { idUbicacion: string; titulo: string; descripcion: string; longitud: number; latitud: number; }) {
+    this.ubi._id = $event.idUbicacion;
+    this.ubi.titulo = $event.titulo;
+    this.ubi.descripcion = $event.descripcion;
+    this.ubi.longitud = $event.longitud;
+    this.ubi.latitud = $event.latitud;
+    //console.log("idUbi antes de enviar: "+this.ubi._id);
+    this.receiveMessageFormUbi(true);
+  }
+  receiveMessageEliminaEmpleadoTarea($event: string) { this.eliminaEmpleadoTarea($event); }
+  private eliminaEmpleadoTarea(emp: string){
+    this.tarServ.deleteEmpleadoTarea(localStorage.getItem('token')!,this.tarea._id,emp).subscribe({next:res=>{
+      if(res.status < 220) this.resPop.resMensajeSucBtn(res.message)
+      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message)
+    },error:err => this.resPop.resMensajeErrBtn(err)/*console.log(err)*/});
+  }
+  receiveMessageIdTareaUbi($event:string){
+    this.ubi.idTarea = $event;
+    this.nuevaTarUbi = true;
   }
   eliminaParada(fechaRecogida: {
     fechaInicio: Date,
@@ -242,33 +231,10 @@ export class TareaDetailsComponent implements OnInit {
       this.resPop.resMensajeWrnBtn(err);
     }});
   }
-  receiveMessageEditaParada($event: { idUbicacion: string; titulo: string; descripcion: string; longitud: number; latitud: number; }) {
-    this.ubi._id = $event.idUbicacion;
-    this.ubi.titulo = $event.titulo;
-    this.ubi.descripcion = $event.descripcion;
-    this.ubi.longitud = $event.longitud;
-    this.ubi.latitud = $event.latitud;
-    //console.log("idUbi antes de enviar: "+this.ubi._id);
-    this.receiveMessageFormUbi(true);
-  }
-  receiveMessageEliminaEmpleadoTarea($event: string) {
-    this.eliminaEmpleadoTarea($event);
-  }
-  private eliminaEmpleadoTarea(emp: string){
-    this.tarServ.deleteEmpleadoTarea(localStorage.getItem('token')!,this.tarea._id,emp).subscribe({next:res=>{
-      if(res.status < 220) this.resPop.resMensajeSucBtn(res.message)
-      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message)
-    },error:err => this.resPop.resMensajeErrBtn(err)/*console.log(err)*/});
-  }
-  solicitarTarea(){
-    this.solicitarTareaPri();
-    //console.log("solicitar: ");
-  }
+  solicitarTarea(){ this.solicitarTareaPri(); }
   private solicitarTareaPri(){
-
     this.solServ.postSolicitud(localStorage.getItem("token")!,
-    this.tarea._id,localStorage.getItem("miid")!).subscribe({next:res=>{
-      //console.log(res);
+      this.tarea._id,localStorage.getItem("miid")!).subscribe({next:res=>{
       if(res.status < 220){
         console.log(res.message);
         this.locServ.getString("mensajesInformacion.202solicitaTarea").subscribe(val => this.resPop.resMensajeSucBtn(val));
@@ -278,30 +244,4 @@ export class TareaDetailsComponent implements OnInit {
       }
     },error:err=>console.log(err)});
   }
-  // pruebas calendario parada
-  /*resaltarRango(): void {
-    // Obtener la fecha de inicio y fin del rango deseado
-    const startDate = new Date('2024-02-01');
-    const endDate = new Date('2024-02-10');
-
-    // Obtener el elemento de fecha
-    const dateInput = document.getElementById('dateInput') as HTMLInputElement;
-
-    // Función para formatear la fecha en formato 'YYYY-MM-DD'
-    const formatDate = (date: Date): string => {
-      const year = date.getFullYear();
-      const month = ('0' + (date.getMonth() + 1)).slice(-2);
-      const day = ('0' + date.getDate()).slice(-2);
-      return `${year}-${month}-${day}`;
-    };
-
-    // Iterar sobre los días en el rango y aplicar estilos
-    const dates = dateInput.querySelectorAll<HTMLInputElement>('input[type="date"]');
-    dates.forEach(date => {
-      const dateValue = new Date(date.value);
-      if (dateValue >= startDate && dateValue <= endDate) {
-        date.style.backgroundColor = 'yellow';
-      }
-    });
-  }*/
 }

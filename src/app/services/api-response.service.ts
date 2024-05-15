@@ -127,6 +127,7 @@ export class ApiResponseService {
       }
     });
   }
+  
   resMensajeWrnBtnRedir(msn:string,redir:string){
     Swal.fire({
       allowOutsideClick:false,
@@ -142,6 +143,16 @@ export class ApiResponseService {
         // Acción cuando se hace clic en el botón Cancelar
         console.log('Botón Cancelar presionado');
       }
+    });
+  }
+  resMensajeWrnBtnThen(msn:string): Promise<SweetAlertResult<any>>{
+    return Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
     });
   }
   resCargando(msn:string){

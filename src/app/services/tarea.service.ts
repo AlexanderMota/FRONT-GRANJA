@@ -54,15 +54,14 @@ export class TareaService {
       })
     });
   }
-  getSubtareas(token:string,idTarea:string, pageSize=20,
-    pageNum=1):Observable<TareaModel[] | ApiResponse> {
+  getSubtareas(token:string,idTarea:string, pageSize=20, pageNum=1):Observable<TareaModel[] | ApiResponse> {
     return this.http.get<TareaModel[] | ApiResponse>(this.urlSubtareas+idTarea ,{
       headers: new HttpHeaders({
         Authorization: token
       }),
       params: {
         pageSize:pageSize,
-        pageNum:pageSize
+        pageNum:pageNum
       }
     });
   }
@@ -94,8 +93,8 @@ export class TareaService {
       })
     });
   }
-  deleteTarea(token:string,idTar:string):Observable< ApiResponse>{
-    return this.http.delete<ApiResponse>(this.baseUrl+idTar,{
+  deleteTarea(token:string,idTar:string,conservaSubs:number):Observable< ApiResponse>{
+    return this.http.delete<ApiResponse>(this.baseUrl+idTar+"_"+conservaSubs,{
       headers: new HttpHeaders({
         Authorization: token
       })

@@ -130,7 +130,7 @@
     <app-subtarea class="subtareas"></app-subtarea>
     <app-comentarios  class="comentarios"></app-comentarios>
     
-    <app-mapa class="mapa" 
+    <app-mapa class="mapa" [tareaNuevaUbi]="nuevaTarUbi"
         (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'
         (eventoEmiteUbi)="sendMessageFormUbi($event)"
         (eventoEmiteEliminaParada)="receiveMessageEliminaParada($event)"
@@ -140,6 +140,7 @@
 
 <div>
     <app-tarea-form *ngIf='showP1' [editaTar]="editaTar" 
+        (eventoEmiteIdTareaUbi)='receiveMessageIdTareaUbi($event)'
         (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>
 <div>

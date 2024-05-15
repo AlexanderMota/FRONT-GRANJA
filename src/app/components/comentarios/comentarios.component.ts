@@ -59,6 +59,7 @@ export class ComentariosComponent implements OnInit {
         case 201: { 
           
            Swal.close();
+           location.reload();
 /*
            if(this.recuerdame){
             localStorage.setItem('nombre', this.empleado!.nombre!);
@@ -67,14 +68,10 @@ export class ComentariosComponent implements OnInit {
 */
            break; 
         }
-        case 0: { 
-          
-          this.localizationService.getString("mensajesError.desconocido").subscribe(val => 
-          this.resApi.resMensajeWrnBtn(val));
-           break; 
-        } 
         default: { 
            //statements; 
+          this.localizationService.getString("mensajesError.desconocido").subscribe(val => 
+          this.resApi.resMensajeWrnBtn(val));
            break; 
         } 
       } 

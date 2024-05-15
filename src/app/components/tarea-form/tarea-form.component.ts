@@ -18,6 +18,8 @@ export class TareaFormComponent implements OnInit {
 
   @Output() 
   eventoEmiteCierraFormTarea = new EventEmitter<boolean>();
+  @Output() 
+  eventoEmiteIdTareaUbi = new EventEmitter<string>();
 
   @Input() 
   editaTar : boolean = false;
@@ -32,6 +34,7 @@ export class TareaFormComponent implements OnInit {
   fechaFin:string = "";
   roles : string[] = [];
 
+  private idNuevaTarUbi = "";
   private paramId : string = "";
   private idSuper : string = "";
 
@@ -186,16 +189,32 @@ export class TareaFormComponent implements OnInit {
         this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
-              this.locServ.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));
-              this.locServ.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnRedir(val,"/tareas/"));
-               break; 
+                const ids = res.message.split("_");
+                console.log(ids);
+              this.locServ.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(ids[0] + val));
+              this.locServ.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnThen("resMensajeWrnBtnThen: "+val)
+              .then(val=>{
+                if(val.isConfirmed) {
+                  this.eventoEmiteIdTareaUbi.emit(ids[1]);
+                  //console.log("es true: ", ids[1]);
+                  this.eventoEmiteCierraFormTarea.emit(false);
+                }else if(!val.isConfirmed) {
+                  console.log("La tarea tiene la misma ubi que su padre.");
+                  location.reload();
+                  this.eventoEmiteCierraFormTarea.emit(false);
+                }
+              })
+              .catch(err=>console.log(err)));
+              break; 
             }
             case 400: { 
               this.locServ.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
+              this.eventoEmiteCierraFormTarea.emit(false);
                break; 
             } 
             default: { 
               this.locServ.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
+              this.eventoEmiteCierraFormTarea.emit(false);
                break; 
             } 
           } 
@@ -225,7 +244,6 @@ export class TareaFormComponent implements OnInit {
       }
     }
     
-    this.eventoEmiteCierraFormTarea.emit(false);
   }
   
   emiteCierraVentana(){

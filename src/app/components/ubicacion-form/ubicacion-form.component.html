@@ -27,9 +27,9 @@
                                 <span class="focus-input100"></span>
                             </div>
 
-                            <span *ngIf="registroForm.submitted && registroForm.controls['descripcion'].errors"
+                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' && registroForm.controls['descripcion'].errors"
                                 class="text-danger animated fadeIn">La descripcion es obligatoria</span>
-                            <div class="wrap-input100 m-b-16">
+                            <div class="wrap-input100 m-b-16" *ngIf="ubicacion.idTarea == ''">
                                 <textarea class="input100" 
                                     type="text" 
                                     name="descripcion" 
@@ -40,15 +40,15 @@
             
                                 <span class="focus-input100"></span>
                             </div>
-                            <div class="input-group">
+                            <div class="input-group" *ngIf="ubicacion.idTarea == ''">
                                 <textarea class="form-control" aria-label="With textarea"></textarea>
                             </div>
 
 
             
-                            <span *ngIf="registroForm.submitted && registroForm.controls['fechaRecogida'].errors"
+                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' && registroForm.controls['fechaInicio'].errors"
                                 class="text-danger animated fadeIn">La fecha Recogida es obligatoria</span>
-                            <div class="wrap-input100 m-b-16">
+                            <div class="wrap-input100 m-b-16"  *ngIf="ubicacion.idTarea == ''">
                                 <label for="inputNum" class="labels input100">
                                     Inicio
                                 </label>
@@ -62,9 +62,9 @@
             
                                 <span class="focus-input100"></span>
                             </div>
-                            <span *ngIf="registroForm.submitted && registroForm.controls['fechaRecogida'].errors"
+                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' && registroForm.controls['fechaFin'].errors"
                                 class="text-danger animated fadeIn">La fecha Recogida es obligatoria</span>
-                            <div class="wrap-input100 m-b-16">
+                            <div class="wrap-input100 m-b-16"  *ngIf="ubicacion.idTarea == ''">
                                 <label for="inputNum" class="labels input100">
                                     Fin
                                 </label>
@@ -124,9 +124,9 @@
 
 
 
-                            <span *ngIf="registroForm.submitted &&  fechaRecogida[0].vehiculo.length < 1"
+                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' &&  fechaRecogida[0].vehiculo.length < 1"
                                 class="text-danger animated fadeIn">Debe indicar qué vehiculo cubrirá esta parada.</span>
-                            <div class="inputComp wrap-input100 m-b-16" #organizacion id="organizacion" >
+                            <div class="inputComp wrap-input100 m-b-16" #vehiculo id="vehiculo"  *ngIf="ubicacion.idTarea == ''">
                                 <label for="inputimp2" class="labels input100">
                                     Vehículo
                                 </label>

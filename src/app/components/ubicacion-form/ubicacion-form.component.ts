@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
 import { VehiculoModel } from 'src/app/models/vehiculo.model';
@@ -21,7 +20,7 @@ export class UbicacionFormComponent implements OnInit {
   @Output() 
   eventoEmiteCierraFormUbi = new EventEmitter<boolean>();
 
-  //showP2:boolean = false;
+  nuevaUbiTarea = false;
   titulo:string = "";
   textBtn:string = "";
   coches: {matricula:string,plazas:number}[]=[];
@@ -33,6 +32,8 @@ export class UbicacionFormComponent implements OnInit {
     private ubiServ:UbicacionService,
     private vehiServ:VehiculoService,
     private localizationService: LocalizationService) {
+
+
       this.vehiServ.getVehiculosByPropietario(
         localStorage.getItem("token")!,
         localStorage.getItem("miid")!).subscribe(res => {
@@ -73,7 +74,7 @@ export class UbicacionFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //console.log("idubi: "+this.ubicacion._id);
+    console.log(this.ubicacion);
     if(this.ubicacion._id){
       this.localizationService.getString("encabezados.editaUbicacion").subscribe(val => this.titulo = val);
       this.localizationService.getString("botones.guardar").subscribe(val => this.textBtn = val);
@@ -83,22 +84,27 @@ export class UbicacionFormComponent implements OnInit {
     }
   }
   onSubmit(form:NgForm){
-    if(!form.valid || this.ubicacion.titulo == "-" || this.ubicacion.descripcion == "-" || 
+    if(!form.valid || this.ubicacion.titulo == "-" || 
       this.ubicacion.longitud == 0 || this.ubicacion.latitud == 0){
       return;
     }
-    this.ubicacion.fechasRecogida.forEach(val => {
-      if(val.vehiculo.length < 1 || !val.fechaInicio || !val.fechaFin){
-        console.log("salta validacion vehiculo en parada");
-        return;
-      }
-    });
+    if(this.ubicacion.idTarea == ""){
+      console.log("parada");
+      this.ubicacion.fechasRecogida.forEach(val => {
+        if(val.vehiculo.length < 1 || !val.fechaInicio|| !val.fechaFin || this.ubicacion.descripcion == "-" ){
+          console.log("salta validacion vehiculo en parada");
+          return;
+        }
+      });
+    }else{
+      this.ubicacion.fechasRecogida = [];
+    }
     this.resApi.resCargando('Espere...');
 
     this.ubicacion.fechasRecogida.push(this.fechaRecogida[0]);
 
     if(this.ubicacion._id){
-      console.log("entrando al patchUbi");
+      //console.log("entrando al patchUbi");
       this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id).subscribe({next:res=>{
         switch(res.status) { 
           case 200: { 
@@ -123,28 +129,53 @@ export class UbicacionFormComponent implements OnInit {
         this.resApi.resMensajeErrBtn(err);
       }});
     }else{
-      this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
-        switch(res.status) { 
-          case 201: { 
-            this.emiteCierraVentana();
-            this.resApi.resMensajeSucBtn('Ubicación de parada creado con éxito');
-              break; 
-          }
-          case 400: {
-            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
-              break; 
+      
+      if(this.ubicacion.idTarea == ""){
+        this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
+          switch(res.status) { 
+            case 201: { 
+              this.emiteCierraVentana();
+              this.resApi.resMensajeSucBtn('Ubicación de parada creado con éxito');
+                break; 
+            }
+            case 400: {
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+                break; 
+            } 
+            default: { 
+                //statements; 
+                break; 
+            } 
           } 
-          default: { 
-              //statements; 
-              break; 
+        },error:(err)=>{
+          this.resApi.resMensajeErrBtn(err.error.message);
+        }});
+      }else{
+        this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
+          switch(res.status) { 
+            case 201: { 
+              this.emiteCierraVentana();
+              this.resApi.resMensajeSucBtn('Ubicación de tarea creada con éxito');
+                break; 
+            }
+            case 400: {
+              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+                break; 
+            } 
+            default: { 
+                //statements; 
+                break; 
+            } 
           } 
-        } 
-      },error:(err)=>{
-        this.resApi.resMensajeErrBtn(err.error.message);
-      }});
+        },error:(err)=>{
+          this.resApi.resMensajeErrBtn(err.error.message);
+        }});
+      }
+
     }
   }
   emiteCierraVentana(){
+    console.log(this.ubicacion);
     this.ubicacion = new UbicacionModel();
     this.eventoEmiteCierraFormUbi.emit(false);
   }

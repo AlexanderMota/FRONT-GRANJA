@@ -30,8 +30,6 @@ export class MapaMenuComponent {
   eventoEmiteReiniciaMapa = new EventEmitter<boolean>();
   @Output() 
   eventoEmiteVerTransportes = new EventEmitter<boolean>();
-  //@Output() 
-  //eventoEmiteEliminaParada = new EventEmitter<boolean>();
   
   @Input() 
   inputSearchValue: string = '';
@@ -49,8 +47,6 @@ export class MapaMenuComponent {
   muestraMenuEstilos = false;
   muestraBarraBusca = false;
   muestraParadas= false;
-  //muestraRuta = true;
-  //muestraIndicaciones = false;
   estilosMapa = EstilosMapBoxEnum.getArray();
   estiloSelect = this.estilosMapa[5].url;
   mediosMapa = MediosTransporteMapBoxEnum.getArray();
@@ -98,7 +94,6 @@ export class MapaMenuComponent {
     this.muestraMenu = false;
     this.muestraMenuEstilos = false;
     this.muestraBarraBusca = true;
-    //this.indicaciones = new MapBoxLeg;
   }
   buscaUbicacion(str:string){
 
@@ -152,7 +147,7 @@ export class MapaMenuComponent {
     this.eventoEmiteFormUbi.emit(this.nuevaUbi);
     //this.eliminaParada = false;
   }
-  activaEliminaParada(){
+  /*activaEliminaParada(){
     this.muestraOcultaMenu();
     this.eliminaParada = !this.eliminaParada;
     if(this.eliminaParada){
@@ -162,7 +157,7 @@ export class MapaMenuComponent {
     }
     //this.eventoEmiteEliminaParada.emit(this.eliminaParada);
     this.nuevaUbi = false;
-  }
+  }*/
   /*ocultaIndicaciones(){
     this.indicaciones = new MapBoxLeg;
     this.muestraRuta = !this.muestraRuta;

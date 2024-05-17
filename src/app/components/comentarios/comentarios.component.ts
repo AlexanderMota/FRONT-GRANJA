@@ -60,16 +60,9 @@ export class ComentariosComponent implements OnInit {
           
            Swal.close();
            location.reload();
-/*
-           if(this.recuerdame){
-            localStorage.setItem('nombre', this.empleado!.nombre!);
-            localStorage.setItem('password', this.empleado!.password!);
-           }
-*/
            break; 
         }
         default: { 
-           //statements; 
           this.localizationService.getString("mensajesError.desconocido").subscribe(val => 
           this.resApi.resMensajeWrnBtn(val));
            break; 

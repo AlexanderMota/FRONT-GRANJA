@@ -14,14 +14,9 @@ export class EmpleadoLineaComponent implements OnInit {
   emp: { nombre: string; id: string; } = {nombre:"",id:""};
   @Input() 
   index:number = 0;
-  constructor() {
-   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
   eliminaEmpleadoTarea(){
-    /*console.log("this.emp.id: ");
-    console.log(this.emp.id);*/
     this.eventoEmiteEliminaEmpleadoTarea.emit(this.emp.id);
   }
 }

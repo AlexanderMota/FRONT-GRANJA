@@ -1,15 +1,10 @@
 <div class="contenedor card container animated fadeIn fast">
-    <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
     <div class="cuerpoTarj card-body">
         <h5 class="card-title">{{ empleado.nombre }}</h5>
         <h5 class="card-text">{{ empleado.apellidos }}</h5>
         <h5 class="card-text">{{ empleado.email }}</h5>
         <h5 class="card-text">{{ empleado.rol }}</h5>
             
-        <!-- linkear botones registrando la ruta en routes -->
         <a  [routerLink]="['/empleado',empleado._id]" class="btn btn-primary bg-dark">Ver mas...</a>
-
-        <!-- linkear botones por método en el controlador del componente -->
-        <!-- <button (click)="verHeroe(i)" type="button" [routerLink]="['/heroe',i]" class="btn btn-primary bg-dark">Ver mas...</button> -->
     </div>
 </div>

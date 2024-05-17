@@ -30,12 +30,8 @@ export class SubtareaComponent implements OnInit {
         this.idTarea = params['id'];
         await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
         .subscribe(async res=>{
-          if(res instanceof ApiResponse){
-            console.log(res.message);
-          }else{
-            this.subtareas=res;
-          }
-          //console.log("comentarios paramID: " + this.subtareas[0]);
+          if(res instanceof ApiResponse) console.log(res.message);
+          else this.subtareas=res;
         });
       }else{
         
@@ -46,14 +42,8 @@ export class SubtareaComponent implements OnInit {
   ngOnInit(): void {
   }
   onSubmit(form: NgForm){
-    if(!form.valid){
-      return;
-    }
-    
-    
+    if(!form.valid) return;
     this.localizationService.getString("mensajesInformacion.espere").subscribe(val =>
     this.resApi.resCargando(val));
-
-
   }
 }

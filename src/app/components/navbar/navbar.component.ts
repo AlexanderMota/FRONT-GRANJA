@@ -56,13 +56,8 @@ export class NavbarComponent implements OnInit {
             this.authServ.logout();
             this.respServ.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
             this.authServ.logout();
-          }else{
-            console.log((res as ApiResponse).message);
-          }
-        }else{
-          this.supertareas = res as TareaModel[];
-        }
-        //console.log(this.supertareas);
+          }else console.log((res as ApiResponse).message);
+        }else this.supertareas = res as TareaModel[];
       });
     }else{
       this.authServ.logout();
@@ -70,17 +65,6 @@ export class NavbarComponent implements OnInit {
       this.authServ.logout();
     }
   }
-
-  /*navAuth(){
-    if(this.auth.esAutenticado()){
-      this.vis = "visible";
-    }else{
-      this.vis = "hidden";
-    }
-  }*/
-  /*busca(str:string){
-    console.log(str);
-  }*/
   logout(){
     this.authServ.logout();
     this.autenticado = false;

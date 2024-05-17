@@ -22,9 +22,6 @@ import { SolicitudService } from 'src/app/services/solicitud.service';
   styleUrls: ['./tarea-details.component.css']
 })
 export class TareaDetailsComponent implements OnInit {
-  /*@ViewChild('app-mapa') 
-  mapComp!: MapaComponent;*/
-
   tarea: TareaModel = new TareaModel();
   ubi:UbicacionModel=new UbicacionModel();
   comentarios: ComentarioModel[] = [];
@@ -41,7 +38,9 @@ export class TareaDetailsComponent implements OnInit {
   numEmp=0;
   numeroTrabajadores=0;
   paramId : string = "";
-  paradas:{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}={idUbicacion:"",fechasRecogida:[]};
+  paradas:{idUbicacion:string,fechasRecogida:{ 
+    fechaInicio: Date; fechaFin: Date; vehiculo: string}[]
+  }={idUbicacion:"",fechasRecogida:[]};
   
   botonAnadirSubtarea = "";//this.localizationService.getString("welcomeMessage");
   botonBorrar = "";//this.localizationService.getString('botones.editar');
@@ -104,18 +103,17 @@ export class TareaDetailsComponent implements OnInit {
             if((res2 as ApiResponse).status == 201){
               this.numEmp = parseInt( (res2 as ApiResponse).message);
               console.log((res2 as ApiResponse).message);
-            }else{
-              console.log((res2 as ApiResponse).message);
-            }
+            }else console.log((res2 as ApiResponse).message);
+            
           }else{
             this.numEmp = (res2 as EmpleadoModel[]).length;
-            (res2 as EmpleadoModel[]).forEach(val => this.empleados.push({nombre:val.nombre + " " + val.apellidos,id:val._id.toString()}));
+            (res2 as EmpleadoModel[]).forEach(val => this.empleados.push({
+              nombre:val.nombre + " " + val.apellidos,id:val._id.toString()
+            }));
           }
-          //this.empleados.push({_id: 'Empleados', idEmpleado : 0, nombre : "Añadir empleado", apellidos:"",telefono:"", email:"", password:""});
         },error:err=>console.log(err)});
-      }else{
-        this.locServ.getString("errorIdTareaPath").subscribe(val => {this.resPop.resMensajeErrBtn(val)});
-      }
+      }else this.locServ.getString("errorIdTareaPath")
+        .subscribe(val => {this.resPop.resMensajeErrBtn(val)});
     });
   }
   borraTarea(){ this.borraTareaPri(); }
@@ -150,14 +148,14 @@ export class TareaDetailsComponent implements OnInit {
   muestraEmpleadosDisponibles(){ this.muestraEmpleadosDisponiblesPri(); }
   private async muestraEmpleadosDisponiblesPri(){
     if(this.empleadosDisp.length < 1){
-      await this.empServ.getEmpleadosByTareaDist(localStorage.getItem('token')!,
-        this.paramId).subscribe(res2=>{
-          if((res2 as ApiResponse).status){
-            console.log((res2 as ApiResponse).message);
-          }else{
-            (res2 as EmpleadoModel[]).forEach(val => this.empleadosDisp.push({nombre:val.nombre + " " + val.apellidos,id:val._id.toString()}));
-          }
-      });
+      await this.empServ.getEmpleadosByTareaDist(
+        localStorage.getItem('token')!,this.paramId).subscribe(res2=>{
+          if((res2 as ApiResponse).status) console.log((res2 as ApiResponse).message);
+          else (res2 as EmpleadoModel[]).forEach(val => this.empleadosDisp.push({
+            nombre:val.nombre + " " + val.apellidos,id:val._id.toString()
+          }));
+        }
+      );
     }
     this.showPEmpD = true;
   }
@@ -171,6 +169,7 @@ export class TareaDetailsComponent implements OnInit {
   }
   emiteCierraVentana2(){ this.showParadas = false; }
   sendMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
+    console.log("aqui");
     this.ubi.titulo = $event.nombre;
     this.ubi.longitud = $event.lng;
     this.ubi.latitud = $event.lat;
@@ -218,7 +217,6 @@ export class TareaDetailsComponent implements OnInit {
       if(val.status == 200 || val.status == 201 || val.status == 202){
         console.log(val.message);
         this.paradas.fechasRecogida = this.paradas.fechasRecogida.filter((elemento) => {
-          // Compara cada propiedad del elemento con las propiedades del elemento a eliminar
           return elemento.fechaInicio !== fechaRecogida.fechaInicio ||
                  elemento.fechaFin !== fechaRecogida.fechaFin ||
                  elemento.vehiculo !== fechaRecogida.vehiculo;
@@ -227,9 +225,7 @@ export class TareaDetailsComponent implements OnInit {
         console.log(val.status,": ",val.message);
         this.resPop.resMensajeWrnBtn(val.message);
       }
-    },error:err=>{
-      this.resPop.resMensajeWrnBtn(err);
-    }});
+    },error:err => this.resPop.resMensajeWrnBtn(err)});
   }
   solicitarTarea(){ this.solicitarTareaPri(); }
   private solicitarTareaPri(){

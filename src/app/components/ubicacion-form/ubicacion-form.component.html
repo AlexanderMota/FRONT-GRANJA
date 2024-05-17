@@ -55,8 +55,8 @@
                                 <input class="inputs input100" 
                                     style="padding: 0;"
                                     type="datetime-local" 
-                                    name="fechaRecogida" 
-                                    [(ngModel)]="fechaRecogida[0].fechaInicio"
+                                    name="fechaInicio" 
+                                    [(ngModel)]="ubicacion.fechasRecogida[0].fechaInicio"
                                     required
                                     placeholder="Fecha de recogida">
             
@@ -71,21 +71,17 @@
                                 <input class="inputs input100" 
                                     style="padding: 0;"
                                     type="datetime-local" 
-                                    name="fechaRecogida" 
-                                    [(ngModel)]="fechaRecogida[0].fechaFin"
+                                    name="fechaFin" 
+                                    [(ngModel)]="ubicacion.fechasRecogida[0].fechaFin"
                                     required
                                     placeholder="Fecha de recogida">
             
                                 <span class="focus-input100"></span>
                             </div>
        
-                                
-            
-            
-                        
             
                             <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                            <span *ngIf="registroForm.submitted && ubicacion!.longitud < 1"
+                            <span *ngIf="registroForm.submitted && registroForm.controls['longitud'].errors"
                                 class="text-danger animated fadeIn">El ubicacion debe tener, al menos, una longitud</span>
                             <div class="inputComp lngLat wrap-input100 m-b-16">
                                 
@@ -102,7 +98,7 @@
                                 <span class="focus-input100"></span>
                             </div>  
                             <!-- <span class="text-danger">El correo es obligatorio</span> -->
-                            <span *ngIf="registroForm.submitted && ubicacion!.latitud < 1"
+                            <span *ngIf="registroForm.submitted && registroForm.controls['latitud'].errors"
                                 class="text-danger animated fadeIn">El ubicacion debe tener, al menos, una latitud</span>
                             <div class="inputComp lngLat wrap-input100 m-b-16">
                                 
@@ -118,33 +114,22 @@
             
                                 <span class="focus-input100"></span>
                             </div>  
-                            
 
 
-
-
-
-                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' &&  fechaRecogida[0].vehiculo.length < 1"
+                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' &&  registroForm.controls['vehiculo'].errors"
                                 class="text-danger animated fadeIn">Debe indicar qué vehiculo cubrirá esta parada.</span>
-                            <div class="inputComp wrap-input100 m-b-16" #vehiculo id="vehiculo"  *ngIf="ubicacion.idTarea == ''">
+                            <div class="inputComp wrap-input100 m-b-16" #vehiculo id="vehiculo" *ngIf="ubicacion.idTarea == ''">
                                 <label for="inputimp2" class="labels input100">
                                     Vehículo
                                 </label>
                             
-                                <select [(ngModel)]="fechaRecogida[0].vehiculo"
-                                    id="inputimp" class="idSuperElement inputs form-select" name="inputgrupo">
+                                <select [(ngModel)]="ubicacion.fechasRecogida[0].vehiculo"
+                                    id="inputimp" class="idSuperElement inputs form-select" name="vehiculo">
                                     <option *ngFor="let coche of coches; let i = index;" [value]="coche.matricula">
-                                    <!--<span class="idOculto">id: {{super._id}} - </span>-->
-
                                         {{ coche.matricula +" - "+ coche.plazas }}
                                     </option>
                                 </select>
                             </div> 
-
-
-
-
-
 
 
                             <div class="container-login100-form-btn m-t-17">

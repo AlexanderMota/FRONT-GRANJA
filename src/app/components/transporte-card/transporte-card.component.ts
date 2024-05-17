@@ -10,8 +10,6 @@ export class TransporteCardComponent implements OnInit {
 
   @Input() vehi:VehiculoModel = new VehiculoModel();
   @Input() index:number = 0;
-  
-  constructor() { }
 
   ngOnInit(): void {
   }

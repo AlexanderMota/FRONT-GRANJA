@@ -34,7 +34,6 @@ export class TareaFormComponent implements OnInit {
   fechaFin:string = "";
   roles : string[] = [];
 
-  private idNuevaTarUbi = "";
   private paramId : string = "";
   private idSuper : string = "";
 
@@ -50,7 +49,6 @@ export class TareaFormComponent implements OnInit {
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
       }else{
-        //console.log(res);
         this.departamentos = res as {
           nombre: string;
         }[];
@@ -63,10 +61,8 @@ export class TareaFormComponent implements OnInit {
       }else{
         this.roles = res as string[];
       }
-      //console.log(res); 
     });
     this.actRoute.params.subscribe(params=>{
-    //console.log(params['id']);
 
       if(params['id']){
         this.paramId = params['id'];
@@ -74,7 +70,6 @@ export class TareaFormComponent implements OnInit {
         if(this.editaTar){
           this.locServ.getString("encabezados.editarTarea").subscribe(val=>this.titulo = val);
           this.locServ.getString("botones.guardarCambios").subscribe(val=>this.textBtn = val);
-          //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
             if((res as ApiResponse).status){
               console.log((res as ApiResponse).message);
@@ -91,9 +86,7 @@ export class TareaFormComponent implements OnInit {
               if(this.tarea.plantilla.length < 1){
                 this.tarea.plantilla[0] = {rol:"",cantidad:0};
               }
-              //console.log(this.tarea.departamento);
             }
-            //console.log("contructor route params=>\n"+res);
           });
           this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
             if((res as ApiResponse)){
@@ -101,24 +94,17 @@ export class TareaFormComponent implements OnInit {
             }else{
               this.supers[0] = res as TareaModel;
             }
-            //console.log("contructor route params=>\n"+res);
           });
         }else{
-          /*const elemento = document.getElementById('organizacion');
-          if(elemento){
-            elemento.style.display = 'none';
-          }*/
           this.locServ.getString("encabezados.guardaSubTarea").subscribe(val=>this.titulo = val);
           this.locServ.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
           this.idSuper = this.paramId;
-          //console.log("contructor route paramid=>\n"+this.paramId);
           this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
             if((res as ApiResponse).status){
               console.log((res as ApiResponse).message);
             }else{
               this.supers[0] =res as TareaModel;
             }
-            //console.log("contructor route params=>\n"+res);
           });
         }
       }else{
@@ -130,15 +116,10 @@ export class TareaFormComponent implements OnInit {
           }else{
           this.supers[0] = res as TareaModel;
           }
-          //console.log("contructor route params=>\n"+res);
         });
         this.editaTar = false;
       }
-      
     });
-    /*this.compMess.emiteDato.subscribe(dato => {console.log(dato.dato);
-  
-    this.oculto=!dato.dato;})*/
   }
   onSubmit(form:NgForm){
     if(!form.valid || this.tarea.importancia == "-" || 
@@ -179,12 +160,6 @@ export class TareaFormComponent implements OnInit {
       }});
       
     }else{
-/*
-      console.log("tarea nueva: ");
-      console.log(this.tarea);
-      console.log("idSuper: ");
-      console.log(this.idSuper);
-*/
       if(this.paramId){
         this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe({next:(res) => {
           switch(res.status) { 
@@ -196,7 +171,6 @@ export class TareaFormComponent implements OnInit {
               .then(val=>{
                 if(val.isConfirmed) {
                   this.eventoEmiteIdTareaUbi.emit(ids[1]);
-                  //console.log("es true: ", ids[1]);
                   this.eventoEmiteCierraFormTarea.emit(false);
                 }else if(!val.isConfirmed) {
                   console.log("La tarea tiene la misma ubi que su padre.");
@@ -246,15 +220,7 @@ export class TareaFormComponent implements OnInit {
     
   }
   
-  emiteCierraVentana(){
-    this.eventoEmiteCierraFormTarea.emit(false);
-  }
-  agregaRol() {
-    this.tarea.plantilla.push({ rol: '', cantidad: 0 }); // Agrega un nuevo objeto a la plantilla
-  }
-  quitaRol(pos:number){
-    console.log(this.tarea);
-    this.tarea.plantilla.splice(pos,1);
-    console.log(this.tarea);
-  }
+  emiteCierraVentana(){ this.eventoEmiteCierraFormTarea.emit(false); }
+  agregaRol() { this.tarea.plantilla.push({ rol: '', cantidad: 0 }); /*Agrega un nuevo objeto a la plantilla*/ }
+  quitaRol(pos:number){ this.tarea.plantilla.splice(pos,1); }
 }

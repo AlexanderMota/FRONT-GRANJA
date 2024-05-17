@@ -147,7 +147,10 @@
     <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveMessageFormVehi($event)'></app-transportes-form>
 </div>
 <div>
-    <app-ubicacion-form *ngIf='showP3' [ubicacion]="ubi" (eventoEmiteCierraFormUbi)="receiveMessageFormUbi($event)"></app-ubicacion-form>
+    <app-ubicacion-form *ngIf='showP3' 
+        [ubicacion]="ubi" [idDestino]="tarea._id"
+        (eventoEmiteCierraFormUbi)="receiveMessageFormUbi($event)">
+    </app-ubicacion-form>
 </div>
 
 <div class="modalcEmp" *ngIf='showPEmpD'>

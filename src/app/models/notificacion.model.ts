@@ -5,4 +5,3 @@ export class NotificacionModel{
   mensaje:   string="";
   fechaRegistro: Date=new Date();
 };
-5

@@ -17,6 +17,8 @@ export class UbicacionFormComponent implements OnInit {
 
   @Input()
   ubicacion: UbicacionModel = new UbicacionModel();
+  @Input()
+  idDestino = "";
   @Output() 
   eventoEmiteCierraFormUbi = new EventEmitter<boolean>();
 
@@ -24,8 +26,7 @@ export class UbicacionFormComponent implements OnInit {
   titulo:string = "";
   textBtn:string = "";
   coches: {matricula:string,plazas:number}[]=[];
-  fechaRecogida: {fechaInicio:Date,fechaFin:Date,vehiculo:string}[]=[{fechaInicio:new Date,fechaFin:new Date,vehiculo:""}];
-  //private paramId : string = "";
+  fechaRecogida={fechaInicio:new Date,fechaFin:new Date,vehiculo:""};
 
   constructor( 
     private resApi:ApiResponseService, 
@@ -33,48 +34,21 @@ export class UbicacionFormComponent implements OnInit {
     private vehiServ:VehiculoService,
     private localizationService: LocalizationService) {
 
-
-      this.vehiServ.getVehiculosByPropietario(
-        localStorage.getItem("token")!,
-        localStorage.getItem("miid")!).subscribe(res => {
-        
-          if((res as ApiResponse).status){
-            console.log((res as ApiResponse).message);
-          }else{
-            (res as [VehiculoModel]).forEach(dat =>{
-              //if((dat.plazas-(dat.ocupantes.length + 1)) > 0){
-              this.coches[this.coches.length] = {matricula:dat.matricula,plazas:dat.plazas-(dat.ocupantes.length + 1)};
-              //}
-            });
-          }
-          //console.log(res);
+    this.vehiServ.getVehiculosByPropietario(
+      localStorage.getItem("token")!,
+      localStorage.getItem("miid")!)
+    .subscribe(res => {
+      if((res as ApiResponse).status) console.log((res as ApiResponse).message);
+      else (res as [VehiculoModel]).forEach(dat =>{
+        //if((dat.plazas-(dat.ocupantes.length + 1)) > 0){
+        this.coches[this.coches.length] = {matricula:dat.matricula,plazas:dat.plazas-(dat.ocupantes.length + 1)};
+        //}
       });
-    /*this.actRoute.params.subscribe(params=>{
-      
-      //console.log(params['id']);
-      if(params['id']){
-        this.titulo = "Edita vehículo";
-        this.textBtn = "Guardar cambios"
-        this.paramId = params['id'];
-        //console.log("contructor route paramid=>\n"+this.paramId);
-        vehiServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
-          this.vehiculo=res;
-          //console.log("contructor route params=>\n"+res);
-        });
-      }else{
-        this.titulo = "Nueva ubicación";
-        this.textBtn = "Registrar ubicación"
-        vehiServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe(res=>{
-          this.supers.push(res);
-          //console.log("contructor route params=>\n"+res);
-        });
-      //}
-      
-    }); */
+    });
   }
 
   ngOnInit(): void {
-    console.log(this.ubicacion);
+    this.ubicacion.fechasRecogida[0] = {fechaInicio:new Date,fechaFin:new Date,vehiculo:""};
     if(this.ubicacion._id){
       this.localizationService.getString("encabezados.editaUbicacion").subscribe(val => this.titulo = val);
       this.localizationService.getString("botones.guardar").subscribe(val => this.textBtn = val);
@@ -84,28 +58,28 @@ export class UbicacionFormComponent implements OnInit {
     }
   }
   onSubmit(form:NgForm){
+    console.log(form);
     if(!form.valid || this.ubicacion.titulo == "-" || 
       this.ubicacion.longitud == 0 || this.ubicacion.latitud == 0){
       return;
     }
+    //console.log("pasada val ubi base");
     if(this.ubicacion.idTarea == ""){
-      console.log("parada");
       this.ubicacion.fechasRecogida.forEach(val => {
-        if(val.vehiculo.length < 1 || !val.fechaInicio|| !val.fechaFin || this.ubicacion.descripcion == "-" ){
+        if(val.vehiculo == "-" || !val.fechaInicio|| !val.fechaFin || this.ubicacion.descripcion == "-" ){
           console.log("salta validacion vehiculo en parada");
           return;
         }
       });
-    }else{
-      this.ubicacion.fechasRecogida = [];
     }
+    
+    //console.log("pasada val parada-ubi");
     this.resApi.resCargando('Espere...');
 
-    this.ubicacion.fechasRecogida.push(this.fechaRecogida[0]);
 
     if(this.ubicacion._id){
       //console.log("entrando al patchUbi");
-      this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id).subscribe({next:res=>{
+      this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id+"_"+this.idDestino).subscribe({next:res=>{
         switch(res.status) { 
           case 200: { 
             this.emiteCierraVentana();
@@ -121,7 +95,7 @@ export class UbicacionFormComponent implements OnInit {
               break; 
           } 
           default: { 
-              //statements; 
+            this.resApi.resMensajeErrBtn(res.message);
               break; 
           } 
         } 
@@ -130,8 +104,12 @@ export class UbicacionFormComponent implements OnInit {
       }});
     }else{
       
+      //console.log("pasada val act-nuevo");
       if(this.ubicacion.idTarea == ""){
-        this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
+        /*this.ubicacion.fechasRecogida = [];
+        this.ubicacion.fechasRecogida.push(this.fechaRecogida);*/
+        console.log(this.ubicacion);
+        this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion,this.idDestino).subscribe({ next:(res)=>{
           switch(res.status) { 
             case 201: { 
               this.emiteCierraVentana();
@@ -143,7 +121,7 @@ export class UbicacionFormComponent implements OnInit {
                 break; 
             } 
             default: { 
-                //statements; 
+              this.resApi.resMensajeErrBtn(res.message);
                 break; 
             } 
           } 
@@ -151,7 +129,9 @@ export class UbicacionFormComponent implements OnInit {
           this.resApi.resMensajeErrBtn(err.error.message);
         }});
       }else{
+        this.ubicacion.fechasRecogida = [];
         this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
+          console.log(res);
           switch(res.status) { 
             case 201: { 
               this.emiteCierraVentana();
@@ -163,7 +143,7 @@ export class UbicacionFormComponent implements OnInit {
                 break; 
             } 
             default: { 
-                //statements; 
+              this.resApi.resMensajeErrBtn(res.message);
                 break; 
             } 
           } 

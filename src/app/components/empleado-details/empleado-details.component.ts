@@ -27,10 +27,9 @@ export class EmpleadoDetailsComponent implements OnInit {
     private locServ: LocalizationService, 
     private actRoute:ActivatedRoute) {
     this.actRoute.params.subscribe(async params=>{
-      //console.log(params);
         if(params['id']){
           this.empServ.getEmpleadoById(localStorage.getItem('token')!, params['id']).subscribe({next:res2 => {
-            //console.log(res2);
+            console.log(res2);
             if((res2 as ApiResponse).status){
               console.log((res2 as ApiResponse).message);
             }else{
@@ -44,8 +43,6 @@ export class EmpleadoDetailsComponent implements OnInit {
             }else{
               this.tareas = res as TareaModel[];
             }
-
-            //console.log(this.solicitudes);
           }, error:(err) => {
             switch (err.error.status) {
               case 401: {
@@ -69,15 +66,9 @@ export class EmpleadoDetailsComponent implements OnInit {
           }});
 
           this.vehiServ.getVehiculosByPropietario(localStorage.getItem("token")!,params['id']).subscribe({next:val=>{
-            if((val as ApiResponse).status){
-              console.log((val as ApiResponse).message);
-            }else{
-              //console.log(val);
-              this.vehiculos = val as VehiculoModel[];
-            }
-          },error:err=>{
-            console.log(err);
-          }});
+            if((val as ApiResponse).status) console.log((val as ApiResponse).message);
+            else this.vehiculos = val as VehiculoModel[];
+          },error:err=> console.log(err)});
         }
     }); 
   }

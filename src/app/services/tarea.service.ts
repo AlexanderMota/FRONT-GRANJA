@@ -33,7 +33,6 @@ export class TareaService {
     });
   }
   getTareaById(token:string,id:string):Observable<TareaModel | ApiResponse> {
-    //console.log(id);
     return this.http.get<TareaModel | ApiResponse>(this.urlTareasByIdTarea+id ,{
       headers: new HttpHeaders({
         Authorization: token

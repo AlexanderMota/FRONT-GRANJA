@@ -26,8 +26,6 @@ export class TareasComponent implements OnInit {
   subtareas:TareaModel[] = [];
   imps:string[] = [];
   departamentos:{nombre:string}[] = [];
-  //supers:TareaModel[] = [];
-  //paramIdSuper = "";
 
   constructor(
     private tarServ:TareaService,
@@ -40,7 +38,6 @@ export class TareasComponent implements OnInit {
   ngOnInit(): void {
     this.rol = localStorage.getItem('rol')!;
     this.visible = this.permisos.includes(this.rol);
-    //console.log(localStorage.getItem('centroActual'));
       if(localStorage.getItem('centroActual')){
         this.tarServ.getTareaById(localStorage.getItem('token')!,localStorage.getItem('centroActual')!).subscribe({next:res=>{
           if((res as ApiResponse).status){
@@ -79,41 +76,6 @@ export class TareasComponent implements OnInit {
       }else{
         console.log("No aparece registrado como empleado de ningún centro.");
       };
-    /*await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
-        .subscribe(async res=>{
-          this.subtareas=res;
-          //console.log("comentarios paramID: " + this.subtareas[0].descripcion);
-        });*/
-    
-    /*this.tarServ.getAllTareas(localStorage.getItem('token')!).subscribe(res=>{
-      this.tareas = res.sort();
-      //console.log(this.solicitudes);
-    },(err)=>{
-      switch(err.error.status) { 
-        case 401: { 
-          this.auth.logout();
-          this.resPop.resMensajeErrBtnRedir("La sesión ha expirado. Vuelva a iniciar sesion.","/");
-          this.auth.logout();
-          
-          break; 
-        } 
-        case 404: { 
-          this.resPop.resMensajeErrBtn("No hay usuarios con ese nombre.");
-           break; 
-        } 
-        case 0: { 
-          this.resPop.resMensajeWrnBtn("Algo ha ido mal.");
-           break; 
-        } 
-        default: { 
-           //statements; 
-           break; 
-        } 
-      } 
-    });*/
-    
-    // al ser solo para el formulario, conviene recortar la info solicitada en esta petición
-    
     
   } 
   abreVentana(): void{

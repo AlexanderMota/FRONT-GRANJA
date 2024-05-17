@@ -38,17 +38,7 @@ export class SolicitudService {
       })
     });
   }
-  /*postEmpleadoATarea(token:string,idEmpleado:string,idTarea:string,idSolicitud:string):Observable<ApiResponse> {
-    //console.log(idEmpleado +" /// "+idTarea);
-    return this.http.post<ApiResponse>(this.urlConfirmaSolicitud+
-      "?idTarea="+idTarea+"&idEmpleado="+idEmpleado+"&idSolicitud="+idSolicitud, "",{
-      headers: new HttpHeaders({
-        Authorization: token
-      })
-    });
-  }*/
   postSolicitud(token:string,idTarea:string,idEmpleado:string):Observable<ApiResponse> {
-    //console.log(idEmpleado +" /// "+idTarea);
     return this.http.post<ApiResponse>(this.baseUrl,{idEmpleado:idEmpleado, idTarea:idTarea},{
       headers: new HttpHeaders({
         Authorization: token
@@ -56,7 +46,6 @@ export class SolicitudService {
     });
   }
   deleteSolicitud(token:string,idSolicitud:string):Observable<ApiResponse> {
-    //console.log(idEmpleado +" /// "+idTarea);
     return this.http.delete<ApiResponse>(this.urlGetSolicitudById+idSolicitud,{
       headers: new HttpHeaders({
         Authorization: token

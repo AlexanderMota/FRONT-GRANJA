@@ -1,13 +1,5 @@
 <div class="subs" *ngIf="subtareas && subtareas.length > 0;  else sinSubs">
     <app-tarea-card class="subtarea" *ngFor="let subtarea of subtareas; let i = index;" [tarea]="subtarea" [index]="i"></app-tarea-card>
-    <!--<i class="subtarea fas fa-plus text-gray mr-2"></i>
-    <div class="card subtarea" *ngFor="let subtarea of subtareas;">
-        <div class="detalles">
-            <p>{{subtarea.nombre}}</p>
-            <p class="fecha">{{subtarea.fechainicio}}</p>
-        </div>
-        <p class="coment">{{subtarea.descripcion}}</p>
-    </div> --> 
 </div>  
 <ng-template #sinSubs >
     <p>No hay subtareas.</p>

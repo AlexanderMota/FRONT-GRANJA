@@ -45,13 +45,10 @@ export class AuthService {
     //this.vis = "visible";
     this.horaCon = new Date(Date.now());
     localStorage.setItem("fintoken",this.horaCon.getTime().toString());
-    //onsole.log(this.horaCon);
     return this.http.post<ApiResponse>(this.urlSignIn, usuario);
   }
 
   registrarEmpleado(token:string,empleado: EmpleadoModel):Observable<ApiResponse> {
-    //empleado.idEmpleado = 0;
-    //console.log(empleado);
     const {nombre,apellidos,telefono,email,password,rol} = empleado
     return this.http.post<ApiResponse>(this.urlSignUp, {nombre,apellidos,telefono,email,password,rol},{
       headers: new HttpHeaders({
@@ -59,10 +56,6 @@ export class AuthService {
       })
     });
   }
-
-  /*guardaRol(rol:string){
-    localStorage.setItem('rol',rol);
-  }*/
   esAutenticado():boolean{
     if(localStorage.getItem('token')){
       const expira = Number(localStorage.getItem("fintoken"));

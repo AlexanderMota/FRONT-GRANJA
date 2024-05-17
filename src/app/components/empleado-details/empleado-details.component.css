@@ -3,3 +3,8 @@
     flex-direction: row;
     justify-content: space-around;
 }
+.tareasEmpleado{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

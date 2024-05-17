@@ -22,7 +22,7 @@ export class ComentarioComponent implements OnInit{
       if((res as ApiResponse).status) console.log((res as ApiResponse).message);
       else this.autor = (res as EmpleadoModel).nombre + " " + (res as EmpleadoModel).apellidos;
     },error:err=>
-      console.log(err)
+      console.log(err.message)
     });
   }
 }

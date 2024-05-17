@@ -1,17 +1,8 @@
 <div>
-    <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
     <div class="card-body">
         <h3 class="card-title" [routerLink]="['/tarea',tareaId]" style="cursor: pointer;">{{ tareaTit }}</h3>
         <h4 >{{nombreEmp}}</h4>
-        <!--<h5 class="card-text">{{ solicitud.tarea.nombre }}</h5>
-        <input id="inputFecha" class="inputs input100"
-            disabled
-            type="datetime-local" 
-            name="fechaSolicitud" 
-            [(ngModel)]="solicitud!.fechaSolicitud"
-            style="padding: 0px;">-->
             <span class="fecham">{{solicitud!.fechaSolicitud | date: 'dd/MM/yyyy hh:mm' }}</span>
-        <!--<a  [routerLink]="['/solicitud',solicitud.idSolicitud]" (click)="prueba()" class="btn btn-primary bg-dark">Ver mas...</a>-->
         <div [ngClass]="solicitud.aprobada ? 'resSi' : 'resNo'"></div>
         <div class="btns">
             <button *ngIf='visible'  >

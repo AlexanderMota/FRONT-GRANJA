@@ -15,21 +15,14 @@ export class TareaCardComponent implements OnInit {
   fechaIni ="";
   fechamostrar : string = this.tarea.fechainicio.toLocaleDateString();;
   fechainiciolocal:string = this.tarea.fechainicio.getDate() +"/"+(this.tarea.fechainicio.getMonth() + 1) +"/"+this.tarea.fechainicio.getFullYear() ;
-  constructor() {
-  }
 
   ngOnInit(): void {
-    if(this.tarea.nombre.length > 15){
-      this.title = (this.tarea.nombre.slice(0,15) + "...");
-    }else{
-      this.title = this.tarea.nombre;
-    }
-    if(this.tarea.descripcion.length > 75){
-      this.descRes = (this.tarea.descripcion.slice(0,75) + "...");
-    }
-    if(this.descRes.length < 1){
-      this.descRes = "Tarea sin descripción."
-    }
+    if(this.tarea.nombre.length > 15) this.title = (this.tarea.nombre.slice(0,15) + "...");
+    else this.title = this.tarea.nombre;
+    
+    if(this.tarea.descripcion.length > 75) this.descRes = (this.tarea.descripcion.slice(0,75) + "...");
+    
+    if(this.descRes.length < 1) this.descRes = "Tarea sin descripción."
     
     let fech = this.tarea.fechainicio.toString();
     this.tarea.fechainicio = new Date(fech.slice(0,19));

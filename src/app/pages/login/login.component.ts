@@ -53,13 +53,9 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.usuario).subscribe({next:res => {
       switch(res.status) {
         case 201: {
-          /*console.log(res.message);
-          let aver = {empleado:{nombre:""}};
-          aver = jwtDecode(res.message);
-          console.log(localStorage.getItem("rol"));*/
-          
           localStorage.setItem('token',res.message);
           this.auth.getMyUser(this.usuario.email).subscribe({next:res => {
+            console.log(res);
             if((res as ApiResponse).status){
               switch((res as ApiResponse).status) {
                 case 201: {

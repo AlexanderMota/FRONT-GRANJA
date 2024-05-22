@@ -88,12 +88,19 @@
             <div class="topTarea">
                 <div>
                     <h3 class="card-title">{{ tarea.nombre }}</h3>
-                    <input id="inputFecha" class="inputs input100"
-                        disabled
-                        type="datetime-local" 
-                        name="fechainicio" 
-                        [(ngModel)]="fechaIni"
-                        style="padding: 0px;">
+                    <div class="fechasTarea">
+                        <input id="inputFecha" class="fechaTarea inputs input100"
+                            disabled
+                            type="datetime-local" 
+                            name="fechainicio" 
+                            [(ngModel)]="fechaIni">
+
+                        <input *ngIf="tarea.fechafin" id="inputFecha" class="fechaTarea inputs input100"
+                            disabled
+                            type="datetime-local" 
+                            name="fechafin" 
+                            [(ngModel)]="fechaFin">
+                    </div>
                 </div>
                 <div class="infoPlantilla">
                     <h4>Plantilla: {{ numEmp }} / {{ numeroTrabajadores }}</h4>

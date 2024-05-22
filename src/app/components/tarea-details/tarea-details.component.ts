@@ -47,6 +47,7 @@ export class TareaDetailsComponent implements OnInit {
   botonEditar = "";//this.localizationService.getString('botones.borrar');
   botonNuevoEmp = "";
   fechaIni = "";
+  fechaFin = "";
   
   private rol = "";
   private permisos = ["ADMIN","Director","RRHH","Gerente","Comercial","Supervisor","Gestor","Capataz","Coordinador"];
@@ -94,6 +95,11 @@ export class TareaDetailsComponent implements OnInit {
             let fech = this.tarea.fechainicio.toString();
             this.tarea.fechainicio = new Date(fech.slice(0,19));
             this.fechaIni = fech.slice(0,19);
+            if(this.tarea.fechafin){
+              fech = this.tarea.fechafin.toString();
+              this.tarea.fechafin = new Date(fech.slice(0,19));
+              this.fechaFin = fech.slice(0,19);
+            }
           }
         },error:err=>console.log(err)});
         await this.empServ.getEmpleadosByTarea(localStorage.getItem('token')!,this.paramId)

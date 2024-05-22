@@ -9,5 +9,5 @@ export class VehiculoModel{
   plazas:       number=0;
   //puntosDestinoRecogida:[]=[];
   ocupantes:[]=[];
-  fechaRegistro:string="";
+  fechaRegistro:Date=new Date();
 };

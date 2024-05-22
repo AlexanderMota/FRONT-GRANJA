@@ -6,5 +6,5 @@ export class SolicitudModel{
   idTarea: string = "";
   idEmpleado: string = "";
   aprobada:boolean = false;
-  fechaSolicitud : Date = new Date();
+  fechaRegistro : Date = new Date();
 };

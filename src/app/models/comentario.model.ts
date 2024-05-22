@@ -4,5 +4,5 @@ export class ComentarioModel{
   idAutor: string ="";
   nombre: string ="";
   descripcion: string ="";
-  fecha: Date =new Date();
+  fechaRegistro: Date =new Date();
 };

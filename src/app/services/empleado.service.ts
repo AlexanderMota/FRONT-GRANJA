@@ -18,7 +18,7 @@ export class EmpleadoService {
   private urlRoles = (this.baseUrl+'roles/');
   private urlDepartamentos = (this.baseUrl+'departamentos/');
   private urlEmpleadosPorTarea = (this.baseUrl+'tarea/');
-  private urlEmpleadoPorIdEmpleado = (this.baseUrl+'byid/');
+  //private urlEmpleadoPorIdEmpleado = (this.baseUrl+'byid/');
   private urlEmpleadosPorTareaDist = (this.baseUrl+'disponible/');
 
   constructor(private http: HttpClient) { }
@@ -36,7 +36,7 @@ export class EmpleadoService {
   }
   getEmpleadoById(token:string,id:string):Observable<EmpleadoModel | ApiResponse> {
     //console.log(id);
-    return this.http.get<EmpleadoModel | ApiResponse>(this.urlEmpleadoPorIdEmpleado+id, {
+    return this.http.get<EmpleadoModel | ApiResponse>(this.baseUrl+id, {
       headers: new HttpHeaders({
         Authorization: token
       })

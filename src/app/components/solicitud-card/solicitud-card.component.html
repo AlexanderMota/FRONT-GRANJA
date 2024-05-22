@@ -2,7 +2,7 @@
     <div class="card-body">
         <h3 class="card-title" [routerLink]="['/tarea',tareaId]" style="cursor: pointer;">{{ tareaTit }}</h3>
         <h4 >{{nombreEmp}}</h4>
-            <span class="fecham">{{solicitud!.fechaSolicitud | date: 'dd/MM/yyyy hh:mm' }}</span>
+            <span class="fecham">{{solicitud!.fechaRegistro | date: 'dd/MM/yyyy hh:mm' }}</span>
         <div [ngClass]="solicitud.aprobada ? 'resSi' : 'resNo'"></div>
         <div class="btns">
             <button *ngIf='visible'  >

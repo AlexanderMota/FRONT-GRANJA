@@ -239,3 +239,11 @@
 .h5letrero {
     color: white;
 }
+.fechasTarea{
+    display: flex;
+    flex-direction: row;
+}
+.fechaTarea{
+    padding: 0px;
+    width: 180px;
+}

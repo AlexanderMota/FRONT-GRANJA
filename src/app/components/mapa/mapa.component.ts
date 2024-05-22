@@ -22,9 +22,9 @@ import { makeArray } from 'jquery';
 export class MapaComponent implements OnInit, AfterViewInit {
 
   @ViewChild('mapa') 
-  private divMapa!: ElementRef;/*
-  @ViewChild('app-mapa-menu') 
-  private menu!: ElementRef;*/
+  private divMapa!: ElementRef;
+  @ViewChild(MapaMenuComponent)
+  menu!: MapaMenuComponent;
   
   @Input() 
   index:number = 0;
@@ -107,7 +107,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.nombrePuntoPartida = res.routes[0].legs[0].summary;
         this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
-        //this.menu.nativeElement
+        this.menu.clickNuevoMarcador();
       });
     });
   }

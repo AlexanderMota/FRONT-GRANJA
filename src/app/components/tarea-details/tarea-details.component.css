@@ -163,11 +163,16 @@
     justify-content: space-between;
 }
 
+.infoPlantilla {
+    font-size: 18px;
+    margin: 0px 20px 20px 0px;
+}
 .empleados {
     display: flex;
     flex-direction: column;
     margin: 20px 20px 20px 0px;
     width: 400px;
+    min-width: 120px;
 }
 
 .btnNuevoEmp {

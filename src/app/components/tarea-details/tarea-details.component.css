@@ -142,7 +142,7 @@
 .card-title {
     font-size: 24px;
     font-weight: bold;
-    margin: 0;
+    margin: 5px 0px 0px 0px;
 
 }
 .contenedor {
@@ -179,11 +179,16 @@
     width: 400px;
     min-width: 120px;
 }
-
-.btnNuevoEmp {
-    text-align: center;
+.sumaEmp{
+    display: flex;
+    flex-direction: row;
 }
-
+.btnNuevoEmp {
+    margin: 0px 5px 0px 0px;
+}
+.txtPlant{
+    margin: 10px 0px 10px 0px;
+}
 .modalcEmp {
     position: fixed;
     top: 0;

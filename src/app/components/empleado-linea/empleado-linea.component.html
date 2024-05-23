@@ -1,6 +1,6 @@
 <div   class="container">
-    <h5 class="cuadroTxt animated fadeIn fast"  [routerLink]="['/empleado',emp.id]">
+    <h4 class="cuadroTxt animated fadeIn fast"  [routerLink]="['/empleado',emp.id]">
         {{ (index+1) + ". " + emp.nombre }}
-    </h5>
+    </h4>
     <button class="btn btn-outline-danger" (click)="eliminaEmpleadoTarea()">X</button>
 </div>

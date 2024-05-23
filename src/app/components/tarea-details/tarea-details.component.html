@@ -86,7 +86,7 @@
         <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
         <div class="card-body detalles">
             <div class="topTarea">
-                <div>
+                <div class="cabTit">
                     <h3 class="card-title">{{ tarea.nombre }}</h3>
                     <div class="fechasTarea">
                         <input id="inputFecha" class="fechaTarea inputs input100"
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="infoPlantilla">
-                    <h4>Plantilla: {{ numEmp }} / {{ numeroTrabajadores }}</h4>
+                    <h4 class="txtPlant">Plantilla: {{ numEmp }} / {{ numeroTrabajadores }}</h4>
                     <button (click)="solicitarTarea()" style="float: right;">
                         <a class="btn btn-outline-info" >Solicitar</a>
                     </button>
@@ -125,12 +125,23 @@
         </div>
         
         <div *ngIf='visible' class="empleados">
+            <div class="sumaEmp">   
+                <button class="btnNuevoEmp btn btn-outline-info" (click)="muestraEmpleadosDisponibles()">
+                    {{botonNuevoEmp}}
+                </button>
+                <select [(ngModel)]="rolBuscar"
+                    required
+                    name="puesto" 
+                    id="inputimp" class="inputs form-select" name="inputdepart">
+                    <option value="" disabled selected>-</option>
+                    <option *ngFor="let rol of roles;">
+                        {{ rol }}
+                    </option>
+                </select>
+            </div>
             <app-empleado-linea class="card " [emp]="empleado" [index]="i" (eventoEmiteEliminaEmpleadoTarea)="receiveMessageEliminaEmpleadoTarea($event)"
                 *ngFor="let empleado of empleados; let i = index;">
             </app-empleado-linea>
-            <button class="card btnNuevoEmp" (click)="muestraEmpleadosDisponibles()">
-                {{botonNuevoEmp}}
-            </button>
         </div>
     </div>
 

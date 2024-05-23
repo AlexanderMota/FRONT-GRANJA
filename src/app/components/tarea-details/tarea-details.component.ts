@@ -49,9 +49,11 @@ export class TareaDetailsComponent implements OnInit {
   botonNuevoEmp = "";
   fechaIni = "";
   fechaFin = "";
+  rolBuscar = "";
   
   private rol = "";
   private permisos = ["ADMIN","Director","RRHH","Gerente","Comercial","Supervisor","Gestor","Capataz","Coordinador"];
+  roles: string[] = [];
 
 
   constructor(
@@ -125,6 +127,7 @@ export class TareaDetailsComponent implements OnInit {
           if(res instanceof ApiResponse) console.log(res.message);
           else this.subtareas=res;
         });
+        this.cargaRoles();
       }else this.locServ.getString("errorIdTareaPath")
         .subscribe(val => {this.resPop.resMensajeErrBtn(val)});
     });
@@ -138,6 +141,16 @@ export class TareaDetailsComponent implements OnInit {
         });
       }
     });
+  }
+  private cargaRoles(){
+    this.empServ.getRoles(localStorage.getItem('token')!).subscribe({next:res=>{
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+      }else{
+        this.roles = res as string[];
+      }
+      //console.log(res); 
+    },error:err=>console.log(err)});
   }
   private async borraTareaPri(conrservaSubs:number){ //1 conserva 0 borra 
     this.resPop.resCargando('Espere...');
@@ -169,17 +182,23 @@ export class TareaDetailsComponent implements OnInit {
   }
   muestraEmpleadosDisponibles(){ this.muestraEmpleadosDisponiblesPri(); }
   private async muestraEmpleadosDisponiblesPri(){
-    if(this.empleadosDisp.length < 1){
-      await this.empServ.getEmpleadosByTareaDist(
-        localStorage.getItem('token')!,this.paramId).subscribe(res2=>{
-          if((res2 as ApiResponse).status) console.log((res2 as ApiResponse).message);
-          else (res2 as EmpleadoModel[]).forEach(val => this.empleadosDisp.push({
-            nombre:val.nombre + " " + val.apellidos,id:val._id.toString()
-          }));
-        }
-      );
+    console.log("this.rolBuscar: ");
+    console.log(this.rolBuscar);
+    if(this.rolBuscar.length < 1){
+      this.resPop.resMensajeErrBtn("Antes de visualizar los empleados disponibles del centro, debe indicar el rol que necesita buscar.");
+    }else{
+      if(this.empleadosDisp.length < 1){
+        await this.empServ.getEmpleadosByTareaDist(
+          localStorage.getItem('token')!,localStorage.getItem('centroActual')!,this.rolBuscar).subscribe(res2=>{
+            if((res2 as ApiResponse).status) console.log((res2 as ApiResponse).message);
+            else (res2 as EmpleadoModel[]).forEach(val => this.empleadosDisp.push({
+              nombre:val.nombre + " " + val.apellidos,id:val._id.toString()
+            }));
+          }
+        );
+      }
+      this.showPEmpD = true;
     }
-    this.showPEmpD = true;
   }
   /*abreFormTransporte(){
     this.showP2 = true;

@@ -66,12 +66,15 @@ export class EmpleadoService {
       })
     });
   }
-  getEmpleadosByTareaDist(token:string,idTarea:string):Observable<EmpleadoModel[] | ApiResponse> {
+  getEmpleadosByTareaDist(token:string,idTarea:string,rolBuscar:string):Observable<EmpleadoModel[] | ApiResponse> {
     //console.log("idTarea: "+idTarea);
     return this.http.get<EmpleadoModel[] | ApiResponse>(this.urlEmpleadosPorTareaDist+idTarea, {
       headers: new HttpHeaders({
         Authorization: token
-      })
+      }),
+      params: {
+        rolBuscar,
+      }
     });
   }
   postEmpleado(token:string,tar:EmpleadoModel):Observable<ApiResponse>{

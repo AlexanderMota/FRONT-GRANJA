@@ -23,11 +23,15 @@ export class SolicitudService {
 
   constructor(private http: HttpClient) { }
 
-  getAllSolicitudes(token:string):Observable<SolicitudModel[] | ApiResponse> {
+  getAllSolicitudes(token:string, pageSize=20, pageNum=1):Observable<SolicitudModel[] | ApiResponse> {
     return this.http.get<[SolicitudModel] | ApiResponse>(this.baseUrl, {
       headers: new HttpHeaders({
         Authorization: token
-      })
+      }),
+      params: {
+        pageSize:pageSize,
+        pageNum:pageNum
+      }
     });
   }
   getSolicitudById(token:string,id:string):Observable<SolicitudModel | ApiResponse> {

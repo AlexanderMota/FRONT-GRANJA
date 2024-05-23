@@ -16,8 +16,16 @@
 .coment{
     padding-left: 10px;
 }
+.fondo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 .fecha{
     padding-left: 10px;
+}
+.borraComBtn{
+    margin: 0px 10px 0px 0px;
 }
 .titulo{
     font-weight: bold;

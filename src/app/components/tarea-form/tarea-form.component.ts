@@ -45,6 +45,8 @@ export class TareaFormComponent implements OnInit {
     private locServ:LocalizationService) { }
 
   ngOnInit(): void {
+    
+    this.locServ.getArray("colecciones.rangoImportancia").subscribe(val=>this.imps = val);
     this.empServ.getDepartamentos(localStorage.getItem('token')!).subscribe(res=>{
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
@@ -54,7 +56,6 @@ export class TareaFormComponent implements OnInit {
         }[];
       }
     });
-    
     this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
@@ -66,7 +67,6 @@ export class TareaFormComponent implements OnInit {
 
       if(params['id']){
         this.paramId = params['id'];
-        this.locServ.getArray("colecciones.rangoImportancia").subscribe(val=>this.imps = val);
         if(this.editaTar){
           this.locServ.getString("encabezados.editarTarea").subscribe(val=>this.titulo = val);
           this.locServ.getString("botones.guardarCambios").subscribe(val=>this.textBtn = val);
@@ -196,7 +196,8 @@ export class TareaFormComponent implements OnInit {
           this.resApi.resMensajeErrBtn(err.error.message);
         }});
       }else{
-        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe({next:(res) => {
+        console.log(localStorage.getItem('centroActual')!);
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,localStorage.getItem('centroActual')!).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
               this.locServ.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));

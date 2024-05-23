@@ -34,4 +34,11 @@ export class ComentarioService {
       })
     });
   }
+  deleteComentarioTarea(token:string,idCom:string):Observable< ApiResponse>{
+    return this.http.delete<ApiResponse>(this.urlComentariosByIdTarea+idCom,{
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
 } 

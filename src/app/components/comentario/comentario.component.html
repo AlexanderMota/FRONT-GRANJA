@@ -5,5 +5,8 @@
         <p>{{autor}}</p>
     </div>
     <p class="coment">{{comentario.descripcion}}</p>
+    <div class="fondo">
         <p class="fecha">{{comentario.fechaRegistro | date: 'dd/MM/yy HH:mm' }}</p>
+        <button (click)="borraComment()" *ngIf="puedeEliminar" class="borraComBtn">Eliminar</button>
+    </div>
 </div>

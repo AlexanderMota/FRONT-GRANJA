@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
@@ -17,25 +17,14 @@ import Swal from 'sweetalert2';
 })
 export class SubtareaComponent implements OnInit {
 
+  @Input()
   subtareas : TareaModel[] = [];
-  subtarea : TareaModel = new TareaModel();
   idTarea : string = "";
   constructor(
     private resApi: ApiResponseService,
     private actRoute:ActivatedRoute,
-    private tarServ:TareaService,
     private localizationService:LocalizationService) { 
     this.actRoute.params.subscribe(async params=>{
-      if(params['id']){
-        this.idTarea = params['id'];
-        await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
-        .subscribe(async res=>{
-          if(res instanceof ApiResponse) console.log(res.message);
-          else this.subtareas=res;
-        });
-      }else{
-        
-      }
     });
   }
 

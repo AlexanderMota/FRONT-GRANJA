@@ -139,7 +139,12 @@
 
 
 
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
 
+}
 .contenedor {
     width: 100%;
     padding-bottom: 30px;

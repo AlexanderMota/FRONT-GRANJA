@@ -108,13 +108,6 @@ export class ApiResponseService {
       icon:'error'
     }).then(() => {if(recarga){location.reload()}});
   }
-  resMensajeWrnBtn(msn:string){
-    Swal.fire({
-      allowOutsideClick:false,
-      text:msn,
-      icon:'warning'
-    });
-  }
   resMensajeErrBtnRedir(msn:string,redir:string){
 
     Swal.fire({
@@ -127,14 +120,33 @@ export class ApiResponseService {
       }
     });
   }
+
+  resMensajeWrnBtn(msn:string,accText = "Aceptar",btnCnc = false, cncText = "Cancelar"){
+    return Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'warning',
+      showCancelButton: btnCnc,
+      cancelButtonText: cncText,
+      confirmButtonText: accText
+    });
+  }
+  /*resMensajeWrnBtnCnc(msn:string){
+    Swal.fire({
+      allowOutsideClick:false,
+      text:msn,
+      icon:'warning'
+
+    });
+  }*/
   
   resMensajeWrnBtnRedir(msn:string,redir:string){
     Swal.fire({
       allowOutsideClick:false,
       text:msn,
       icon:'warning',
-      showCancelButton: true,
       confirmButtonText: 'Aceptar',
+      showCancelButton: true,
       cancelButtonText: 'Cancelar'
     }).then((result)=>{
       if (result.isConfirmed) {

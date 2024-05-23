@@ -23,6 +23,7 @@ import { SolicitudService } from 'src/app/services/solicitud.service';
 })
 export class TareaDetailsComponent implements OnInit {
   tarea: TareaModel = new TareaModel();
+  subtareas:TareaModel[] = [];
   ubi:UbicacionModel=new UbicacionModel();
   comentarios: ComentarioModel[] = [];
   empleados: {nombre:string, id:string}[] = [];
@@ -118,14 +119,29 @@ export class TareaDetailsComponent implements OnInit {
             }));
           }
         },error:err=>console.log(err)});
+        
+        await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.paramId)
+        .subscribe(async res=>{
+          if(res instanceof ApiResponse) console.log(res.message);
+          else this.subtareas=res;
+        });
       }else this.locServ.getString("errorIdTareaPath")
         .subscribe(val => {this.resPop.resMensajeErrBtn(val)});
     });
   }
-  borraTarea(){ this.borraTareaPri(); }
-  private async borraTareaPri(){
+  borraTarea(){ 
+    this.resPop.resMensajeWrnBtn("Se va a elminar la tarea '"+this.tarea.nombre+"' ¿Desea continuar?","Aceptar",true).then(res =>{
+      if(res.isConfirmed){
+        this.resPop.resMensajeWrnBtn("Esta tarea tiene otras que derivan de ella ("+this.subtareas.length+"). ¿Qué desea hacer con ellas?", "Conservar", true, "Eliminar").then(res2 =>{
+          if(res2.isConfirmed )this.borraTareaPri(1);
+          else this.borraTareaPri(0);
+        });
+      }
+    });
+  }
+  private async borraTareaPri(conrservaSubs:number){ //1 conserva 0 borra 
     this.resPop.resCargando('Espere...');
-    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id,0).subscribe({next:res=>{
+    await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id,conrservaSubs).subscribe({next:res=>{
       console.log(res);
       if(res.status < 220) this.resPop.resMensajeSucBtnRedir(res.message,"tareas") //this.locServ.getString("tareaEliminadaCorrecto").subscribe(val =>this.resPop.resMensajeSucBtnRedir(val,"tareas"));
       else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message) //this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
@@ -140,7 +156,7 @@ export class TareaDetailsComponent implements OnInit {
   }
   agregaTrabajadorATarea(idEmpleado:string){ this.agregaTrabajadorATareaPri(idEmpleado); }
   private async agregaTrabajadorATareaPri(idEmpleado:string){
-    await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado,"").subscribe(res=>{
+    await this.tarServ.postEmpleadoATarea(localStorage.getItem('token')!,this.tarea._id,idEmpleado).subscribe(res=>{
       if(res.status < 220){
         console.log(res.message);
         this.locServ.getString("mensajesInformacion.tareaEliminadaCorrecto").subscribe(val => this.resPop.resMensajeSucBtnRedir(val,"tareas"));
@@ -200,6 +216,8 @@ export class TareaDetailsComponent implements OnInit {
   }
   receiveMessageEliminaEmpleadoTarea($event: string) { this.eliminaEmpleadoTarea($event); }
   private eliminaEmpleadoTarea(emp: string){
+    console.log("idTar: =============> "+this.tarea._id);
+    console.log("idEmp: =============> "+emp);
     this.tarServ.deleteEmpleadoTarea(localStorage.getItem('token')!,this.tarea._id,emp).subscribe({next:res=>{
       if(res.status < 220) this.resPop.resMensajeSucBtn(res.message)
       else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message)

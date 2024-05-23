@@ -49,8 +49,8 @@ export class AuthService {
   }
 
   registrarEmpleado(token:string,empleado: EmpleadoModel):Observable<ApiResponse> {
-    const {nombre,apellidos,telefono,email,password,rol} = empleado
-    return this.http.post<ApiResponse>(this.urlSignUp, {nombre,apellidos,telefono,email,password,rol},{
+    const {nombre,apellidos,telefono,email,password,rol,centroTrabajo} = empleado
+    return this.http.post<ApiResponse>(this.urlSignUp, {nombre,apellidos,telefono,email,password,rol,centroTrabajo},{
       headers: new HttpHeaders({
         Authorization: token
       })

@@ -76,7 +76,7 @@ export class TareaService {
       }
     });
   }
-  postEmpleadoATarea(token:string,idTarea:string,idEmpleado:string,idSolicitud:string):Observable<ApiResponse>{
+  postEmpleadoATarea(token:string,idTarea:string,idEmpleado:string,idSolicitud:string=""):Observable<ApiResponse>{
     return this.http.post<ApiResponse>(this.urlAgregaEmpleadoATarea, {idTarea,idEmpleado,idSolicitud},{
       headers: new HttpHeaders({
         Authorization: token

@@ -19,7 +19,7 @@ export class EmpleadoService {
   private urlDepartamentos = (this.baseUrl+'departamentos/');
   private urlEmpleadosPorTarea = (this.baseUrl+'tarea/');
   //private urlEmpleadoPorIdEmpleado = (this.baseUrl+'byid/');
-  private urlEmpleadosPorTareaDist = (this.baseUrl+'disponible/');
+  private urlEmpleadosPorTareaDist = (this.baseUrl+'disponibles/');
 
   constructor(private http: HttpClient) { }
 

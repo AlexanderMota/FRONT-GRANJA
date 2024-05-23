@@ -68,10 +68,26 @@
             
                                 <span class="focus-input100"></span>
                             </div>
-                        <!--
-                            <span *ngIf="registroForm.submitted && registroForm.controls['puesto'].errors"
-                                class="text-danger animated fadeIn">El puesto es obligatorio</span>
-                        -->
+                            
+                            
+                            <span *ngIf="registroForm.submitted && empleado.centroTrabajo.length < 1"
+                                class="text-danger animated fadeIn">Debe indicar a qué centro pertenece este empleado.</span>
+                            <div class="inputComp wrap-input100 m-b-16">
+                                <label for="inputcentro" class="labels input100">
+                                    Centro
+                                </label>
+                                <select [(ngModel)]="empleado.centroTrabajo" 
+                                    required
+                                    id="inputcentro" class="inputs form-select" name="inputcentro">
+                                    <option value="" disabled selected>-</option>
+                                    <option *ngFor="let centro of supers;" [ngValue]="centro._id">
+                                        {{ centro.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <span *ngIf="registroForm.submitted && empleado.centroTrabajo.length < 1"
+                                class="text-danger animated fadeIn">Debe indicar qué rol desempeñará este empleado.</span>
                             <div class="inputComp wrap-input100 m-b-16">
                                 <label for="inputimp2" class="labels input100">
                                     Puesto
@@ -81,7 +97,7 @@
                                     required
                                     name="puesto" 
                                     id="inputimp" class="inputs form-select" name="inputdepart">
-                                    <option selected>-</option>
+                                    <option value="" disabled selected>-</option>
                                     <option *ngFor="let rol of roles;">
                                         {{ rol }}
                                     </option>

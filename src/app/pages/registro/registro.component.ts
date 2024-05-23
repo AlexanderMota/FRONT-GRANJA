@@ -6,6 +6,8 @@ import { EmpleadoModel } from '../../models/empleado.model';
 import { AuthService } from '../../services/auth.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
+import { TareaService } from 'src/app/services/tarea.service';
+import { TareaModel } from 'src/app/models/tarea.model';
 
 @Component({
   selector: 'app-registro',
@@ -18,21 +20,31 @@ export class RegistroComponent implements OnInit {
   empleado: EmpleadoModel = new EmpleadoModel();
   //recuerdame : boolean = false;
   roles:string[] = [];
+  supers:TareaModel[] = [];
 
   constructor(
     private auth:AuthService, 
     private empServ:EmpleadoService,
+    private tarServ:TareaService,
     private resApi: ApiResponseService) { }
 
   ngOnInit() { 
-    this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
+    this.tarServ.getSuperTareas(localStorage.getItem('token')!).subscribe({next:res=>{
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+      }else{
+        this.supers = res as TareaModel[];
+      }
+      
+    },error:err=>console.log(err)});
+    this.empServ.getRoles(localStorage.getItem('token')!).subscribe({next:res=>{
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
       }else{
         this.roles = res as string[];
       }
       //console.log(res); 
-    });
+    },error:err=>console.log(err)});
   } 
   onSubmit(form: NgForm){
     if(!form.valid){
@@ -41,29 +53,21 @@ export class RegistroComponent implements OnInit {
     
     this.resApi.resCargando('Espere...');
 
-    this.auth.registrarEmpleado(localStorage.getItem("token")!, this.empleado!).subscribe(res => {
+    console.log("onSubmit() ============> llegamos");
+    this.auth.registrarEmpleado(localStorage.getItem("token")!, this.empleado!).subscribe({next:res => {
       console.log(res);
       switch(res.status) { 
         case 201: { 
-           Swal.close();
+          this.resApi.resMensajeSucBtn(res.message);
            this.emiteCierraVentana();
-           /*if(this.recuerdame){
-            localStorage.setItem('nombre', this.empleado!.nombre!);
-            localStorage.setItem('password', this.empleado!.password!);
-           }*/
-
            break; 
         }
-        case 0: { 
+        default: { 
           this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
            break; 
         } 
-        default: { 
-           //statements; 
-           break; 
-        } 
       } 
-    },(err)=>{
+    },error:err=>{
       switch(err.error.status) { 
         case 400: { 
           Swal.fire({
@@ -73,15 +77,6 @@ export class RegistroComponent implements OnInit {
           });
            break; 
         }  
-        case 401: { 
-          /*this.resApi.resMensajeWrnBtn('La sesión ha caducado.');
-          Swal.fire({
-            allowOutsideClick:false,
-            text:'La sesión ha caducado.',
-            icon:'warning'
-          });*/
-           break; 
-        } 
         case 402: { 
           Swal.fire({
             allowOutsideClick:false,
@@ -107,11 +102,15 @@ export class RegistroComponent implements OnInit {
            break; 
         } 
         default: { 
-           //statements; 
+          Swal.fire({
+            allowOutsideClick:false,
+            text:'Algo ha ido mal.',
+            icon:'error'
+          });
            break; 
         } 
       } 
-    });
+    }});
   }
   emiteCierraVentana(){
     this.eventoEmiteCierraNuevaPersona.emit(false);

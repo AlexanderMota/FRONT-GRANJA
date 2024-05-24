@@ -34,7 +34,6 @@ export class ComentariosComponent implements OnInit {
           }else{
             this.comentarios=res as ComentarioModel[];
           }
-          //console.log("comentarios paramID: " + this.comentarios[0].descripcion);
         });
       }else{
         

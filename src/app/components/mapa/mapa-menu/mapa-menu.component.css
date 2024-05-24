@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 .list-group li:hover {
-    background-color: #a2d8fc; /* Color de fondo al pasar el ratón por encima */
+    background-color: #a2d8fc;
 }
 .list-group li {
     cursor: pointer;
@@ -74,19 +74,19 @@
     border: 1px solid grey;
 }
 .listaBuscador:hover {
-    background-color: #a2d8fc; /* Color de fondo al pasar el ratón por encima */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón por encima */
+    background-color: #a2d8fc; 
+    cursor: pointer;
 }
 .lineaBusca1{
     font-size: 13px;
     font-weight: bold;
-    white-space: nowrap; /* Evita el ajuste de línea */
+    white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .lineaBusca2{
     font-size: 12px;
-    white-space: nowrap; /* Evita el ajuste de línea */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -112,8 +112,8 @@
     border: 0px;
 }
 .list-group3 li:hover {
-    background-color: #a2d8fc; /* Color de fondo al pasar el ratón por encima */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón por encima */
+    background-color: #a2d8fc; 
+    cursor: pointer; 
 }
 .selected {
     background-color: #a2d8fc;
@@ -138,15 +138,3 @@
 .direcciones ul li{
     border: 1px solid black;
 }
-/*.botonBorraRuta{
-    z-index: 9;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 9;
-    margin: 105px 9px 0 0;
-}
-.imgBorraRuta{
-    width: 32px;
-    height: 35px;
-}*/

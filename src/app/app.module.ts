@@ -39,7 +39,6 @@ import { TareasComponent } from './pages/tareas/tareas.component';
 import { EmpleadosComponent } from './pages/empleados/empleados.component';
 import { SolicitudesComponent } from './pages/solicitudes/solicitudes.component';
 import { TareaComponent } from './pages/tarea/tarea.component';
-//import { SolicitudComponent } from './pages/solicitud/solicitud.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
 import { CabeceraNavListaComponent } from './components/cabecera-nav-lista/cabecera-nav-lista.component';
 import { ComentarioComponent } from './components/comentario/comentario.component';
@@ -59,7 +58,6 @@ import { ComentarioComponent } from './components/comentario/comentario.componen
     EmpleadoCardComponent,
     SolicitudCardComponent,
     TareaComponent,
-    //SolicitudComponent,
     TareaFormComponent,
     TareaDetailsComponent,
     EmpleadoLineaComponent,

@@ -62,15 +62,11 @@ export class MapaMenuComponent {
 
   ngOnInit(): void {
   }
-  // ///////////////////////////////////////////////////
   menuItems: MenuItem[] = [
     {
       ruta: '/transporte',
       nombre: 'Transportes'
-    }/*, {
-      ruta: '/mapas/zoom-range',
-      nombre: 'Añade transporte'
-    }*/
+    }
   ];
   muestraOcultaMenu(){
     this.muestraMenu = !this.muestraMenu;
@@ -101,7 +97,6 @@ export class MapaMenuComponent {
     .subscribe(async res=>{
       this.resMapBox = res;
     });
-    //this.muestraIndicaciones = true;
   }
   clickOcurrenciaUbi($event: MapBoxFeature){
     this.resMapBox = new MapBoxResponseModel;
@@ -126,40 +121,18 @@ export class MapaMenuComponent {
     this.muestraParadas = !this.muestraParadas;
     if(this.muestraParadas){
       this.localizationService.getString("botones.ocultaParadas").subscribe(val => this.paradaCadena = val);
-      //if(!this.nuevaUbi){this.activaNuevaUbi(); this.nuevaUbi = false;}
     }else{
       this.localizationService.getString("botones.verParadas").subscribe(val => this.paradaCadena = val);
     }
     this.eventoEmiteVerTransportes.emit(this.muestraParadas);
   }
   activaNuevaUbi(){
-    //this.muestraOcultaMenu();
     this.nuevaUbi = !this.nuevaUbi;
     if(this.nuevaUbi){
-      //console.log(this.nuevaUbi);
       this.localizationService.getString("botones.navegacion").subscribe(val => this.nuevaUbiCadena = val);
-      //this.muestraParadas = false;
     }else{
-      //console.log(this.nuevaUbi);
       this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
-      //if(this.muestraParadas){this.sendVerTransportes()}
     }
     this.eventoEmiteFormUbi.emit(this.nuevaUbi);
-    //this.eliminaParada = false;
   }
-  /*activaEliminaParada(){
-    this.muestraOcultaMenu();
-    this.eliminaParada = !this.eliminaParada;
-    if(this.eliminaParada){
-      //this.localizationService.getString("botones.editar").subscribe(val => this.nuevaUbiCadena = val);
-    }else{
-      //this.localizationService.getString("botones.eliminar").subscribe(val => this.nuevaUbiCadena = val);
-    }
-    //this.eventoEmiteEliminaParada.emit(this.eliminaParada);
-    this.nuevaUbi = false;
-  }*/
-  /*ocultaIndicaciones(){
-    this.indicaciones = new MapBoxLeg;
-    this.muestraRuta = !this.muestraRuta;
-  }*/
 }

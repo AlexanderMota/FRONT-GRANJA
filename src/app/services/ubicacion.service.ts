@@ -122,21 +122,6 @@ export class UbicacionService {
       })
     });
   }
-  /*patchUbi(token:string,
-    ubi:UbicacionModel,
-    idUbi:string =""){
-    const {titulo,descripcion,longitud,latitud,fechasRecogida} = ubi;
-    if(idUbi == ""){
-      if(ubi._id){
-        idUbi = ubi._id;
-      }
-    }
-    return this.http.patch<ApiResponse>(this.urlUbiById+idUbi, {titulo,descripcion,longitud,latitud,fechasRecogida}, {
-      headers: new HttpHeaders({
-        Authorization: token
-      })
-    });
-  }*/
   patchParada(token:string,
     fechasRecogida:{
       fechaInicio: Date;

@@ -9,9 +9,6 @@ import { TareaModel } from '../models/tarea.model';
 })
 export class TareaService {
 
-  //Get: Obtiene todas las tareas
-  //Post: Añade una tarea
-  //private urlGetAllTareas = 'https://api-granja.azurewebsites.net/api/tareas/solicitudes/todas';
   private baseUrl = 'http://localhost:4300/api/tareas/';
   private urlTareasByIdTarea = this.baseUrl+"byid/";
   private urlSubtareas = this.baseUrl+"subtareas/";

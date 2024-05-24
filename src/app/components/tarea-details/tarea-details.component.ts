@@ -43,9 +43,9 @@ export class TareaDetailsComponent implements OnInit {
     fechaInicio: Date; fechaFin: Date; vehiculo: string}[]
   }={idUbicacion:"",fechasRecogida:[]};
   
-  botonAnadirSubtarea = "";//this.localizationService.getString("welcomeMessage");
-  botonBorrar = "";//this.localizationService.getString('botones.editar');
-  botonEditar = "";//this.localizationService.getString('botones.borrar');
+  botonAnadirSubtarea = "";
+  botonBorrar = "";
+  botonEditar = "";
   botonNuevoEmp = "";
   fechaIni = "";
   fechaFin = "";
@@ -156,8 +156,8 @@ export class TareaDetailsComponent implements OnInit {
     this.resPop.resCargando('Espere...');
     await this.tarServ.deleteTarea(localStorage.getItem('token')!,this.tarea._id,conrservaSubs).subscribe({next:res=>{
       console.log(res);
-      if(res.status < 220) this.resPop.resMensajeSucBtnRedir(res.message,"tareas") //this.locServ.getString("tareaEliminadaCorrecto").subscribe(val =>this.resPop.resMensajeSucBtnRedir(val,"tareas"));
-      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message) //this.locServ.getString("errTareaNoEliminada").subscribe(val => this.resPop.resMensajeErrBtn(val));
+      if(res.status < 220) this.resPop.resMensajeSucBtnRedir(res.message,"tareas")
+      else if(res.status > 400) this.resPop.resMensajeErrBtn(res.message)
       else this.resPop.resMensajeErrBtn(res.message)
       
     },error:err=>this.resPop.resMensajeErrBtn(err)})
@@ -200,9 +200,6 @@ export class TareaDetailsComponent implements OnInit {
       this.showPEmpD = true;
     }
   }
-  /*abreFormTransporte(){
-    this.showP2 = true;
-  }*/
   
   emiteCierraVentana(){
     this.showPEmpD = false;

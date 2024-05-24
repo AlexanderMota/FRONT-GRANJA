@@ -40,7 +40,6 @@ export class UbicacionFormComponent implements OnInit {
     .subscribe(res => {
       if((res as ApiResponse).status) console.log((res as ApiResponse).message);
       else (res as [VehiculoModel]).forEach(dat =>{
-        //if((dat.plazas-(dat.ocupantes.length + 1)) > 0){
         this.coches[this.coches.length] = {matricula:dat.matricula,plazas:dat.plazas-(dat.ocupantes.length + 1)};
         //}
       });
@@ -63,7 +62,6 @@ export class UbicacionFormComponent implements OnInit {
       this.ubicacion.longitud == 0 || this.ubicacion.latitud == 0){
       return;
     }
-    //console.log("pasada val ubi base");
     if(this.ubicacion.idTarea == ""){
       this.ubicacion.fechasRecogida.forEach(val => {
         if(val.vehiculo == "-" || !val.fechaInicio|| !val.fechaFin || this.ubicacion.descripcion == "-" ){
@@ -73,12 +71,10 @@ export class UbicacionFormComponent implements OnInit {
       });
     }
     
-    //console.log("pasada val parada-ubi");
     this.resApi.resCargando('Espere...');
 
 
     if(this.ubicacion._id){
-      //console.log("entrando al patchUbi");
       this.ubiServ.patchParada(localStorage.getItem("token")!,this.ubicacion.fechasRecogida[0],this.ubicacion._id+"_"+this.idDestino).subscribe({next:res=>{
         switch(res.status) { 
           case 200: { 
@@ -104,10 +100,7 @@ export class UbicacionFormComponent implements OnInit {
       }});
     }else{
       
-      //console.log("pasada val act-nuevo");
       if(this.ubicacion.idTarea == ""){
-        /*this.ubicacion.fechasRecogida = [];
-        this.ubicacion.fechasRecogida.push(this.fechaRecogida);*/
         console.log(this.ubicacion);
         this.ubiServ.postUbiParada(localStorage.getItem('token')!, this.ubicacion,this.idDestino).subscribe({ next:(res)=>{
           switch(res.status) { 

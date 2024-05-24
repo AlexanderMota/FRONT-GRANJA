@@ -13,23 +13,6 @@ export class UbicacionComponent implements OnInit {
   private idTarea : string = "";
   subtareas : TareaModel[] = [];
 
-  /*
-  constructor(
-      private actRoute:ActivatedRoute,
-      private tarServ:TareaService) {
-    this.actRoute.params.subscribe(async params=>{
-      if(params['id']){
-        this.idTarea = params['id'];
-        await this.tarServ.getSubtareas(localStorage.getItem('token')!,this.idTarea)
-        .subscribe(async res=>{
-          this.subtareas=res;
-          //console.log("comentarios paramID: " + this.comentarios[0].descripcion);
-        });
-      }else{
-        
-      }
-    }); }*/
-
   ngOnInit(): void {
   }
 }

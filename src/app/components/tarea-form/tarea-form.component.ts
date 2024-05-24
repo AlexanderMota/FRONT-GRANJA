@@ -220,6 +220,6 @@ export class TareaFormComponent implements OnInit {
   }
   
   emiteCierraVentana(){ this.eventoEmiteCierraFormTarea.emit(false); }
-  agregaRol() { this.tarea.plantilla.push({ rol: '', cantidad: 0 }); /*Agrega un nuevo objeto a la plantilla*/ }
+  agregaRol() { this.tarea.plantilla.push({ rol: '', cantidad: 0 }); }
   quitaRol(pos:number){ this.tarea.plantilla.splice(pos,1); }
 }

@@ -13,8 +13,6 @@ export class AppComponent{
   //vis = "";
   title = 'FRONT-GRANJA';
   
-  /*setVis(vis:string){
-    this.vis = vis;
-  }*/
+
   
 }

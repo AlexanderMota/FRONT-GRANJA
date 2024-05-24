@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable,  } from 'rxjs';
-//import { NavbarComponent } from '../components/navbar/navbar.component';
 import { ApiResponse } from '../models/apiResponse.model';
 import { EmpleadoModel } from '../models/empleado.model';
 import { UsuarioModel } from '../models/usuario.model';

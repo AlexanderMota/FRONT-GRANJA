@@ -80,13 +80,12 @@ export class MapaComponent implements OnInit, AfterViewInit {
     this.mapa = new mapboxgl.Map({
       container: this.divMapa.nativeElement,
       style: EstilosMapBoxEnum.Satélite,
-      center: [-0.4904,38.3464], // starting position
+      center: [-0.4904,38.3464],
       zoom: 10
     }); 
     this.mapa.addControl(new mapboxgl.NavigationControl());
 
     this.mapa.on('load', () => {
-      // Load an image from an external URL.
       this.mapa.loadImage('../../../assets/images/icons/parada.png', (error, image) => {
         if (error) console.log(error);
         this.mapa.addImage('parada', image!);
@@ -183,11 +182,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
       lat
     ]).addTo(this.mapa);
   }
-  private agregarMarcador(/*marcUs: mapboxgl.Marker,*/lng:number,lat:number,movil:boolean){
+  private agregarMarcador(lng:number,lat:number,movil:boolean){
     
     const color ='#xxxxxx'.replace(/x/g, y =>(Math.random()*16|0).toString(16));
 
-    //this.marcadores[this.marcadores.length]=
     this.marcUsuario = new mapboxgl.Marker({
         draggable:movil,
         color:color
@@ -196,18 +194,13 @@ export class MapaComponent implements OnInit, AfterViewInit {
         lat
       ]).addTo(this.mapa);
 
-    //agrega listener al marcador y +
     if(this.marcUsuario && !this.nuevaUbiActivo){
-      /*this.onDraggenNombrePunto(this.marcUsuario);
-      console.log(this.nombrePuntoPartida);*/
 
 
-
-
-      /*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.on('dragend', () => {
+      this.marcUsuario.on('dragend', () => {
         this.ubiServ.getMapBoxRoute(this.medio, 
-          [/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-          /*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lat],
+          [this.marcUsuario.getLngLat().lng,
+          this.marcUsuario.getLngLat().lat],
           [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
           this.borraRuta();
           this.borraIndicaciones();
@@ -215,8 +208,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
           this.indicaciones = res.routes[0].legs[0];
         });
         this.ubiServ.getMapBoxUbicacionByCoordenadas(
-          {lng:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-          lat:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lat}
+          {lng:this.marcUsuario.getLngLat().lng,
+          lat:this.marcUsuario.getLngLat().lat}
         ).subscribe( res => {
           if(res.features[0]){
             this.nombrePuntoPartida = res.features[0].place_name;
@@ -225,25 +218,21 @@ export class MapaComponent implements OnInit, AfterViewInit {
       });
 
       this.ubiServ.getMapBoxUbicacionByCoordenadas(
-        {lng:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-      lat:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lat}
+        {lng:this.marcUsuario.getLngLat().lng,
+      lat:this.marcUsuario.getLngLat().lat}
       ).subscribe( res => {
         if(res.features[0]){
           this.nombrePuntoPartida = res.features[0].place_name;
         }else this.nombrePuntoPartida = "";
       });
 
-    }else if(/*this.marcadores[1]*/this.marcUsuario && this.nuevaUbiActivo){
-      /*this.onDraggenParada(this.marcUsuario);
-      console.log(this.nombrePuntoPartida);*/
+    }else if(this.marcUsuario && this.nuevaUbiActivo){
 
 
-
-
-      /*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.on('dragend', () => {
+      this.marcUsuario.on('dragend', () => {
         this.ubiServ.getMapBoxUbicacionByCoordenadas(
-          {lng:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-          lat:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lat}
+          {lng:this.marcUsuario.getLngLat().lng,
+          lat:this.marcUsuario.getLngLat().lat}
         ).subscribe( res => {
           if(res.features[0]){
             this.nombrePuntoPartida = res.features[0].place_name;
@@ -255,12 +244,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
             this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
             this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg, btnAcc, true, btnCan).then(value => {
               if(value.isConfirmed){
-                //this.receiveNuevaUbi(false);
                 this.sendMessageFormUbi(
                   {
                     nombre:this.nombrePuntoPartida,
-                    lng:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-                    lat:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng
+                    lng:this.marcUsuario.getLngLat().lng,
+                    lat:this.marcUsuario.getLngLat().lng
                   }
                 );
               }
@@ -272,8 +260,8 @@ export class MapaComponent implements OnInit, AfterViewInit {
       });
       
       this.ubiServ.getMapBoxUbicacionByCoordenadas(
-        {lng:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lng,
-        lat:/*this.marcadores[this.marcadores.length-1]*/this.marcUsuario.getLngLat().lat}
+        {lng:this.marcUsuario.getLngLat().lng,
+        lat:this.marcUsuario.getLngLat().lat}
       ).subscribe( res => {
         if(res.features[0]){
           this.nombrePuntoPartida = res.features[0].place_name;
@@ -282,58 +270,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  /*private onDraggenParada(marcUs : mapboxgl.Marker){
-    marcUs.on('dragend', () => {
-      this.ubiServ.getMapBoxUbicacionByCoordenadas(
-        {lng:marcUs.getLngLat().lng, lat:marcUs.getLngLat().lat}
-      ).subscribe( res => {
-        if(res.features[0]){
-          this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
-          this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
-          this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
-          this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
-          this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg, btnAcc, true, btnCan).then(value => {
-            if(value.isConfirmed){
-              this.sendMessageFormUbi({
-                nombre:res.features[0].place_name,
-                lng:marcUs.getLngLat().lng, lat:marcUs.getLngLat().lng
-              });
-            }
-          })})})})});
-          this.nombrePuntoPartida = res.features[0].place_name;
-        }else { 
-          this.nombrePuntoPartida = "";
-        }
-      });
-    });
-  }
-  private onDraggenNombrePunto(marcUs : mapboxgl.Marker){
-    marcUs.on('dragend', () => {
-      this.ubiServ.getMapBoxRoute(this.medio, 
-        [marcUs.getLngLat().lng, marcUs.getLngLat().lat],
-        [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
-        this.borraRuta();
-        this.borraIndicaciones();
-        this.pintaRuta(res.routes[0].geometry.coordinates);
-        this.indicaciones = res.routes[0].legs[0];
-      });
-      this.ubiServ.getMapBoxUbicacionByCoordenadas(
-        { lng:marcUs.getLngLat().lng, lat:marcUs.getLngLat().lat }
-      ).subscribe( res => {
-        if( res.features[0] ){
-          this.nombrePuntoPartida = res.features[0].place_name;
-        }this.nombrePuntoPartida = "";
-      });
-    });
-    this.ubiServ.getMapBoxUbicacionByCoordenadas(
-      {lng:marcUs.getLngLat().lng, lat:marcUs.getLngLat().lat}
-    ).subscribe( res => {
-      if(res.features[0]){
-        this.nombrePuntoPartida = res.features[0].place_name;
-      }this.nombrePuntoPartida = "";
-    });
-  } */
-
   private borraRuta(){
     if (this.mapa.getSource('route')) {
       this.mapa.removeLayer('route');
@@ -389,12 +325,11 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   private pintaParadas(dat : UbicacionModel[]){
     for( let i = 0; i < dat.length; i++ ){
-      // Add a layer to use the image to represent the data.
       this.mapa.addLayer({
         id: 'parada'+i.toString(),
         type: 'symbol',
         layout: {
-            'icon-image': 'parada', // reference the image
+            'icon-image': 'parada', 
             'icon-size': 0.085
         },
         source: {
@@ -505,94 +440,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
     }
     this.clickHandlersParadas = {};
   }
-  /*private clickParadasOn(dat:UbicacionModel[]){
-    for( let i = 0; i < dat.length; i++ ){
-      this.mapa.on('click', 'parada'+i.toString(), (e) => {
-        // Aquí puedes ejecutar la función que desees cuando se haga clic en la capa
-        //console.log(e);
-        //this.receiveNuevaUbi(this.nuevaUbiActivo);
-        let btnResCad = "";
-        let btnEdiCad = "";
-        let btnEliCad = "";
-        this.localizationService.getString("botones.reservar").subscribe(btnRes => btnResCad = btnRes);
-        this.localizationService.getString("botones.editar").subscribe(btnEdi => btnEdiCad = btnEdi);
-        this.localizationService.getString("botones.eliminar").subscribe(btnEli =>  btnEliCad = btnEli);
-        //this.ubiServ.getMapBoxUbicacionByCoordenadas(e.lngLat).subscribe(res => {
-          //console.log(res);
-        const popup = new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat([dat[i].longitud,dat[i].latitud]).setHTML(
-          `<h3 style="margin: 5px 0px 0px 0px; font-weith:bold;">${dat[i].titulo}</h3>
-          <hr class="dropdown-divider" style="margin: 5px 0px;">
-          <p style="margin: 5px 0px 15px 0px;">${dat[i].descripcion}</p>
-          <div style="display: flex; flex-direction: row; justify-content: space-between;">
-            <a class="boton1 btn btn-outline-info" style="padding: 6px 6px; width: 80px;">${btnResCad}</a>
-            <a class="boton2 btn btn-outline-warning" style="padding: 6px 6px; width: 80px;">${btnEdiCad}</a>
-            <a class="boton3 btn btn-outline-danger" style="padding: 6px 6px; width: 80px;">${btnEliCad}</a>
-          </div>`
-        ).addTo(this.mapa);
-          //<div style="display: flex; flex-direction: row; justify-content: space-between;">
-            //<a class="boton2 btn btn-outline-info">${btnResCad}</a>
-          //</div>
-
-        popup.setMaxWidth("280px");
-        popup.getElement().style.cursor = 'default';
-        popup.getElement().querySelector("button")!.style.width = "20px";
-        popup.getElement().querySelector("button")!.style.cursor = "pointer";
-
-      
-        popup.getElement().querySelector(".boton1")!.addEventListener('click', () => {
-          this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
-          this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
-          this.localizationService.getString("mensajesInformacion.infoReservaPlaza").subscribe(msg => {
-          this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
-            let da: string[] = [];
-            dat[i].fechasRecogida.forEach(val => {
-              da.push(val.vehiculo + " - " + val.fechaInicio);
-            });
-
-            let index = 0;
-            this.apiRespServ.resMensajeInputSelect(tit,msg,btnAcc, true, btnCan,da).then(value => {
-              if(value){
-                index = parseInt(value);
-                //console.log(value);
-                this.vehiServ.patchVehiculo(
-                  localStorage.getItem('token')!,
-                  dat[i].fechasRecogida[index].vehiculo,
-                  localStorage.getItem('miid')!
-                ).subscribe(res => {
-                    console.log(res.status + " - " + res.message);
-                    if(res.status == 200){
-                      this.apiRespServ.resMensajeSucBtn(res.message);
-                    }else{
-                      this.apiRespServ.resMensajeErrBtn(res.message);
-                    };
-                  }
-                );
-              }
-            }).catch(err=>console.log(err));
-          })})})});
-        });
-        popup.getElement().querySelector(".boton2")!.addEventListener('click', () => {
-          //console.log("idUbicacion: "+dat[i]._id);
-          this.eventoEmiteEditaParada.emit({
-            idUbicacion: dat[i]._id,
-            titulo: dat[i].titulo,
-            descripcion: dat[i].descripcion, 
-            longitud: dat[i].longitud, 
-            latitud: dat[i].latitud
-          });
-        });
-        popup.getElement().querySelector(".boton3")!.addEventListener('click', () => {
-          //console.log("idUbicacion: "+dat[i]._id);
-          this.eventoEmiteEliminaParada.emit({
-            idUbicacion:dat[i]._id,
-            fechasRecogida:dat[i].fechasRecogida
-          });
-        });
-      });
-    }
-  }*/
-  
   sendMessageFormVehi($event: boolean){
     this.eventoEmiteFormVehi.emit($event);
   }
@@ -618,7 +465,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   receiveMessageCambiaEstiloMapa($event: string){
     this.mapa.setStyle($event);
-    //if(this.marcUsuario.isDraggable()){
       this.ubiServ.getMapBoxRoute(this.medio, 
         [this.marcUsuario.getLngLat().lng,this.marcUsuario.getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
@@ -626,12 +472,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
-    //}
   }
 
   receiveMessageMedioTransporteMapa($event: string){
     this.medio = $event;
-    //if(this.marcUsuario.isDraggable()){
       this.ubiServ.getMapBoxRoute(this.medio, 
         [this.marcUsuario.getLngLat().lng,this.marcUsuario.getLngLat().lat],
         [this.ubiCentro.longitud,this.ubiCentro.latitud]).subscribe(res => {
@@ -639,7 +483,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.indicaciones = res.routes[0].legs[0];
         this.pintaRuta(res.routes[0].geometry.coordinates);
       });
-    //}
   }
   receiveReiniciaMapa($event: boolean){
     if($event){
@@ -648,7 +491,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   receiveVerTransportes($event: boolean){
     if($event){
-      //this.clickMapaVerRutaActivo();
       this.ubiServ.getUbiParadasDisp( localStorage.getItem('token')!, this.ubiCentro._id )
       .subscribe({next:res=>{
         if((res as ApiResponse).status){
@@ -657,7 +499,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
           this.borraRuta();
           this.borraIndicaciones();
           this.marcUsuario.remove();
-          //this.clickMapaVerRutaActivo();
         }else{ 
           if((res as UbicacionModel[]).length < 1) this.apiRespServ.resMensajeWrnBtn("Ningún compañero ha configurado una parada para esta tarea.");
           else{

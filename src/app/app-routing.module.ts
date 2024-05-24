@@ -27,7 +27,6 @@ const routes: Routes = [
   { path: 'transporte', component: TransporteComponent , canActivate: [ AuthGuard ]},
 
   { path: 'solicitudes', component: SolicitudesComponent , canActivate: [ AuthGuard ]},
-  //{ path: 'solicitud/:id', component: SolicitudComponent , canActivate: [ AuthGuard ] },
 
   { path: 'registro', component: RegistroComponent, canActivate: [ AuthGuard ] },
   { path: 'login', component: LoginComponent },

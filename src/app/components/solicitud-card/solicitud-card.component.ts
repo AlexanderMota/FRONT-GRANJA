@@ -41,7 +41,7 @@ export class SolicitudCardComponent implements OnInit {
       this.locServ.getString("botones.aprobar").subscribe(val => this.botonAprobar = val);
     }else this.locServ.getString("botones.eliminar").subscribe(val => this.botonRechazar = val);
   }
-  private inicia(){//console.log(this.solicitud);
+  private inicia(){
     this.visible = this.permisos.includes(localStorage.getItem('rol')!);
     
     this.tarServ.getTareaById(localStorage.getItem("token")!,this.solicitud.idTarea).subscribe({next:res=>{

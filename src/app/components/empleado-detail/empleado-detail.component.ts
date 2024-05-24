@@ -16,7 +16,7 @@ export class EmpleadoDetailComponent implements OnInit {
   ngOnInit(): void {
   }
   subeImagen(){
-    const imageUrl = '../../../assets/img/'; // Ruta de la imagen en la carpeta assets
+    const imageUrl = '../../../assets/img/';
     const imgn = 'aquaman.png';
     this.http.get(imageUrl+imgn, { responseType: 'blob' }).subscribe(blob => {
       const file = new File([blob], imgn, { type: blob.type });

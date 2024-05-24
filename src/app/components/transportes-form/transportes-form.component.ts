@@ -22,17 +22,14 @@ export class TransportesFormComponent implements OnInit {
   vehiculo: VehiculoModel = new VehiculoModel();
   titulo:string = "";
   textBtn:string = "";
-  //private paramId : string = "";
 
   constructor( 
     private resApi:ApiResponseService, 
     private actRoute:ActivatedRoute, 
     private vehiServ:VehiculoService,
     private localizationService:LocalizationService ) {
-    //this.actRoute.params.subscribe(params=>{
       this.localizationService.getString("encabezados.guardaVehiculo").subscribe(val=>this.titulo = val);
       this.localizationService.getString("botones.nuevoVehiculo").subscribe(val=>this.textBtn = val);
-    //}); 
   }
 
   ngOnInit(): void {
@@ -48,30 +45,6 @@ export class TransportesFormComponent implements OnInit {
       return;
     }
     this.resApi.resCargando('Espere...');
-    /*if(this.paramId.length > 0){
-      this.vehiServ.patchTarea(localStorage.getItem('token')!, this.vehiculo!).subscribe(res => {
-        switch(res.status) { 
-          case 201: { 
-            this.resApi.resMensajeSucBtn('Tarea creada con éxito');
-             break; 
-          }
-          case 202: { 
-            this.resApi.resMensajeSucBtn('Tarea modificada con éxito');
-             break; 
-          }
-          case 0: { 
-            this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
-             break; 
-          } 
-          default: { 
-             break; 
-          } 
-        }
-      },(err)=>{
-        this.resApi.resMensajeErrBtn(err.error.message);
-      });
-      
-    }else*/
     console.log(this.vehiculo);
     this.vehiServ.postVehiculo(localStorage.getItem('token')!, this.vehiculo ,).subscribe({next:(res) => {
       switch(res.status) { 

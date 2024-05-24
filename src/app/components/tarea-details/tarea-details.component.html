@@ -1,89 +1,7 @@
-<!--
-
-<div class="container card animated fadeInDown">
-    <div class="card-body details">
-        <h3 class="card-title">{{ tarea.nombre }}</h3>
-        <input id="inputFecha" class="inputs input100" disabled type="datetime-local" name="fechainicio"
-            [(ngModel)]="fechaIni" style="padding: 0px;">
-        <div class="info-section">
-            <p class="infoPlantilla">Plantilla: {{ empleados.length }} / {{ numeroTrabajadores }}</p>
-            <p class="description">{{ tarea.descripcion }}</p>
-        </div>
-        <div class="button-group">
-            <button (click)="abreFormTarea(true)" class="btn btn-outline-secondary">{{ botonEditar }}</button>
-            <button (click)="abreFormTarea(false)" class="btn btn-outline-info">{{ botonAnadirSubtarea }}</button>
-            <button (click)="borraTarea()" class="btn btn-outline-warning">{{ botonBorrar }}</button>
-        </div>
-    </div>
-    <div class="employees">
-        <app-empleado-linea class="card" [routerLink]="['/empleado',empleado.id]" [emp]="empleado" [index]="i"
-            *ngFor="let empleado of empleados; let i = index;"></app-empleado-linea>
-        <button class="card newEmpButton" (click)="muestraEmpleadosDisponibles()">{{ botonNuevoEmp }}</button>
-    </div>
-</div>
-
-<div>
-    <app-tarea-form *ngIf='showP1' [editaTar]="editaTar"
-        (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
-</div>
-
-<div>
-    <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveMessageFormVehi($event)'></app-transportes-form>
-</div>
-
-<div>
-    <app-ubicacion-form *ngIf='showP3' [ubicacion]="ubi" (eventoEmiteCierraFormUbi)="receiveMessageFormUbi($event)">
-    </app-ubicacion-form>
-</div>
-
-<div class="modal-container" *ngIf='showPEmpD || showParadas'>
-    <div class="modal-content animated fadeInDown">
-        <button class="closeButton" (click)="emiteCierraVentana()">X</button>
-        <div class="employeesDisp">
-            <app-empleado-linea class="card" (click)="agregaTrabajadorATarea(empleado.id)" [emp]="empleado"
-                [index]="i" *ngFor="let empleado of empleadosDisp; let i = index;"></app-empleado-linea>
-            <div class="card" *ngFor="let parada of paradas.fechasRecogida; let i = index;">
-                <a class="btn btn-dark stretched-link" (click)="eliminaParada(parada)">
-                    <h5 class="subtitle">{{ (i+1) + " : " + parada.vehiculo + " " + parada.fechaInicio }}</h5>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="contenedor  card animated fadeInDown" >
 
     <div class="cuerpoTarj card" >
     
-        <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
         <div class="card-body detalles">
             <div class="topTarea">
                 <div class="cabTit">
@@ -111,7 +29,6 @@
             </div>
             <p class="cuadroTxt card"><small class=" text-muted">{{ tarea.descripcion }}</small></p>
                 
-            <!-- linkear botones registrando la ruta en routes -->
             <button *ngIf='visible' (click)="abreFormTarea(true)" >
                 <a class="btn btn-outline-secondary" >{{botonEditar}}</a>
             </button>
@@ -198,7 +115,6 @@
                     <div class="card" 
                         *ngFor="let parada of paradas.fechasRecogida; let i = index;">
                         <a   class="btn btn-dark stretched-link" (click)="eliminaParada( parada )" >
-                            <!--<img [src]="heroe.img" class="card-img-top" [alt]="heroe.img">-->
                             <h5 class="h5letrero animated fadeIn fast" >
                                 {{ (i+1) + " : " + parada.vehiculo + " " + parada.fechaInicio }}
                             </h5>

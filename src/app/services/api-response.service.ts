@@ -48,30 +48,7 @@ export class ApiResponseService {
 
   /*'text'`, `'email'`, `'password'`, `'number'`, `'tel'`, `'range'`, `'textarea'`,
   `'select'`, `'radio'`, `'checkbox'`, `'file'` and `'url'`.*/
-  /*async resMensajeInputDate(titulo:string,
-    msn:string,btnAccTxt:string,
-    btnCancel:boolean,btnCancTxt:string):Promise<string>{
-    const { value: date } = await Swal.fire({
-      title: titulo,
-      text: msn,
-      input: "date",
-      showCancelButton: btnCancel,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: btnAccTxt,
-      cancelButtonText: btnCancTxt//,
-      //didOpen: () => {
-        //const today = (new Date());
-        //Swal.getInput().min = today.split("T")[0];
-      //}
-    });
-    if (date) {
-      //Swal.fire("Departure date", date)
-      return date;
-    }else{
-      return "";
-    }
-  }*/
+
   async resMensajeInputSelect(titulo:string,
     msn:string,btnAccTxt:string,
     btnCancel:boolean,btnCancTxt:string,opciones:Array<string>):Promise<string>{
@@ -87,13 +64,9 @@ export class ApiResponseService {
       inputOptions:opciones,
       inputLabel: "Vehículo: "
        
-      //didOpen: () => {
-        //const today = (new Date());
-        //Swal.getInput().min = today.split("T")[0];
-      //}
+
     });
     if (value) {
-      //Swal.fire("Departure date", date)
       return value;
     }else{
       return "";
@@ -131,14 +104,6 @@ export class ApiResponseService {
       confirmButtonText: accText
     });
   }
-  /*resMensajeWrnBtnCnc(msn:string){
-    Swal.fire({
-      allowOutsideClick:false,
-      text:msn,
-      icon:'warning'
-
-    });
-  }*/
   
   resMensajeWrnBtnRedir(msn:string,redir:string){
     Swal.fire({
@@ -151,8 +116,7 @@ export class ApiResponseService {
     }).then((result)=>{
       if (result.isConfirmed) {
         this.router.navigateByUrl(redir);
-      }else/* if (result.dismiss === 'cancel') */{
-        // Acción cuando se hace clic en el botón Cancelar
+      }else{
         console.log('Botón Cancelar presionado');
       }
     });
@@ -178,7 +142,3 @@ export class ApiResponseService {
 
   };
 }
-
-/*enum Icons {
-  warning, error, success, info, question
-}*/

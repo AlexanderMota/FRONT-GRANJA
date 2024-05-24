@@ -26,7 +26,7 @@ export class TareaFormComponent implements OnInit {
   
   imps : string[] = [];
   supers : TareaModel[] = [];
-  departamentos : { nombre: string }[] = [];
+  departamentos : string[] = [];
   tarea: TareaModel = new TareaModel();
   titulo:string = "";
   textBtn:string = "";
@@ -51,9 +51,7 @@ export class TareaFormComponent implements OnInit {
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
       }else{
-        this.departamentos = res as {
-          nombre: string;
-        }[];
+        this.departamentos = res as string[];
       }
     });
     this.empServ.getRoles(localStorage.getItem('token')!).subscribe(res=>{
@@ -161,6 +159,7 @@ export class TareaFormComponent implements OnInit {
       
     }else{
       if(this.paramId){
+        
         this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
@@ -196,7 +195,6 @@ export class TareaFormComponent implements OnInit {
           this.resApi.resMensajeErrBtn(err.error.message);
         }});
       }else{
-        console.log(localStorage.getItem('centroActual')!);
         this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,localStorage.getItem('centroActual')!).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 

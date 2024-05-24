@@ -50,9 +50,9 @@ export class EmpleadoService {
       })
     });
   }
-  getDepartamentos(token:string):Observable<{ nombre: string; }[] | ApiResponse> {
+  getDepartamentos(token:string):Observable<string[] | ApiResponse> {
     //console.log(id);
-    return this.http.get<{ nombre: string; }[] | ApiResponse>(this.urlDepartamentos, {
+    return this.http.get<string[] | ApiResponse>(this.urlDepartamentos, {
       headers: new HttpHeaders({
         Authorization: token
       })

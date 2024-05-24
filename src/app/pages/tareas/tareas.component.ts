@@ -25,7 +25,7 @@ export class TareasComponent implements OnInit {
   posttitulo="Lista de todas las tareas disponibles";
   subtareas:TareaModel[] = [];
   imps:string[] = [];
-  departamentos:{nombre:string}[] = [];
+  departamentos:string[] = [];
 
   constructor(
     private tarServ:TareaService,
@@ -83,9 +83,7 @@ export class TareasComponent implements OnInit {
       if((res as ApiResponse).status){
         console.log((res as ApiResponse).message);
       }else{
-        this.departamentos = res as {
-          nombre: string;
-      }[];
+        this.departamentos = res as string[];
       }
       this.locServ.getArray("colecciones.rangoImportancia").subscribe(res => this.imps = res);
       //console.log(res);

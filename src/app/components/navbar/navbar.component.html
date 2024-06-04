@@ -8,7 +8,7 @@
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" (click)="creaCentro()">Nuevo centro</a></li>
           <li><hr class="dropdown-divider"></li>
           <li *ngFor="let tarea of supertareas;" (click)="guardaCentro(tarea._id)"><a class="dropdown-item" >{{tarea.nombre}}</a></li>
         </ul>
@@ -53,3 +53,8 @@
     </div>
   </div>
 </nav>
+
+<div>
+  <app-tarea-form *ngIf='showP' [idSuper]="centro" (eventoEmiteCierraFormTarea)='receiveMessageCierraFormCentro($event)'>
+  </app-tarea-form>
+</div>

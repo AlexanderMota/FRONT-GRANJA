@@ -23,6 +23,8 @@ export class TareaFormComponent implements OnInit {
 
   @Input() 
   editaTar : boolean = false;
+  @Input() 
+  idSuper : string = "";
   
   imps : string[] = [];
   supers : TareaModel[] = [];
@@ -33,9 +35,6 @@ export class TareaFormComponent implements OnInit {
   fechaIni:string = "";
   fechaFin:string = "";
   roles : string[] = [];
-
-  private paramId : string = "";
-  private idSuper : string = "";
 
   constructor(
     private resApi:ApiResponseService, 
@@ -63,12 +62,11 @@ export class TareaFormComponent implements OnInit {
     });
     this.actRoute.params.subscribe(params=>{
 
-      if(params['id']){
-        this.paramId = params['id'];
+      if(this.idSuper.length > 15){
         if(this.editaTar){
           this.locServ.getString("encabezados.editarTarea").subscribe(val=>this.titulo = val);
           this.locServ.getString("botones.guardarCambios").subscribe(val=>this.textBtn = val);
-          this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
+          this.tarServ.getTareaById(localStorage.getItem('token')!,this.idSuper).subscribe(res=>{
             if((res as ApiResponse).status){
               console.log((res as ApiResponse).message);
             }else{
@@ -96,8 +94,8 @@ export class TareaFormComponent implements OnInit {
         }else{
           this.locServ.getString("encabezados.guardaSubTarea").subscribe(val=>this.titulo = val);
           this.locServ.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
-          this.idSuper = this.paramId;
-          this.tarServ.getTareaById(localStorage.getItem('token')!,this.paramId).subscribe(res=>{
+          //this.idSuper = this.paramId;
+          this.tarServ.getTareaById(localStorage.getItem('token')!,this.idSuper).subscribe(res=>{
             if((res as ApiResponse).status){
               console.log((res as ApiResponse).message);
             }else{
@@ -105,6 +103,9 @@ export class TareaFormComponent implements OnInit {
             }
           });
         }
+      }else if(this.idSuper == "0b1c"){
+        this.titulo = "Nuevo centro";
+        this.locServ.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
       }else{
         this.locServ.getString("encabezados.guardaTarea").subscribe(val=>this.titulo = val);
         this.locServ.getString("botones.guardaTarea").subscribe(val=>this.textBtn = val);
@@ -158,9 +159,9 @@ export class TareaFormComponent implements OnInit {
       }});
       
     }else{
-      if(this.paramId){
+      if(this.idSuper.length > 15){
         
-        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.paramId).subscribe({next:(res) => {
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea ,this.idSuper).subscribe({next:(res) => {
           switch(res.status) { 
             case 201: { 
                 const ids = res.message.split("_");
@@ -171,7 +172,7 @@ export class TareaFormComponent implements OnInit {
                 if(val.isConfirmed) {
                   this.eventoEmiteIdTareaUbi.emit(ids[1]);
                   this.eventoEmiteCierraFormTarea.emit(false);
-                }else if(!val.isConfirmed) {
+                }else{
                   console.log("La tarea tiene la misma ubi que su padre.");
                   location.reload();
                   this.eventoEmiteCierraFormTarea.emit(false);
@@ -188,6 +189,39 @@ export class TareaFormComponent implements OnInit {
             default: { 
               this.locServ.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
               this.eventoEmiteCierraFormTarea.emit(false);
+               break; 
+            } 
+          } 
+        },error:(err)=>{
+          this.resApi.resMensajeErrBtn(err.error.message);
+        }});
+      }else if(this.idSuper == "0b1c"){
+        console.log("flujo correcto");
+        console.log(this.idSuper);
+        this.tarServ.postTarea(localStorage.getItem('token')!, this.tarea,"b1c" ).subscribe({next:(res) => {
+          switch(res.status) { 
+            case 201: { 
+                const ids = res.message.split("_");
+              this.locServ.getString("mensajesInformacion.201PatchTarea").subscribe(val=>this.resApi.resMensajeSucBtn(val));this.locServ.getString("mensajesInformacion.infoUbiNuevaTarea").subscribe(val=> this.resApi.resMensajeWrnBtnThen("resMensajeWrnBtnThen: "+val)
+              .then(val=>{
+                if(val.isConfirmed) {
+                  this.eventoEmiteIdTareaUbi.emit(ids[1]);
+                  this.eventoEmiteCierraFormTarea.emit(false);
+                }else{
+                  console.log("La tarea tiene la misma ubi que su padre.");
+                  location.reload();
+                  this.eventoEmiteCierraFormTarea.emit(false);
+                }
+              })
+              .catch(err=>console.log(err)));
+              break; 
+            }
+            case 400: { 
+              this.locServ.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
+               break; 
+            } 
+            default: { 
+              this.locServ.getString("mensajesError.desconocido").subscribe(val=>this.resApi.resMensajeWrnBtn(val));
                break; 
             } 
           } 

@@ -1,0 +1,13 @@
+<div class="subs" *ngIf="ubis && ubis.length > 0;  else sinUbis">
+    <div class="contenedor card container animated fadeIn fast"
+        *ngFor="let ubi of ubis; let i = index;">
+        <div class="cuerpoTarj card-body">
+            <h5 class="card-title">{{ ubi.titulo }}</h5>
+            <h5 class="card-text">{{ ubi.descripcion }}</h5>
+            <h5 class="card-text">{{ ubi.fechasRecogida }}</h5>
+        </div>
+    </div>
+</div>  
+<ng-template #sinUbis >
+    <p>No hay paradas.</p>
+</ng-template>

@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LocalizationService {
-  private stringsUrl = '../../assets/textos/strings.json';
+  private readonly stringsUrl = '../../assets/textos/strings.json';
   private stringsSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   strings$: Observable<any> = this.stringsSubject.asObservable();
 

@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   //@Input()
   perfil = "";
   visible = false;
+  showP = false;
   autenticado = false;
   supertareas: TareaModel[] = [];
 
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   val4 ="";
   val5 ="";
   val6 ="";
+  centro ="0b1c";
 
   private rol="";
   private permisos = ["ADMIN", "Director", "RRHH","Gerente"];
@@ -75,5 +77,13 @@ export class NavbarComponent implements OnInit {
   guardaCentro(centro:string){
     localStorage.setItem('centroActual', centro);
     location.reload();
+  }
+  creaCentro(){
+    this.respServ.resMensajeQuesBtnCancBtn("ATENCIÓN","Se dispone a crear un nuevo centro de trabajo ¿Desea continuar?","Continuar",true,"Cancelar").then(val =>{
+      this.showP = val.isConfirmed;
+    });
+  }
+  receiveMessageCierraFormCentro($event:boolean){
+    this.showP = $event;
   }
 }

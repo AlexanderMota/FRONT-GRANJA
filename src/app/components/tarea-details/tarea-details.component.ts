@@ -207,12 +207,26 @@ export class TareaDetailsComponent implements OnInit {
   }
   emiteCierraVentana2(){ this.showParadas = false; }
   sendMessageFormUbi($event: {nombre:string,lng:number,lat:number}){
-    console.log("aqui");
     this.ubi.titulo = $event.nombre;
     this.ubi.longitud = $event.lng;
     this.ubi.latitud = $event.lat;
-    this.nuevaTarUbi = false;
-    this.showP3 = true;
+    console.log("1.- this.ubi.idTarea: ");
+    console.log(this.ubi.idTarea);
+    if(this.ubi.idTarea == ""){
+      this.ubi.idTarea = this.tarea._id;
+      this.nuevaTarUbi = true;
+      this.showP3 = true;
+
+    }else{
+      this.nuevaTarUbi = false;
+      this.showP3 = true;
+    }
+    console.log("2.- this.ubi.idTarea: ");
+    console.log(this.ubi.idTarea);
+  }
+  sendMessageFormUbiTarea($event: {nombre:string,lng:number,lat:number}){
+    //this.tarea._id = "123";
+    this.sendMessageFormUbi($event);
   }
   receiveMessageFormTarea($event: boolean){ this.showP1 = $event; }
   receiveMessageFormVehi($event: boolean){ this.showP2 = $event; }
@@ -241,8 +255,11 @@ export class TareaDetailsComponent implements OnInit {
   }
   receiveMessageIdTareaUbi($event:string){
     this.ubi.idTarea = $event;
-    this.nuevaTarUbi = true;
   }
+  /*receiveMessageCambiaUbi(){
+    this.ubi.idTarea = this.tarea._id;
+    this.nuevaTarUbi = false;
+  }*/
   eliminaParada(fechaRecogida: {
     fechaInicio: Date,
     fechaFin: Date,

@@ -8,8 +8,8 @@ import { SolicitudModel } from '../models/solicitud.model';
   providedIn: 'root'
 })
 export class SolicitudService {
-  private baseUrl = 'http://localhost:4300/api/solicitud';
-  private urlGetSolicitudById = this.baseUrl+'/byid/';
+  private readonly baseUrl = 'http://localhost:4300/api/solicitud';
+  private readonly urlGetSolicitudById = this.baseUrl+'/byid/';
 
   constructor(private http: HttpClient) { }
 

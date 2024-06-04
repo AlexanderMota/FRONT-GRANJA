@@ -27,9 +27,9 @@
                                 <span class="focus-input100"></span>
                             </div>
 
-                            <span *ngIf="registroForm.submitted && ubicacion.idTarea == '' && registroForm.controls['descripcion'].errors"
+                            <span *ngIf="registroForm.submitted && registroForm.controls['descripcion'].errors"
                                 class="text-danger animated fadeIn">La descripcion es obligatoria</span>
-                            <div class="wrap-input100 m-b-16" *ngIf="ubicacion.idTarea == ''">
+                            <div class="wrap-input100 m-b-16">
                                 <textarea class="input100" 
                                     type="text" 
                                     name="descripcion" 
@@ -40,7 +40,7 @@
             
                                 <span class="focus-input100"></span>
                             </div>
-                            <div class="input-group" *ngIf="ubicacion.idTarea == ''">
+                            <div class="input-group" *ngIf="ubicacion.idTarea == '' || idDestino == '123'">
                                 <textarea class="form-control" aria-label="With textarea"></textarea>
                             </div>
 

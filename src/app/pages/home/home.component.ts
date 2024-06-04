@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EstadisticaService } from 'src/app/services/estadistica.service';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +11,14 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HomeComponent implements OnInit {
 
   constructor(private authServ: AuthService,
-    private respServ:ApiResponseService ) {
+    private respServ:ApiResponseService,
+    private estServ: EstadisticaService ) {
 
   }
   ngOnInit(): void {
+    this.estServ.getComentariosEst(localStorage.getItem("token")!).subscribe(val => {
+      console.log(val);
+    });
     let fla = this.authServ.esAutenticado();
     //console.log(fla);
     if(!fla){

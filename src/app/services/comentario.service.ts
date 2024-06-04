@@ -9,9 +9,9 @@ import { ComentarioModel } from '../models/comentario.model';
 })
 export class ComentarioService {
 
-  private baseUrl = 'http://localhost:4300/api/tareas/';
-  private urlComentariosByIdTarea = this.baseUrl+"comentarios/";
-  private urlAgregaComentarioATarea = this.baseUrl+"addcomentario/";
+  private readonly baseUrl = 'http://localhost:4300/api/tareas/';
+  private readonly urlComentariosByIdTarea = this.baseUrl+"comentarios/";
+  private readonly urlAgregaComentarioATarea = this.baseUrl+"addcomentario/";
 
   constructor(private http: HttpClient) { }
 

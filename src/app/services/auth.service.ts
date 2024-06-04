@@ -18,17 +18,17 @@ export class AuthService {
   //Token caducado pruebas: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsZWFkbyI6eyJub21icmUiOiJhZG1pbiIsInJvbCI6IkFETUlOIn0sImlhdCI6MTcxMzUxODAyNiwiZXhwIjoxNzEzNTIxNjI2fQ.VNvX_1HwMNkMnPL8prqO7VytdvOofxYXJfQkiNUNkk8
   
   //private urlTokenValido = 'https://api-granja.azurewebsites.net/api/auth';
-  private urlTokenValido = 'http://localhost:4300/api/auth';
+  private readonly urlTokenValido = 'http://localhost:4300/api/auth';
 
   //Crear nuevo usuario
   //private urlSignUp = 'https://api-granja.azurewebsites.net/api/auth/signup';
-  private urlSignUp = this.urlTokenValido+'/signup';
+  private readonly urlSignUp = this.urlTokenValido+'/signup';
   
   //Login
   //private urlSignIn = 'https://api-granja.azurewebsites.net/api/auth/signin';
-  private urlSignIn = this.urlTokenValido+'/signin';
+  private readonly urlSignIn = this.urlTokenValido+'/signin';
 
-  private urlGetMyUser = this.urlTokenValido+'/myuser';
+  private readonly urlGetMyUser = this.urlTokenValido+'/myuser';
 
 
   logout(){

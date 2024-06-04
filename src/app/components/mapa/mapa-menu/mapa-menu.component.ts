@@ -23,6 +23,8 @@ export class MapaMenuComponent {
   @Output() 
   eventoEmiteFormUbi = new EventEmitter<boolean>();
   @Output() 
+  eventoEmiteCambiaUbi = new EventEmitter<boolean>();
+  @Output() 
   eventoEmiteCambiaEstiloMapa = new EventEmitter<string>();
   @Output() 
   eventoEmiteMedioTransporteMapa = new EventEmitter<string>();
@@ -37,6 +39,8 @@ export class MapaMenuComponent {
   indicaciones: MapBoxLeg = new MapBoxLeg;
   @Input()
   nuevaUbi: boolean = false;
+  //@Input()
+  cambiaUbi: boolean = false;
   @Input()
   eliminaParada: boolean = false;
 
@@ -127,6 +131,7 @@ export class MapaMenuComponent {
     this.eventoEmiteVerTransportes.emit(this.muestraParadas);
   }
   activaNuevaUbi(){
+    this.cambiaUbi = false;
     this.nuevaUbi = !this.nuevaUbi;
     if(this.nuevaUbi){
       this.localizationService.getString("botones.navegacion").subscribe(val => this.nuevaUbiCadena = val);
@@ -134,5 +139,15 @@ export class MapaMenuComponent {
       this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
     }
     this.eventoEmiteFormUbi.emit(this.nuevaUbi);
+  }
+  activaCambiaUbi(){
+    this.nuevaUbi = false;
+    this.cambiaUbi = !this.cambiaUbi;
+    if(this.cambiaUbi){
+      this.localizationService.getString("botones.navegacion").subscribe(val => this.nuevaUbiCadena = val);
+    }else{
+      this.localizationService.getString("botones.nuevaParada").subscribe(val => this.nuevaUbiCadena = val);
+    }
+    this.eventoEmiteCambiaUbi.emit(this.cambiaUbi);
   }
 }

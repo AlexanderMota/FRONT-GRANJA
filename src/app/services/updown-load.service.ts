@@ -7,8 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UpDownLoadService {
-  private baseUrl = 'http://localhost:4300/api/files/';
-  private urlUpload = this.baseUrl + "fileUp/";
+  private readonly baseUrl = 'http://localhost:4300/api/files/';
+  private readonly urlUpload = this.baseUrl + "fileUp/";
 
   constructor(private http: HttpClient) { }
 

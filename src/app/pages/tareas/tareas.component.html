@@ -22,6 +22,6 @@
   </div>
 </div>
 <div>
-  <app-tarea-form *ngIf='showP' (eventoEmiteCierraFormTarea)='receiveMessage($event)'>
+  <app-tarea-form *ngIf='showP' [idSuper]="idSuper" (eventoEmiteCierraFormTarea)='receiveMessage($event)'>
   </app-tarea-form>
 </div>

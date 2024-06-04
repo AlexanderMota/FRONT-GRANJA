@@ -10,13 +10,13 @@ import { EmpleadoModel } from '../models/empleado.model';
 export class EmpleadoService {
 
 
-  private baseUrl = 'http://localhost:4300/api/empleados/';
+  private readonly baseUrl = 'http://localhost:4300/api/empleados/';
   
-  private urlRoles = (this.baseUrl+'roles/');
-  private urlDepartamentos = (this.baseUrl+'departamentos/');
-  private urlEmpleadosPorTarea = (this.baseUrl+'tarea/');
+  private readonly urlRoles = (this.baseUrl+'roles/');
+  private readonly urlDepartamentos = (this.baseUrl+'departamentos/');
+  private readonly urlEmpleadosPorTarea = (this.baseUrl+'tarea/');
   //private urlEmpleadoPorIdEmpleado = (this.baseUrl+'byid/');
-  private urlEmpleadosPorTareaDist = (this.baseUrl+'disponibles/');
+  private readonly urlEmpleadosPorTareaDist = (this.baseUrl+'disponibles/');
 
   constructor(private http: HttpClient) { }
 

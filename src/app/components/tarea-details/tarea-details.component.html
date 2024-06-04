@@ -69,12 +69,13 @@
         (eventoEmiteFormVehi)='receiveMessageFormVehi($event)'
         (eventoEmiteUbi)="sendMessageFormUbi($event)"
         (eventoEmiteEliminaParada)="receiveMessageEliminaParada($event)"
-        (eventoEmiteEditaParada)="receiveMessageEditaParada($event)">
+        (eventoEmiteEditaParada)="receiveMessageEditaParada($event)"
+        (eventoEmiteEditaUbi)="sendMessageFormUbiTarea($event)">
     </app-mapa>
 </div>
 
 <div>
-    <app-tarea-form *ngIf='showP1' [editaTar]="editaTar" 
+    <app-tarea-form *ngIf='showP1' [editaTar]="editaTar" [idSuper]="paramId"
         (eventoEmiteIdTareaUbi)='receiveMessageIdTareaUbi($event)'
         (eventoEmiteCierraFormTarea)='receiveMessageFormTarea($event)'></app-tarea-form>
 </div>

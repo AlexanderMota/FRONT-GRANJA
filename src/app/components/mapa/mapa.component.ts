@@ -11,7 +11,6 @@ import { ApiResponseService } from 'src/app/services/api-response.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
-import { makeArray } from 'jquery';
 
 
 @Component({
@@ -32,6 +31,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
   tareaNuevaUbi = false;
 
   nuevaUbiActivo = false;
+  cambiaUbiActivo = false;
   nombrePuntoPartida:string="";
   indicaciones: MapBoxLeg = new MapBoxLeg;
 
@@ -43,7 +43,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
   private eventoEmiteEliminaParada = new EventEmitter<{idUbicacion:string,fechasRecogida:{ fechaInicio: Date; fechaFin: Date; vehiculo: string}[]}>();
   @Output() 
   private eventoEmiteEditaParada = new EventEmitter<{idUbicacion:string,titulo:string,descripcion:string, longitud:number, latitud:number}>();
+  @Output() 
+  private eventoEmiteEditaUbi = new EventEmitter<{nombre:string,lng:number,lat:number}>();
   
+
   private mapa!:mapboxgl.Map;
   private marcCentro: mapboxgl.Marker = new mapboxgl.Marker;
   private marcUsuario: mapboxgl.Marker = new mapboxgl.Marker;
@@ -121,7 +124,12 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
         this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg,btnAcc,true,btnCan).then(value => {
         if(value.isConfirmed){
-          this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+          if(this.cambiaUbiActivo){
+            this.eventoEmiteEditaUbi.emit({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat})
+          }else{
+            this.eventoEmiteUbi.emit({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+          }
+          
         }})})})})});
       }else{
         this.localizationService.getString("botones.cancelar").subscribe(btnCan =>  {
@@ -130,7 +138,7 @@ export class MapaComponent implements OnInit, AfterViewInit {
         this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
         this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg,btnAcc,true,btnCan).then(value => {
         if(value.isConfirmed){
-          this.sendMessageFormUbi({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
+          this.eventoEmiteUbi.emit({nombre:this.nombrePuntoPartida,lng:event.lngLat.lng,lat:event.lngLat.lat});
         }})})})})});
       }
     });
@@ -244,13 +252,12 @@ export class MapaComponent implements OnInit, AfterViewInit {
             this.localizationService.getString("mensajesInformacion.infoGuardaNuevaParada").subscribe(msg => {
             this.apiRespServ.resMensajeQuesBtnCancBtn(tit,msg, btnAcc, true, btnCan).then(value => {
               if(value.isConfirmed){
-                this.sendMessageFormUbi(
-                  {
-                    nombre:this.nombrePuntoPartida,
-                    lng:this.marcUsuario.getLngLat().lng,
-                    lat:this.marcUsuario.getLngLat().lng
-                  }
-                );
+                
+                this.eventoEmiteUbi.emit({
+                  nombre:this.nombrePuntoPartida,
+                  lng:this.marcUsuario.getLngLat().lng,
+                  lat:this.marcUsuario.getLngLat().lng
+                });
               }
             })})})})});
           }else { 
@@ -380,35 +387,32 @@ export class MapaComponent implements OnInit, AfterViewInit {
 
         popup.getElement().querySelector(".boton1")!.addEventListener('click', () => {
           this.localizationService.getString("botones.cancelar").subscribe(btnCan => {
-            this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
-              this.localizationService.getString("mensajesInformacion.infoReservaPlaza").subscribe(msg => {
-                this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
-                  let da: string[] = [];
-                  dat[i].fechasRecogida.forEach(val => {
-                    da.push(val.vehiculo + " - " + val.fechaInicio);
-                  });
+          this.localizationService.getString("botones.aceptar").subscribe(btnAcc => {
+          this.localizationService.getString("mensajesInformacion.infoReservaPlaza").subscribe(msg => {
+          this.localizationService.getString("encabezados.atencionTitulo").subscribe(tit => {
+            let da: string[] = [];
+            dat[i].fechasRecogida.forEach(val => {
+              da.push(val.vehiculo + " - " + val.fechaInicio);
+            });
 
-                  let index = 0;
-                  this.apiRespServ.resMensajeInputSelect(tit, msg, btnAcc, true, btnCan, da).then(value => {
-                    if (value) {
-                      index = parseInt(value);
-                      this.vehiServ.patchVehiculo(
-                        localStorage.getItem('token')!,
-                        dat[i].fechasRecogida[index].vehiculo,
-                        localStorage.getItem('miid')!
-                      ).subscribe(res => {
-                        if (res.status == 200) {
-                          this.apiRespServ.resMensajeSucBtn(res.message);
-                        } else {
-                          this.apiRespServ.resMensajeErrBtn(res.message);
-                        }
-                      });
-                    }
-                  }).catch(err => console.log(err));
-                })
-              })
-            })
-          });
+            let index = 0;
+            this.apiRespServ.resMensajeInputSelect(tit, msg, btnAcc, true, btnCan, da).then(value => {
+              if (value) {
+                index = parseInt(value);
+                this.vehiServ.patchVehiculo(
+                  localStorage.getItem('token')!,
+                  dat[i].fechasRecogida[index].vehiculo,
+                  localStorage.getItem('miid')!
+                ).subscribe(res => {
+                  if (res.status == 200) {
+                    this.apiRespServ.resMensajeSucBtn(res.message);
+                  } else {
+                    this.apiRespServ.resMensajeErrBtn(res.message);
+                  }
+                });
+              }
+            }).catch(err => console.log(err));
+          })})})});
         });
 
         popup.getElement().querySelector(".boton2")!.addEventListener('click', () => {
@@ -442,9 +446,6 @@ export class MapaComponent implements OnInit, AfterViewInit {
   }
   sendMessageFormVehi($event: boolean){
     this.eventoEmiteFormVehi.emit($event);
-  }
-  private sendMessageFormUbi(even: {nombre:string,lng:number,lat:number}){
-    this.eventoEmiteUbi.emit(even);
   }
 
   receiveMessageBuscaUbi($event: MapBoxFeature){
@@ -538,5 +539,10 @@ export class MapaComponent implements OnInit, AfterViewInit {
       this.clickMapaInactivo(this.clickHandlerNuevaUbi);
       this.clickMapaVerRutaActivo(); 
     }
+  }
+  receiveCambiaUbi($event: boolean){
+    this.cambiaUbiActivo = $event;
+    this.tareaNuevaUbi = $event;
+    this.receiveNuevaUbi($event);
   }
 }

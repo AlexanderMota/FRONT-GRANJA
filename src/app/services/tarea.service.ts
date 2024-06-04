@@ -9,12 +9,12 @@ import { TareaModel } from '../models/tarea.model';
 })
 export class TareaService {
 
-  private baseUrl = 'http://localhost:4300/api/tareas/';
-  private urlTareasByIdTarea = this.baseUrl+"byid/";
-  private urlSubtareas = this.baseUrl+"subtareas/";
-  private urlSuperTareas = this.baseUrl+"supertareas/";
-  private urlTareasByIdEmpleado = this.baseUrl+"empleado/";
-  private urlAgregaEmpleadoATarea = this.baseUrl+"addempleado/";
+  private readonly baseUrl = 'http://localhost:4300/api/tareas/';
+  private readonly urlTareasByIdTarea = this.baseUrl+"byid/";
+  private readonly urlSubtareas = this.baseUrl+"subtareas/";
+  private readonly urlSuperTareas = this.baseUrl+"supertareas/";
+  private readonly urlTareasByIdEmpleado = this.baseUrl+"empleado/";
+  private readonly urlAgregaEmpleadoATarea = this.baseUrl+"addempleado/";
 
   constructor(private http: HttpClient) { }
 
@@ -61,7 +61,7 @@ export class TareaService {
       }
     });
   }
-  postTarea(token:string,tar:TareaModel,idSuper:string ="0b"):Observable<ApiResponse>{
+  postTarea(token:string,tar:TareaModel,idSuper:string):Observable<ApiResponse>{
     const {nombre,descripcion,departamento,importancia,fechainicio,fechafin,terminada,plantilla,precioHora} = tar;
     return this.http.post<ApiResponse>(this.baseUrl, {nombre,descripcion,departamento,importancia,fechainicio,fechafin,plantilla,precioHora,terminada},{
       headers: new HttpHeaders({

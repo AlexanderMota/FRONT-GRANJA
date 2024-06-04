@@ -51,6 +51,9 @@ export class UbicacionFormComponent implements OnInit {
     if(this.ubicacion._id){
       this.localizationService.getString("encabezados.editaUbicacion").subscribe(val => this.titulo = val);
       this.localizationService.getString("botones.guardar").subscribe(val => this.textBtn = val);
+    }else if(this.ubicacion.idTarea){
+      this.titulo = "EDITA UBICACIÓN";
+      this.localizationService.getString("botones.guardar").subscribe(val => this.textBtn = val);
     }else{
       this.localizationService.getString("encabezados.nuevaUbicacion").subscribe(val => this.titulo = val);
       this.localizationService.getString("botones.guardar").subscribe(val => this.textBtn = val);
@@ -62,14 +65,14 @@ export class UbicacionFormComponent implements OnInit {
       this.ubicacion.longitud == 0 || this.ubicacion.latitud == 0){
       return;
     }
-    if(this.ubicacion.idTarea == ""){
+    /*if(this.ubicacion.idTarea == ""){
       this.ubicacion.fechasRecogida.forEach(val => {
         if(val.vehiculo == "-" || !val.fechaInicio|| !val.fechaFin || this.ubicacion.descripcion == "-" ){
           console.log("salta validacion vehiculo en parada");
           return;
         }
       });
-    }
+    }*/
     
     this.resApi.resCargando('Espere...');
 
@@ -80,19 +83,19 @@ export class UbicacionFormComponent implements OnInit {
           case 200: { 
             this.emiteCierraVentana();
             this.resApi.resMensajeSucBtn(res.message);
-              break; 
+            break; 
           }
           case 202: {
             this.resApi.resMensajeWrnBtn(res.message);
-              break; 
+            break; 
           } 
           case 405: {
             this.resApi.resMensajeErrBtn(res.message);
-              break; 
+            break; 
           } 
           default: { 
             this.resApi.resMensajeErrBtn(res.message);
-              break; 
+            break; 
           } 
         } 
       },error:err=>{
@@ -122,27 +125,31 @@ export class UbicacionFormComponent implements OnInit {
           this.resApi.resMensajeErrBtn(err.error.message);
         }});
       }else{
-        this.ubicacion.fechasRecogida = [];
-        this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
-          console.log(res);
-          switch(res.status) { 
-            case 201: { 
-              this.emiteCierraVentana();
-              this.resApi.resMensajeSucBtn('Ubicación de tarea creada con éxito');
-                break; 
-            }
-            case 400: {
-              this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
-                break; 
+        /*if(this.idDestino == "123"){
+          console.log("llegamos");
+        }else{*/
+          this.ubicacion.fechasRecogida = [];
+          this.ubiServ.postUbi(localStorage.getItem('token')!, this.ubicacion).subscribe({ next:(res)=>{
+            console.log(res);
+            switch(res.status) { 
+              case 201: { 
+                this.emiteCierraVentana();
+                this.resApi.resMensajeSucBtn('Ubicación de tarea creada con éxito');
+                  break; 
+              }
+              case 400: {
+                this.resApi.resMensajeWrnBtn('Algo ha ido mal.');
+                  break; 
+              } 
+              default: { 
+                this.resApi.resMensajeErrBtn(res.message);
+                  break; 
+              } 
             } 
-            default: { 
-              this.resApi.resMensajeErrBtn(res.message);
-                break; 
-            } 
-          } 
-        },error:(err)=>{
-          this.resApi.resMensajeErrBtn(err.error.message);
-        }});
+          },error:(err)=>{
+            this.resApi.resMensajeErrBtn(err.error.message);
+          }});
+        //}
       }
 
     }

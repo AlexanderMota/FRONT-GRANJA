@@ -9,8 +9,13 @@
     </li>
     <li class="list-group-item" (click)="sendVerTransportes()">{{paradaCadena}}</li>
     <li class="list-group-item" (click)="muestraFormVehi()">Añade transporte</li>
-    <li class="list-group-item" (click)="activaNuevaUbi()">{{nuevaUbiCadena}}</li>
-    
+    <li [ngClass]="{'disabled': cambiaUbi}" 
+        class="list-group-item" 
+        (click)="activaNuevaUbi()"
+        [attr.disabled]="cambiaUbi ? true : null">
+        {{nuevaUbiCadena}}
+    </li>
+    <li class="list-group-item" (click)="activaCambiaUbi()">Cambiar ubicación</li>
     <li class="list-group-item" (click)="reiniciaMapa()">Reinicia</li>
     <li class="list-group-item" (click)="muestraOcultaMenu()">Atrás</li>
 </ul>

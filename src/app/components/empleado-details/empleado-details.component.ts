@@ -8,6 +8,7 @@ import { ApiResponseService } from 'src/app/services/api-response.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { TareaService } from 'src/app/services/tarea.service';
+import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 
 @Component({
@@ -20,12 +21,14 @@ export class EmpleadoDetailsComponent implements OnInit {
   empleado: EmpleadoModel = new EmpleadoModel();
   tareas:TareaModel[]=[];
   vehiculos:VehiculoModel[]=[];
+  vehisComp:VehiculoModel[]=[];
   constructor(private empServ:EmpleadoService, 
     private tarServ:TareaService, 
     private vehiServ:VehiculoService, 
     private resPop:ApiResponseService,
     private locServ: LocalizationService, 
-    private actRoute:ActivatedRoute) {
+    private actRoute:ActivatedRoute,
+    private ubiServ: UbicacionService) {
     this.actRoute.params.subscribe(async params=>{
         if(params['id']){
           this.empServ.getEmpleadoById(localStorage.getItem('token')!, params['id']).subscribe({next:res2 => {
@@ -34,6 +37,20 @@ export class EmpleadoDetailsComponent implements OnInit {
               console.log((res2 as ApiResponse).message);
             }else{
               this.empleado = res2 as EmpleadoModel;
+
+              this.ubiServ.getMisParadas(localStorage.getItem('token')!,this.empleado._id).subscribe({next:res4=>{
+                
+                console.log(res4);
+                if((res4 as ApiResponse).status){
+                  console.log((res4 as ApiResponse).message);
+                }else{
+                  console.log("response mis paradas");
+                  /*(res4 as any[]).forEach(val => {
+                    console.log("sfgdsfg");
+                    console.log(val);
+                  });*/
+                }
+              },error:err=>console.log(err)});
             }
           },error: err =>console.log(err)});
 
@@ -69,6 +86,7 @@ export class EmpleadoDetailsComponent implements OnInit {
             if((val as ApiResponse).status) console.log((val as ApiResponse).message);
             else this.vehiculos = val as VehiculoModel[];
           },error:err=> console.log(err)});
+          
         }
     }); 
   }

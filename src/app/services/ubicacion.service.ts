@@ -6,20 +6,22 @@ import { environment } from 'src/environments/environment';
 import { MapBoxResponseModel } from '../models/mapBoxResponse.model';
 import { MapBoxRouteResponseModel } from '../models/mapBoxRouteResponse.model';
 import { ApiResponse } from '../models/apiResponse.model';
+import { VehiculoModel } from '../models/vehiculo.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UbicacionService {
 
-  private baseUrl = 'http://localhost:4300/api/ubicacion/';
-  private urlUbiByIdTarea = this.baseUrl+"tarea/";
-  private urlUbiParadas = this.baseUrl+"paradas/";
-  private urlUbiDeleteParada = this.urlUbiParadas+"delete/";
-
-  private baseUrlMapBox = 'https://api.mapbox.com/';
-  private urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
-  private urlMapBoxGetRoute = this.baseUrlMapBox + 'directions/v5/mapbox/';
+  private readonly baseUrl = 'http://localhost:4300/api/ubicacion/';
+  private readonly urlUbiByIdTarea = this.baseUrl+"tarea/";
+  private readonly urlUbiParadas = this.baseUrl+"paradas/";
+  private readonly urlUbiDeleteParada = this.urlUbiParadas+"delete/";
+  private readonly urlMisParadas = this.baseUrl+"misparadas/"
+  
+  private readonly baseUrlMapBox = 'https://api.mapbox.com/';
+  private readonly urlMapBoxBuscaUbi = this.baseUrlMapBox + 'geocoding/v5/mapbox.places/';
+  private readonly urlMapBoxGetRoute = this.baseUrlMapBox + 'directions/v5/mapbox/';
   
   constructor(private http: HttpClient) { }
 
@@ -96,6 +98,13 @@ export class UbicacionService {
     });
   }
 
+  getMisParadas(token: string, idEmpleado: string): Observable<{vehiculo:VehiculoModel,paradas:UbicacionModel[]}[] | ApiResponse> {
+    return this.http.get<any[] | ApiResponse>(this.urlMisParadas+idEmpleado, {
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    });
+  }
 
   postUbi(token:string,
     ubi:UbicacionModel,

@@ -9,11 +9,11 @@ import { ApiResponse } from '../models/apiResponse.model';
 })
 export class VehiculoService {
 
-  private baseUrl = 'http://localhost:4300/api/vehiculo/';
-  private urlVehiByProp = this.baseUrl + "propietario/";
-  private urlVehiByMatr = this.baseUrl + "matricula/";
-  private urlVehiByPara = this.baseUrl + "parada/";
-  private urlVehiByPasa = this.baseUrl + "pasajero/";
+  private readonly baseUrl = 'http://localhost:4300/api/vehiculo/';
+  private readonly urlVehiByProp = this.baseUrl + "propietario/";
+  private readonly urlVehiByMatr = this.baseUrl + "matricula/";
+  private readonly urlVehiByPara = this.baseUrl + "parada/";
+  private readonly urlVehiByPasa = this.baseUrl + "pasajero/";
   
   constructor(private http: HttpClient) { }
   

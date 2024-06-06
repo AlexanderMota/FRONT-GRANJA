@@ -13,4 +13,7 @@ export class TransporteCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  eliminaVehiculo() {
+    console.log("eliminaVehiculo() to do");
+  }
 }

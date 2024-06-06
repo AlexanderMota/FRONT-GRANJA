@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { EmpleadoModel } from 'src/app/models/empleado.model';
 import { TareaModel } from 'src/app/models/tarea.model';
+import { UbicacionModel } from 'src/app/models/ubicacion.model';
 import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { EmpleadoService } from 'src/app/services/empleado.service';
@@ -21,7 +22,13 @@ export class EmpleadoDetailsComponent implements OnInit {
   empleado: EmpleadoModel = new EmpleadoModel();
   tareas:TareaModel[]=[];
   vehiculos:VehiculoModel[]=[];
-  vehisComp:VehiculoModel[]=[];
+  vehisComp:{
+    vehiculo: VehiculoModel,
+    paradas: UbicacionModel[]
+  }[]=[];
+  showP= false;
+  showP2= false;
+
   constructor(private empServ:EmpleadoService, 
     private tarServ:TareaService, 
     private vehiServ:VehiculoService, 
@@ -45,10 +52,19 @@ export class EmpleadoDetailsComponent implements OnInit {
                   console.log((res4 as ApiResponse).message);
                 }else{
                   console.log("response mis paradas");
-                  /*(res4 as any[]).forEach(val => {
-                    console.log("sfgdsfg");
+                  this.vehisComp = res4 as {
+                    vehiculo: VehiculoModel,
+                    paradas: UbicacionModel[]
+                }[];
+                  (res4 as {
+                    vehiculo: VehiculoModel,
+                    paradas: UbicacionModel[]
+                }[]).forEach(val => {
                     console.log(val);
-                  });*/
+                    val.paradas.forEach(par => {
+                      console.log(par);
+                    });
+                  });
                 }
               },error:err=>console.log(err)});
             }
@@ -92,5 +108,15 @@ export class EmpleadoDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+  
+  receiveEditaPerfil($event: boolean) {
+    this.showP = $event;
+  }/*
+  receiveMessageFormVehi($event: boolean) {
+    this.showP2 = $event;
+  }*/
+  receiveAgregaVehiculo($event: boolean) {
+    this.showP2 = $event;
   }
 }

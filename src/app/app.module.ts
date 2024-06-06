@@ -42,6 +42,7 @@ import { TareaComponent } from './pages/tarea/tarea.component';
 import { TransporteComponent } from './pages/transporte/transporte.component';
 import { CabeceraNavListaComponent } from './components/cabecera-nav-lista/cabecera-nav-lista.component';
 import { ComentarioComponent } from './components/comentario/comentario.component';
+import { GraficoPrueba3Component } from './components/grafico-prueba3/grafico-prueba3.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ComentarioComponent } from './components/comentario/comentario.componen
     TransporteCardComponent,
     UbicacionFormComponent,
     CabeceraNavListaComponent,
-    ComentarioComponent
+    ComentarioComponent,
+    GraficoPrueba3Component
   ],
   imports: [
     BrowserModule,

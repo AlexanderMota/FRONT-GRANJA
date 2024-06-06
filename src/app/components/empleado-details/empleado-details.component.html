@@ -1,6 +1,6 @@
 <div class="container card contPrincipal">
     
-  <app-empleado-detail [empleado]="empleado"></app-empleado-detail> 
+  <app-empleado-detail [empleado]="empleado" (eventoEmiteFormVehi)="receiveAgregaVehiculo($event)"></app-empleado-detail> 
   <div class="container-lg  card" *ngIf="tareas && tareas.length > 0;  else sinTars">
       <app-tarea-card  
         [tarea]="tarea" [index]="i" *ngFor="let tarea of tareas; let i = index;">
@@ -11,12 +11,31 @@
   </ng-template>
 </div>
 <div class="container-lg  card" *ngIf="vehiculos && vehiculos.length > 0;  else sinVehis">
+
   <app-transporte-card  
     [index]="i" [vehi]="vehiculo" *ngFor="let vehiculo of vehiculos; let i = index;">
   </app-transporte-card>  
 </div> 
-<ng-template class="container-sm  card" #sinVehis >
-  <p>Empleado sin vehiculos</p>
+<ng-template class="aviso" #sinVehis >
+  <p class="aviso">Empleado sin vehiculos</p>
 </ng-template>
-<app-ubicacion [idEmpleado]="empleado._id">
-</app-ubicacion>
+
+<div class="subs" *ngIf="vehisComp && vehisComp.length > 0;  else sinUbis">
+  <h4 class="titParadas">Plazas reservadas: </h4>
+  <div class="card container animated"
+      *ngFor="let vehiComp of vehisComp; let i = index;">
+      <app-ubicacion [vehiculoCompanero]="vehiComp">
+      </app-ubicacion>
+  </div>
+</div>  
+<ng-template #sinUbis>
+  <p class="aviso">No hay paradas.</p>
+</ng-template>
+
+<div>
+  <app-registro *ngIf="showP" (eventoEmiteCierraNuevaPersona)='receiveEditaPerfil($event)'></app-registro>
+</div>
+
+<div>
+  <app-transportes-form *ngIf='showP2' (eventoEmiteCierraFormVehi)='receiveAgregaVehiculo($event)'></app-transportes-form>
+</div>

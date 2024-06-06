@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ColorType, createChart } from 'lightweight-charts';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
+import { EstadisticaService } from 'src/app/services/estadistica.service';
 
 @Component({
   selector: 'app-grafico-prueba',
@@ -8,7 +10,10 @@ import { ColorType, createChart } from 'lightweight-charts';
 })
 export class GraficoPruebaComponent implements OnInit {
 
-  constructor() { }
+  private datos: { time: string; value: number; }[]= [];
+
+  constructor(private estServ:EstadisticaService) { 
+  }
 
   ngOnInit(): void {
     const chart = createChart(document.getElementById('container')!, { 
@@ -20,7 +25,7 @@ export class GraficoPruebaComponent implements OnInit {
         } 
       } 
     });
-    const areaSeries = chart.addAreaSeries({ 
+    const baselineSeries = chart.addAreaSeries({ 
       lineColor: '#2962FF', 
       topColor: '#2962FF', 
       bottomColor: 'rgba(41, 98, 255, 0.28)' 
@@ -32,7 +37,30 @@ export class GraficoPruebaComponent implements OnInit {
 
     chart.timeScale().fitContent();
 
+    this.estServ.getComentariosEst(localStorage.getItem("token")!).subscribe(res => {
+      console.log(res);
+      
+      if((res as ApiResponse).status){
+        console.log((res as ApiResponse).message);
+      }else{
+        this.datos = res as { time: string, value: number }[];
 
+        console.log("this.datos");
+        console.log(this.datos);
+        baselineSeries.setData(this.datos/*[
+          { time: '2018-12-22', value: 32.51 },
+          { time: '2018-12-23', value: 31.11 },
+          { time: '2018-12-24', value: 27.02 },
+          { time: '2018-12-25', value: 27.32 },
+          { time: '2018-12-26', value: 25.17 },
+          { time: '2018-12-27', value: 28.89 },
+          { time: '2018-12-28', value: 25.46 },
+          { time: '2018-12-29', value: 23.92 },
+          { time: '2018-12-30', value: 22.68 },
+          { time: '2018-12-31', value: 22.67 },
+        ]*/);
+      }
+    });
 
 
     //const chart = createChart(document.getElementById('container')!);
@@ -41,18 +69,6 @@ export class GraficoPruebaComponent implements OnInit {
       topColor: '#2962FF',
       bottomColor: 'rgba(41, 98, 255, 0.28)',
     });*/
-    areaSeries.setData([
-      { time: '2018-12-22', value: 32.51 },
-      { time: '2018-12-23', value: 31.11 },
-      { time: '2018-12-24', value: 27.02 },
-      { time: '2018-12-25', value: 27.32 },
-      { time: '2018-12-26', value: 25.17 },
-      { time: '2018-12-27', value: 28.89 },
-      { time: '2018-12-28', value: 25.46 },
-      { time: '2018-12-29', value: 23.92 },
-      { time: '2018-12-30', value: 22.68 },
-      { time: '2018-12-31', value: 22.67 },
-    ]);
     /*const candlestickSeries = chart.addCandlestickSeries({
       upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
       wickUpColor: '#26a69a', wickDownColor: '#ef5350',

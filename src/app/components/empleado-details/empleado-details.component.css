@@ -8,3 +8,9 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+.titParadas{
+  margin-left: 80px;
+}
+.aviso{
+  margin-left: 100px;
+}

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TareaModel } from 'src/app/models/tarea.model';
 import { UbicacionModel } from 'src/app/models/ubicacion.model';
+import { VehiculoModel } from 'src/app/models/vehiculo.model';
 import { TareaService } from 'src/app/services/tarea.service';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 
@@ -12,18 +13,20 @@ import { UbicacionService } from 'src/app/services/ubicacion.service';
 })
 export class UbicacionComponent implements OnInit {
   @Input()
-  idEmpleado : string = "";
+  vehiculoCompanero : {
+    vehiculo: VehiculoModel,
+    paradas: UbicacionModel[]
+  } = {
+    vehiculo: new VehiculoModel(),
+    paradas: []
+  };
 
   ubis:UbicacionModel[]=[];
   
-  constructor( private ubiServ:UbicacionService ){ 
-    console.log(this.idEmpleado);
+  constructor( /*private ubiServ:UbicacionServic*/ ){ 
   }
 
   ngOnInit(): void {
-    console.log(this.idEmpleado);
-    this.ubiServ.getMisParadas(localStorage.getItem('token')!,this.idEmpleado).subscribe({next:res=>{
-      console.log(res);
-    },error:err=>console.log(err)});
+    
   }
 }

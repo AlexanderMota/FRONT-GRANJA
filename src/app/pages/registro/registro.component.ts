@@ -16,11 +16,13 @@ import { TareaModel } from 'src/app/models/tarea.model';
 })
 export class RegistroComponent implements OnInit {
 
+  @Input() idPerfil = "";
   @Output() eventoEmiteCierraNuevaPersona = new EventEmitter<boolean>();
   empleado: EmpleadoModel = new EmpleadoModel();
   //recuerdame : boolean = false;
   roles:string[] = [];
   supers:TareaModel[] = [];
+  editarPerfil = "";
 
   constructor(
     private auth:AuthService, 

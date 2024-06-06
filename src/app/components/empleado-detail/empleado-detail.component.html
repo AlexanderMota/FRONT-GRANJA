@@ -7,9 +7,15 @@
                 <p class="card-text"><small class="text-muted">{{empleado.email}} // {{empleado.telefono}}</small></p>
                 <p class="card-text">{{empleado.rol}}</p>
                 <div>
-                    <img  class="img-logo" src="../../../assets/img/batman.png" width="300px" alt="Marvel">
+                   
+                    <ng-template #sinFoto>
+                        <img  class="img-logo" src="../../../assets/img/batman.png" class="card container"  alt="Marvel">
+                    </ng-template>
+                    <img *ngIf="imageUrl; else sinFoto" [src]="imageUrl" alt="Profile Image" class="card container" >
                 </div>
-                <button class="btn btn-primary bg-dark" (click)="subeImagen()">Subir</button>
+                <button class="btn btn-primary bg-dark" (click)="triggerFileInput()">Subir</button>
+                <button class="btn btn-primary bg-dark" (click)="agregaVehiculo()">Agrega vehiculo</button>
+                <input type="file" id="fileInput" (change)="onFileSelected($event)" style="display: none;">
             </div>
         </div>
     </div>

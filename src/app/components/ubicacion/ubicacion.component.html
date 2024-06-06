@@ -1,13 +1,20 @@
-<div class="subs" *ngIf="ubis && ubis.length > 0;  else sinUbis">
+<div class="cuerpoTarj card-body">
+    <h5 class="card-title">Matrícula: {{ vehiculoCompanero.vehiculo.matricula }}</h5>
+    <h5 class="card-text">Descripción: {{ vehiculoCompanero.vehiculo.descripcion }}</h5>
+    <h5 class="card-text">Plazas: {{ vehiculoCompanero.vehiculo.plazas }}</h5>
+    
     <div class="contenedor card container animated fadeIn fast"
-        *ngFor="let ubi of ubis; let i = index;">
-        <div class="cuerpoTarj card-body">
-            <h5 class="card-title">{{ ubi.titulo }}</h5>
-            <h5 class="card-text">{{ ubi.descripcion }}</h5>
-            <h5 class="card-text">{{ ubi.fechasRecogida }}</h5>
+        *ngFor="let parada of vehiculoCompanero.paradas; let i = index;">
+        <div class="info">
+            <h5 class="card-title">Dirección: {{parada.titulo }}</h5>
+            <h5 class="card-text">Nota del conductor: {{ parada.descripcion }}</h5>
+        </div>
+        
+        <div class="fechasRecogida card animated fadeIn fast"
+            *ngFor="let fechaRecogida of parada.fechasRecogida; let i = index;">
+            <h5 class="card-text">Desde: {{ fechaRecogida.fechaInicio }}</h5>
+            <h5 class="card-text">Hasta: {{ fechaRecogida.fechaFin }}</h5>
+            <h5 class="card-text">Vehículo: {{ fechaRecogida.vehiculo }}</h5>
         </div>
     </div>
-</div>  
-<ng-template #sinUbis >
-    <p>No hay paradas.</p>
-</ng-template>
+</div>

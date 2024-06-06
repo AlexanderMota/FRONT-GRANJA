@@ -4,6 +4,6 @@
         <h5 class="card-text">{{ vehi.matricula }}</h5>
         <h5 class="card-text">{{ vehi.plazas }}</h5>
             
-        <a  [routerLink]="['/transporte',vehi.matricula]" class="btn btn-primary bg-dark">Ver mas...</a>
+        <a class="btn btn-primary bg-dark" (click)="eliminaVehiculo()">Borrar</a>
     </div>
 </div>

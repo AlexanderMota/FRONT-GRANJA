@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from 'src/app/models/apiResponse.model';
 import { ApiResponseService } from 'src/app/services/api-response.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EstadisticaService } from 'src/app/services/estadistica.service';
@@ -10,15 +11,14 @@ import { EstadisticaService } from 'src/app/services/estadistica.service';
 })
 export class HomeComponent implements OnInit {
 
+  //estDatos : { time: string , value :number }[] = [];
+
   constructor(private authServ: AuthService,
     private respServ:ApiResponseService,
     private estServ: EstadisticaService ) {
 
   }
   ngOnInit(): void {
-    this.estServ.getComentariosEst(localStorage.getItem("token")!).subscribe(val => {
-      console.log(val);
-    });
     let fla = this.authServ.esAutenticado();
     //console.log(fla);
     if(!fla){
